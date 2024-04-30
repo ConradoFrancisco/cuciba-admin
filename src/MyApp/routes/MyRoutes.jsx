@@ -24,6 +24,7 @@ import TutorialsPage from "MyApp/pages/help/TutorialsPage";
 import EstadisticasPage from "MyApp/pages/home/EstadisticasPage";
 import PrincipalPage from "MyApp/pages/home/PrincipalPage";
 import MessagesListPage from "MyApp/pages/mensajes/MessagesListPage";
+import NewsListPage from "MyApp/pages/news/NewsListPage";
 import NotificationListPage from "MyApp/pages/notification/NotificationListPage";
 import PropertyInterestedPage from "MyApp/pages/property/PropertyInterestedPage";
 import PropertyListPage from "MyApp/pages/property/PropertyListPage";
@@ -61,7 +62,7 @@ const MyRoutes = () => {
             <Route path="list" element={<MessagesListPage />} />
           </Route>
           <Route path="/noticias">
-            <Route path="listar" element={<PropertyListPage />} />
+            <Route path="listar" element={<NewsListPage />} />
             <Route path="compartidas/listar" element={<PropertySharedPage />} />
             <Route path="interesados" element={<PropertyInterestedPage />} />
           </Route>

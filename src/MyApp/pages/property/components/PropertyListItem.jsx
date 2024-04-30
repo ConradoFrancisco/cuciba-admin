@@ -22,11 +22,15 @@ const PropertyListItem = () => {
         <Card.Body>
           <Row>
             <Col xs={12} sm={1}>
-              <Image src="https://via.placeholder.com/100" fluid />
+              <Image
+                src="http://168.197.49.125:3000/images/news/noticia1.jpg"
+                fluid
+              />
             </Col>
             <Col xs={12} sm={4}>
               <span className="d-block fw-bold">
-                Casa tipo PH Villa Lugano, Capital Federal
+                Nuevo Programa de Capacitación en Bienes Raíces del Colegio
+                Inmobiliario
               </span>
               <span className="d-block small">
                 Operación: <strong>Venta</strong> Precio:
