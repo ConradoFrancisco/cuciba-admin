@@ -9,31 +9,12 @@ import { FiPlus } from "react-icons/fi";
 import NewsTitleForm from "./forms/NewsTitleForm";
 import { NewsInstance } from "services/NewsServices";
 import IconButton from "components/common/IconButton";
+import MyLoadingComponent from "MyApp/my-components/MyLoadingComponent";
+import { Link } from "react-router-dom";
 
 export default function NewsListPage() {
   const [loading, setLoading] = React.useState(false);
-  const [data, setData] = React.useState(false);
-
-  const mappedData = data?.map((item) => ({
-    ...item,
-    acciones: (
-      <>
-        <IconButton className="m-1" size="sm" variant="success" icon="edit" />
-        <IconButton
-          className="m-1"
-          size="sm"
-          variant="primary"
-          icon="external-link-alt"
-        />
-        <IconButton
-          className="m-1"
-          size="sm"
-          variant="danger"
-          icon="trash-alt"
-        />
-      </>
-    ),
-  }));
+  const [data, setData] = React.useState([]);
 
   const columns = [
     {
@@ -61,6 +42,9 @@ export default function NewsListPage() {
   const openModal = () => {
     setSmShow(true);
   };
+  const closeModal = () => {
+    setSmShow(false);
+  };
   const [smShow, setSmShow] = useState(false);
 
   React.useEffect(() => {
@@ -68,8 +52,37 @@ export default function NewsListPage() {
       try {
         setLoading(true);
         let response = await NewsInstance.getAll();
-        setData(response.results);
-        console.log(response);
+        const mappedData = response.results.map((item) => ({
+          ...item,
+          acciones: (
+            <>
+              <div className="d-flex justify-content-around">
+              <Link to={`/noticias/editar/${item.id}`}>
+                <IconButton
+                  className="m-1"
+                  size="sm"
+                  variant="success"
+                  icon="edit"
+                />
+                </Link>              
+                <IconButton
+                  className="m-1"
+                  size="sm"
+                  variant="primary"
+                  icon="external-link-alt"
+                />
+                <IconButton
+                  className="m-1"
+                  size="sm"
+                  variant="danger"
+                  icon="trash-alt"
+                />
+              </div>
+            </>
+          ),
+        }));
+        setData(mappedData);
+        console.log(mappedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -99,40 +112,44 @@ export default function NewsListPage() {
             <FalconCloseButton onClick={() => setSmShow(false)} />
           </Modal.Header>
           <Modal.Body>
-            <NewsTitleForm />
+            <NewsTitleForm setData={setData} closeModal={closeModal} />
           </Modal.Body>
         </Modal>
       </PageHeader>
 
-      <Card className="p-2">
-        <AdvanceTableWrapper
-          columns={columns}
-          data={mappedData}
-          sortable
-          pagination
-          perPage={5}
-        >
-          <AdvanceTable
-            table
-            headerClassName="bg-200 text-nowrap align-middle"
-            rowClassName="align-middle white-space-nowrap"
-            tableProps={{
-              bordered: true,
-              striped: true,
-              className: "fs-10 mb-0 overflow-hidden",
-            }}
-          />
-          <div className="mt-3">
-            <AdvanceTableFooter
-              rowCount={mappedData.length}
+      {loading ? (
+        <MyLoadingComponent />
+      ) : (
+        <Card className="p-2">
+          <AdvanceTableWrapper
+            columns={columns}
+            data={data}
+            sortable
+            pagination
+            perPage={5}
+          >
+            <AdvanceTable
               table
-              rowInfo
-              navButtons
-              rowsPerPageSelection
+              headerClassName="bg-200 text-nowrap align-middle"
+              rowClassName="align-middle white-space-nowrap"
+              tableProps={{
+                bordered: true,
+                striped: true,
+                className: "fs-10 mb-0 overflow-hidden",
+              }}
             />
-          </div>
-        </AdvanceTableWrapper>
-      </Card>
+            <div className="mt-3">
+              <AdvanceTableFooter
+                rowCount={data.length}
+                table
+                rowInfo
+                navButtons
+                rowsPerPageSelection
+              />
+            </div>
+          </AdvanceTableWrapper>
+        </Card>
+      )}
     </>
   );
 }
