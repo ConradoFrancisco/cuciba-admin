@@ -4,11 +4,14 @@ import { useDropzone } from "react-dropzone";
 import Flex from "components/common/Flex";
 import cloudUpload from "assets/img/icons/cloud-upload.svg";
 import TinymceEditor from "MyApp/components/common/TinymceEditor";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaSave } from "react-icons/fa";
+import { NewsInstance } from "services/NewsServices";
+import { not } from "is_js";
 
 export default function EditNewsPage() {
   const { id } = useParams();
+  const [noticia,setNoticia] = useState({})
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const [value, setValue] = React.useState(null);
   const files = acceptedFiles.map((file) => (
@@ -16,6 +19,15 @@ export default function EditNewsPage() {
       {file.path} - {file.size} bytes
     </li>
   ));
+
+  useEffect(() => {
+    const fetchNew = async () => {
+      const response = await NewsInstance.getUnique(parseInt(id));
+      console.log(response.results)
+      setNoticia(response.results[0])
+    }
+    fetchNew();
+  }, [])
   return (
     <>
       <Card className="p-4">
@@ -27,7 +39,7 @@ export default function EditNewsPage() {
                 <Form.Control
                   type="email"
                   placeholder="name@example.com"
-                  value={"asd"}
+                  value={noticia.title}
                 />
               </Form.Group>
             </Col>
@@ -54,7 +66,7 @@ export default function EditNewsPage() {
               <Form.Group className="mb-3">
                 <Form.Label>Contenido de la noticia</Form.Label>
                 <TinymceEditor
-                  value={value}
+                  value={noticia.body}
                   handleChange={(newValue) => setValue(newValue)}
                 />
               </Form.Group>

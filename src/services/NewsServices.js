@@ -6,9 +6,11 @@ class NewsService {
       setTimeout(()=>{
         if (true) {
           // Logica para el pedido a la db
+          const mappedData = data.map(({ id, title, estado }) => ({ id, title, estado }))
+          console.log(mappedData)
           const response = {
-            results: data,
-            length: 2,
+            results: mappedData,
+            length: mappedData.length,
             statusCode: 200,
           };
           resolve(response);
@@ -19,12 +21,28 @@ class NewsService {
       },2000)
     });
   }
+  async getUnique(id){
+    return new Promise((resolve,reject)=>{
+      if (true) {
+        // Logica para el pedido a la db
+        const noticia = data.filter((noticia) => noticia.id === id);
+        const response = {
+          results: noticia,
+          statusCode: 200,
+        };
+        console.log(response)
+        resolve(response);
+      } else {
+        reject(new Error("no se ha podido cumplir la promesa"));
+      }
+    })
+  }
   async create(title) {
     return new Promise((resolve, reject) => {
       setTimeout(()=>{
         if (true) {
           // Logica para el pedido a la db
-          data.unshift({ id: data.length + 1, titulo: title,estado:'Sin publicar'});
+          data.unshift({ id: data.length + 1, title: title,estado:'Sin publicar',imageUrl:'',date:'',description:'',cantFotos:'',body:'',images:[],quote:''});
           console.log(data)
           const response = {
             results: data,

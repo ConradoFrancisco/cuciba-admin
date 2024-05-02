@@ -23,7 +23,7 @@ export default function NewsListPage() {
       headerProps: { className: "text-900" },
     },
     {
-      accessor: "titulo",
+      accessor: "title",
       Header: "Titulo",
       headerProps: { className: "text-900" },
     },
