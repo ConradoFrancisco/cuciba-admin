@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useDropzone } from "react-dropzone";
 import { useFormik } from "formik";
@@ -7,8 +7,55 @@ import TinymceEditor from "components/common/TinymceEditor";
 import Flex from "components/common/Flex";
 import { FaSave } from "react-icons/fa";
 import cloudUpload from "assets/img/icons/cloud-upload.svg";
+import { } from 'react-tag-input'
+import { render } from 'react-dom';
+/* import { COUNTRIES } from './countries'; */
+import './style.css';
+import { WithContext as ReactTags } from 'react-tag-input';
+
+/* const suggestions = COUNTRIES.map(country => {
+  return {
+    id: country,
+    text: country
+  };
+}); */
+
+const KeyCodes = {
+  comma: 188,
+  enter: 13
+};
+
+const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 export default function NewsEditForm({ noticia }) {
+  const [tags, setTags] = React.useState([
+
+  ]);
+
+  const handleDelete = i => {
+    setTags(tags.filter((tag, index) => index !== i));
+  };
+
+  const handleAddition = tag => {
+    setTags([...tags, tag]);
+  };
+
+  const handleDrag = (tag, currPos, newPos) => {
+    const newTags = tags.slice();
+
+    newTags.splice(currPos, 1);
+    newTags.splice(newPos, 0, tag);
+
+    // re-render
+    setTags(newTags);
+  };
+
+  const handleTagClick = index => {
+    console.log('The tag at index ' + index + ' was clicked');
+  };
+
+
+
   const [imagePreviews, setImagePreviews] = useState([]);
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
@@ -25,18 +72,26 @@ export default function NewsEditForm({ noticia }) {
     category: Yup.string().required("La categoría es requerida"),
     tags: Yup.string().required("Las etiquetas son requeridas"),
   });
+  console.log(noticia)
   const formik = useFormik({
     initialValues: {
       category: "",
       tags: "",
-      content: noticia ? noticia.body : "",
+      content: noticia && noticia.body ? noticia.body : "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log("Valores del formulario:", values);
     },
   });
-
+  useEffect(() => {
+    if (noticia && noticia.body) {
+      formik.setValues({
+        ...formik.values,
+        content: noticia.body
+      });
+    }
+  }, [noticia]);
   const files = imagePreviews.map((file, key) => (
     <>
       <div className="d-flex" style={{ flexDirection: "column" }}>
@@ -60,7 +115,7 @@ export default function NewsEditForm({ noticia }) {
   ));
 
   return (
-    <Form onSubmit={formik.handleSubmit}>
+    noticia ? (<><Form onSubmit={formik.handleSubmit}>
       <Row>
         <Col xl={12}>
           <Form.Group className="mb-3">
@@ -92,13 +147,20 @@ export default function NewsEditForm({ noticia }) {
         <Col xl={6}>
           <Form.Group className="mb-3">
             <Form.Label>Etiquetas</Form.Label>
-            <Form.Control
-              type="text"
-              name="tags"
-              placeholder=""
-              value={formik.values.tags}
-              onChange={formik.handleChange}
-              isInvalid={formik.touched.tags && formik.errors.tags}
+            <ReactTags
+              classNames={{
+                formGroup: 'form-group'
+              }}
+              tags={tags}
+              /* suggestions={suggestions} */
+              delimiters={delimiters}
+              handleDelete={handleDelete}
+              handleAddition={handleAddition}
+              handleDrag={handleDrag}
+              handleTagClick={handleTagClick}
+              inputFieldPosition="top"
+              placeholder="Presiona enter para guardar una nueva etiqueta"
+              autocomplete
             />
             <Form.Control.Feedback type="invalid">
               {formik.errors.tags}
@@ -154,6 +216,6 @@ export default function NewsEditForm({ noticia }) {
           </Button>
         </Col>
       </Row>
-    </Form>
+    </Form></>) : ''
   );
 }
