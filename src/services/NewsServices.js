@@ -70,12 +70,13 @@ class NewsService {
       }, 2000);
     });
   }
-  async edit(id, category, content, tags, images) {
+  async edit(id,title, category, content, tags, images) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (true) {
           const noticia = data.filter((noticia) => noticia.id === id);
           noticia[0].tags = tags;
+          noticia[0].title = title;
           noticia[0].body = content;
           noticia[0].category = category;
           noticia[0].images = images;

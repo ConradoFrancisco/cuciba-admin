@@ -64,6 +64,7 @@ export default function NewsEditForm({ noticia }) {
   });
   const formik = useFormik({
     initialValues: {
+      title: "",
       category: noticia && noticia.category ? noticia.category : "",
       content: noticia && noticia.body ? noticia.body : "",
     },
@@ -77,22 +78,22 @@ export default function NewsEditForm({ noticia }) {
         setTagError("Debes poner al menos 1 etiqueta");
         return;
       }
-      const images = imagePreviews.map((image) => image.preview);
-
+      
       const allData = {
         values,
         tags,
-        images,
+        imagePreviews,
       };
 
       try {
         setLoading(true);
         const response = await NewsInstance.edit(
           noticia.id,
+          values.title,
           values.category,
           allData.values.content,
           allData.tags,
-          allData.images
+          allData.imagePreviews
         );
         if (response.statusCode === 200) {
           console.log(response);
@@ -106,23 +107,15 @@ export default function NewsEditForm({ noticia }) {
   });
 
   useEffect(() => {
-    if (noticia && noticia.category) {
-      formik.setValues({
-        ...formik.values,
-        category: noticia.category,
-      });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [noticia]);
-
-  useEffect(() => {
-    if (noticia && noticia.body) {
+    if (noticia && noticia.title) {
       formik.setValues({
         ...formik.values,
         content: noticia.body,
+        category:noticia.category,
+        title:noticia.title
       });
       setTags(noticia.tags);
+      setImagePreviews(noticia.images)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noticia.body]);
@@ -168,7 +161,7 @@ export default function NewsEditForm({ noticia }) {
           <Col xl={12}>
             <Form.Group className="mb-3">
               <Form.Label>Titulo</Form.Label>
-              <Form.Control type="text" name="titulo" value={noticia.title} />
+              <Form.Control onChange={formik.handleChange} type="text" name="title" value={formik.values.title} />
             </Form.Group>
           </Col>
           <Col xl={6}>
