@@ -13,7 +13,12 @@
   .ReactTags__tags {
     position: relative;
   }
-  
+  .errorTag{
+    display: block !important;
+  }
+  .inputError{
+    border-color: #e63757 !important;
+  }
   .ReactTags__clearAll {
     cursor: pointer;
     padding: 10px;

@@ -12,12 +12,11 @@ export default function EditNewsPage() {
 
   useEffect(() => {
     const fetchNew = async () => {
-      try{
+      try {
         const response = await NewsInstance.getUnique(parseInt(id));
         setNoticia(response.results[0]);
-        console.log(response.results[0]);
-      }catch(e){
-        console.log(e)
+      } catch (e) {
+        console.log(e);
       }
     };
     fetchNew();
