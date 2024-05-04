@@ -4,40 +4,22 @@ import AdvanceTable from "components/common/advance-table/AdvanceTable";
 import AdvanceTableFooter from "components/common/advance-table/AdvanceTableFooter";
 import AdvanceTableWrapper from "components/common/advance-table/AdvanceTableWrapper";
 import React, { useState } from "react";
-import { Card, Modal } from "react-bootstrap";
+import { Card, Col, Image, Modal, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import NewsTitleForm from "./forms/NewsTitleForm";
 import { NewsInstance } from "services/NewsServices";
 import IconButton from "components/common/IconButton";
 import MyLoadingComponent from "MyApp/my-components/MyLoadingComponent";
 import { Link } from "react-router-dom";
+import AdvanceTableSearchBox from "MyApp/components/common/advance-table/AdvanceTableSearchBox";
+import NewListItem from "./components/NewListItem";
+import ListFilterComponent from "../property/components/ListFilterComponent";
+import ListOrderComponent from "../property/components/ListOrderComponent";
 
 export default function NewsListPage() {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState([]);
-
-  const columns = [
-    {
-      accessor: "id",
-      Header: "ID",
-      headerProps: { className: "text-900" },
-    },
-    {
-      accessor: "title",
-      Header: "Titulo",
-      headerProps: { className: "text-900" },
-    },
-    {
-      accessor: "estado",
-      Header: "Estado",
-      headerProps: { className: "text-900" },
-    },
-    {
-      accessor: "acciones",
-      Header: "Acciones",
-      headerProps: { className: "text-900", display: "flex" },
-    },
-  ];
+  const [isPublished] = React.useState(true);
 
   const openModal = () => {
     setSmShow(true);
@@ -52,37 +34,7 @@ export default function NewsListPage() {
       try {
         setLoading(true);
         let response = await NewsInstance.getAll();
-        const mappedData = response.results.map((item) => ({
-          ...item,
-          acciones: (
-            <>
-              <div className="d-flex justify-content-around">
-              <Link to={`/noticias/editar/${item.id}`}>
-                <IconButton
-                  className="m-1"
-                  size="sm"
-                  variant="success"
-                  icon="edit"
-                />
-                </Link>              
-                <IconButton
-                  className="m-1"
-                  size="sm"
-                  variant="primary"
-                  icon="external-link-alt"
-                />
-                <IconButton
-                  className="m-1"
-                  size="sm"
-                  variant="danger"
-                  icon="trash-alt"
-                />
-              </div>
-            </>
-          ),
-        }));
-        setData(mappedData);
-        console.log(mappedData);
+        setData(response.results)
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -116,40 +68,26 @@ export default function NewsListPage() {
           </Modal.Body>
         </Modal>
       </PageHeader>
+      <Row className="g-3">
+        <Col xs={12} sm={2}>
+          <Card>
+            <ListFilterComponent />
+          </Card>
+        </Col>
+        <Col xs={12} sm={10}>
+          {loading ? (
+            <MyLoadingComponent />
+          ) : (
+            <>
+              <ListOrderComponent />
+              {data?.map((noticia, key) => (
+                <NewListItem key={key} noticia={noticia} />
+              ))}
+            </>
+          )}
 
-      {loading ? (
-        <MyLoadingComponent />
-      ) : (
-        <Card className="p-2">
-          <AdvanceTableWrapper
-            columns={columns}
-            data={data}
-            sortable
-            pagination
-            perPage={5}
-          >
-            <AdvanceTable
-              table
-              headerClassName="bg-200 text-nowrap align-middle"
-              rowClassName="align-middle white-space-nowrap"
-              tableProps={{
-                bordered: true,
-                striped: true,
-                className: "fs-10 mb-0 overflow-hidden",
-              }}
-            />
-            <div className="mt-3">
-              <AdvanceTableFooter
-                rowCount={data.length}
-                table
-                rowInfo
-                navButtons
-                rowsPerPageSelection
-              />
-            </div>
-          </AdvanceTableWrapper>
-        </Card>
-      )}
+        </Col>
+      </Row>
     </>
   );
 }

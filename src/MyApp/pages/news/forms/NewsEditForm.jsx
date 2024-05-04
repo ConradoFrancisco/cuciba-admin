@@ -7,7 +7,7 @@ import TinymceEditor from "components/common/TinymceEditor";
 import Flex from "components/common/Flex";
 import { FaSave } from "react-icons/fa";
 import cloudUpload from "assets/img/icons/cloud-upload.svg";
-import {} from "react-tag-input";
+import { } from "react-tag-input";
 
 import "./style.css";
 import { WithContext as ReactTags } from "react-tag-input";
@@ -78,7 +78,7 @@ export default function NewsEditForm({ noticia }) {
         setTagError("Debes poner al menos 1 etiqueta");
         return;
       }
-      
+
       const allData = {
         values,
         tags,
@@ -89,6 +89,7 @@ export default function NewsEditForm({ noticia }) {
         setLoading(true);
         const response = await NewsInstance.edit(
           noticia.id,
+          allData.imagePreviews[0].preview,
           values.title,
           values.category,
           allData.values.content,
@@ -102,6 +103,7 @@ export default function NewsEditForm({ noticia }) {
         console.error(e);
       } finally {
         setLoading(false);
+        redirect('/noticias/listar')
       }
     },
   });
@@ -111,19 +113,22 @@ export default function NewsEditForm({ noticia }) {
       formik.setValues({
         ...formik.values,
         content: noticia.body,
-        category:noticia.category,
-        title:noticia.title
+        category: noticia.category,
+        title: noticia.title
       });
-      setTags(noticia.tags);
+      noticia.tags ? setTags(noticia.tags) : setTags([])
       setImagePreviews(noticia.images)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noticia.body]);
   useEffect(() => {
     console.log(noticia.id);
-    tags.length > 0 || tagError === 0
-      ? setTagError(null)
-      : setTagError("Debes poner al menos una etiqueta");
+    if (tags) {
+      tags.length > 0 || tagError === 0
+        ? setTagError(null)
+        : setTagError("Debes poner al menos una etiqueta");
+
+    }
   }, [tags]);
 
   useEffect(() => {
@@ -234,15 +239,14 @@ export default function NewsEditForm({ noticia }) {
               <div
                 className={`${fileError ? "inputError" : ""}`}
                 {...getRootProps({
-                  className: `dropzone-area py-6 ${
-                    fileError ? "inputError" : ""
-                  }`,
+                  className: `dropzone-area py-6 ${fileError ? "inputError" : ""
+                    }`,
                 })}
               >
                 <input {...getInputProps()} />
                 <Flex justifyContent="center">
                   <img src={cloudUpload} alt="" width={25} className="me-2" />
-                  <p className="fs-9 mb-0 text-700">Drop your files here</p>
+                  <p className="fs-9 mb-0 text-700">Arrastra tus fotos aquí</p>
                 </Flex>
               </div>
               <Form.Control.Feedback
@@ -256,12 +260,12 @@ export default function NewsEditForm({ noticia }) {
         </Row>
         <Row>
           <div className="mt-3">
-            {acceptedFiles.length > 0 && (
+            {imagePreviews ? imagePreviews.length > 0 && (
               <>
                 <h6>Imagenes adjuntadas</h6>
                 <div className="d-flex">{files}</div>
               </>
-            )}
+            ) : ''}
           </div>
         </Row>
         <Row>

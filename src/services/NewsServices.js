@@ -6,10 +6,11 @@ class NewsService {
       setTimeout(() => {
         if (true) {
           // Logica para el pedido a la db
-          const mappedData = data.map(({ id, title, estado }) => ({
+          const mappedData = data.map(({ id, title, estado,imageUrl }) => ({
             id,
             title,
             estado,
+            imageUrl
           }));
           console.log(mappedData);
           const response = {
@@ -49,15 +50,16 @@ class NewsService {
             id: data.length + 1,
             title: title,
             estado: "Sin publicar",
-            imageUrl: "",
+            imageUrl: "https://img.freepik.com/vector-premium/imagen-miniatura-predeterminada-icono-imagen-grafico-pictograma-plano-simple-no-disponible-foto-faltante_101884-2515.jpg?w=826",
             date: "",
             description: "",
             cantFotos: "",
             body: "",
             images: [],
             quote: "",
+            tags:[]
           });
-          console.log(data);
+          
           const response = {
             results: data,
             length: 2,
@@ -70,12 +72,13 @@ class NewsService {
       }, 2000);
     });
   }
-  async edit(id,title, category, content, tags, images) {
+  async edit(id,portada,title, category, content, tags, images) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (true) {
           const noticia = data.filter((noticia) => noticia.id === id);
           noticia[0].tags = tags;
+          noticia[0].imageUrl = portada
           noticia[0].title = title;
           noticia[0].body = content;
           noticia[0].category = category;

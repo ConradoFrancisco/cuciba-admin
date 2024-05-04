@@ -6,6 +6,7 @@ import { NewsInstance } from "services/NewsServices";
 import IconButton from "components/common/IconButton";
 import React from "react";
 import { Link } from "react-router-dom";
+import { FaSave } from "react-icons/fa";
 
 export default function NewsTitleForm({ setData, closeModal }) {
   const [loading, setLoading] = React.useState();
@@ -83,9 +84,30 @@ export default function NewsTitleForm({ setData, closeModal }) {
         <span className="text-danger">
           {formik.errors.title ? <div>{formik.errors.title}</div> : null}
         </span>
-        <Button variant="primary" type="submit" className="btn-sm mt-4">
-          {loading ? <Spinner /> : "Submit"}
-        </Button>
+        
+        {loading ? (
+              <Button
+                variant="primary"
+                size="sm"
+                className="d-inline-flex flex-center mt-2"
+                disabled
+              >
+                <Spinner
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                <span className=""> Cargando...</span>
+              </Button>
+            ) : (
+              <Button type="submit" className="mt-2" size="sm">
+                <FaSave className="me-2" />
+                Guardar Cambios
+              </Button>
+            )}
+        
       </Form.Group>
     </Form>
   );

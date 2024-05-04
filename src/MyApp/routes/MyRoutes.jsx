@@ -68,6 +68,10 @@ const MyRoutes = () => {
             <Route path="compartidas/listar" element={<PropertySharedPage />} />
             <Route path="interesados" element={<PropertyInterestedPage />} />
           </Route>
+          <Route path="/property">
+            <Route path="listar" element={<PropertyListPage />} />
+          </Route>
+          
           <Route path="/inmobiliaria">
             <Route path="ver/:id" element={<BranchShowPage />} />
           </Route>

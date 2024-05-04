@@ -1,7 +1,7 @@
 export const data = [
   {
     id: 1,
-    imageUrl: "images/news/noticia1.jpg",
+    imageUrl: "http://168.197.49.125:3000/images/news/noticia1.jpg",
     date: "18/2/2024",
     title:
       "Nuevo Programa de Capacitación en Bienes Raíces del Colegio Inmobiliario",
@@ -28,7 +28,7 @@ export const data = [
   },
   {
     id: 2,
-    imageUrl: "images/news/noticia2.jpg",
+    imageUrl: "http://168.197.49.125:3000/images/news/noticia2.jpg",
     date: "15/2/2024",
     title: "Foro de Discusión sobre Desarrollo Urbano Sostenible",
     description:
@@ -47,7 +47,7 @@ export const data = [
   },
   {
     id: 3,
-    imageUrl: "images/news/noticia31.jpg",
+    imageUrl: "http://168.197.49.125:3000/images/news/noticia31.jpg",
     date: "30/1/2024",
     cantFotos: 4,
     title: "Conferencia sobre Tendencias del Mercado Inmobiliario",
@@ -65,7 +65,7 @@ export const data = [
   },
   {
     id: 4,
-    imageUrl: "images/news/noticia41.jpg",
+    imageUrl: "http://168.197.49.125:3000/images/news/noticia41.jpg",
     date: "28/1/2024",
     title: "Lanzamiento del Programa de Mentoría en Bienes Raíces",
     description:
@@ -83,7 +83,7 @@ export const data = [
   },
   {
     id: 5,
-    imageUrl: "images/news/noticia5.jpg",
+    imageUrl: "http://168.197.49.125:3000/images/news/noticia5.jpg",
     date: "28/1/2024",
     title: "Inauguración del Centro de Innovación en Bienes Raíces",
     description:
