@@ -4,14 +4,13 @@ import AdvanceTable from "components/common/advance-table/AdvanceTable";
 import AdvanceTableFooter from "components/common/advance-table/AdvanceTableFooter";
 import AdvanceTableWrapper from "components/common/advance-table/AdvanceTableWrapper";
 import React, { useState } from "react";
-import { Card, Col, Image, Modal, Row } from "react-bootstrap";
+import { Card, Col, Modal, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import NewsTitleForm from "./forms/NewsTitleForm";
 import { NewsInstance } from "services/NewsServices";
-import IconButton from "components/common/IconButton";
+
 import MyLoadingComponent from "MyApp/my-components/MyLoadingComponent";
-import { Link } from "react-router-dom";
-import AdvanceTableSearchBox from "MyApp/components/common/advance-table/AdvanceTableSearchBox";
+
 import NewListItem from "./components/NewListItem";
 import ListFilterComponent from "../property/components/ListFilterComponent";
 import ListOrderComponent from "../property/components/ListOrderComponent";
@@ -20,7 +19,8 @@ export default function NewsListPage() {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [isPublished] = React.useState(true);
-
+  const [limit,setLimit] = useState(false);
+  const [totalResults,settotalResults] = useState(false);
   const openModal = () => {
     setSmShow(true);
   };
@@ -30,11 +30,19 @@ export default function NewsListPage() {
   const [smShow, setSmShow] = useState(false);
 
   React.useEffect(() => {
+    console.log(limit)
     const fetchData = async () => {
       try {
         setLoading(true);
-        let response = await NewsInstance.getAll();
+        let response;
+        if(limit !== null){
+          response = await NewsInstance.getAll({limit:limit})
+        }else{
+          response = await NewsInstance.getAll({})
+        }
         setData(response.results)
+        settotalResults(response.totalResults)
+        console.log(response.totalResults)
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -42,7 +50,7 @@ export default function NewsListPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [limit]);
   return (
     <>
       <PageHeader
@@ -64,7 +72,7 @@ export default function NewsListPage() {
             <FalconCloseButton onClick={() => setSmShow(false)} />
           </Modal.Header>
           <Modal.Body>
-            <NewsTitleForm setData={setData} closeModal={closeModal} />
+            <NewsTitleForm setData={setData} closeModal={closeModal} limit={limit} settotalResults={settotalResults} />
           </Modal.Body>
         </Modal>
       </PageHeader>
@@ -79,8 +87,8 @@ export default function NewsListPage() {
             <MyLoadingComponent />
           ) : (
             <>
-              <ListOrderComponent />
-              {data?.map((noticia, key) => (
+              <ListOrderComponent totalResults={totalResults} limit={limit} setLimit={setLimit}/>
+              {data.map((noticia, key) => (
                 <NewListItem key={key} noticia={noticia} />
               ))}
             </>

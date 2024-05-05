@@ -1,24 +1,43 @@
 import { data } from "../MyApp/mocks/NewsMock";
 
 class NewsService {
-  async getAll(offset, limit) {
+  async getAll({offset=0, limit}) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (true) {
           // Logica para el pedido a la db
-          const mappedData = data.map(({ id, title, estado,imageUrl }) => ({
-            id,
-            title,
-            estado,
-            imageUrl
-          }));
-          console.log(mappedData);
-          const response = {
-            results: mappedData,
-            length: mappedData.length,
-            statusCode: 200,
-          };
-          resolve(response);
+          if(limit){
+            const mappedData = data.map(({ id, title, estado,imageUrl }) => ({
+              id,
+              title,
+              estado,
+              imageUrl
+            })).slice(offset,offset+limit);
+            console.log(mappedData);
+            const response = {
+              results: mappedData,
+              length: mappedData.length,
+              totalResults: data.length ,
+              statusCode: 200,
+            };
+            resolve(response);
+          }else{
+            const mappedData = data.map(({ id, title, estado,imageUrl }) => ({
+              id,
+              title,
+              estado,
+              imageUrl
+            })).slice();
+            console.log(mappedData);
+            const response = {
+              results: mappedData,
+              length: mappedData.length,
+              totalResults: data.length ,
+              statusCode: 200,
+            };
+            resolve(response);
+          }
+          
         } else {
           reject(new Error("no se ha podido cumplir la promesa"));
         }

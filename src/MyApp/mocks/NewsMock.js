@@ -18,12 +18,9 @@ export const data = [
       '"Estamos emocionados de lanzar nuestro nuevo programa de capacitación en bienes raíces, que está diseñado para equipar a los estudiantes con las habilidades y el conocimiento necesarios para sobresalir en la industria inmobiliaria actual", dijo el director del Colegio Inmobiliario."',
     estado: "publicada",
     tags: [
-      {
-        text: "cucicba",
-      },
-      {
-        text: "prueba",
-      },
+      {id: 'cuciba', text: 'cucicba'},
+      {id: 'test', text: 'test'},
+
     ],
   },
   {

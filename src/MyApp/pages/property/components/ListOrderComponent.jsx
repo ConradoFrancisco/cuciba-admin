@@ -1,16 +1,16 @@
-import React from 'react';
-import { Card, Row, Col, Form, InputGroup, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames';
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Flex from 'components/common/Flex';
+import React from "react";
+import { Card, Row, Col, Form, InputGroup, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import classNames from "classnames";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import Flex from "components/common/Flex";
 
-const ListOrderComponent = () => {
+const ListOrderComponent = ({ setLimit, limit, totalResults }) => {
   const [isList] = React.useState(true);
   const [isGrid] = React.useState(false);
   const [isAsc, setIsAsc] = React.useState(true);
-  const [setSortBy] = React.useState('price');
+  const [setSortBy] = React.useState("price");
   const [itemsPerPage, setItemsPerPage] = React.useState(2);
   const [totalItems] = React.useState(0);
   const [from] = React.useState(0);
@@ -30,20 +30,21 @@ const ListOrderComponent = () => {
             >
               <Form.Select
                 size="sm"
-                value={itemsPerPage}
+                value={limit}
                 onChange={({ target }) => {
-                  setItemsPerPage(target.value);
-                  setProductPerPage(target.value);
+                  const newValue =
+                    target.value === "all" ? null : parseInt(target.value);
+                  setLimit(newValue);
                 }}
-                style={{ maxWidth: '4.875rem' }}
+                style={{ maxWidth: "4.875rem" }}
               >
+                <option value={1}>1</option>
                 <option value={2}>2</option>
-                <option value={4}>4</option>
-                <option value={6}>6</option>
-                <option value={totalItems}>todo</option>
+                <option value={3}>3</option>
+                <option value={'all'}>todo</option>
               </Form.Select>
               <h6 className="mb-0 ms-2">
-                Mostrando {from}-{to} de {totalItems} Publicaciones
+                Mostrando {limit ? `${from} -${limit} de ${totalResults} Publicaciones` : ' todos los resultados'}
               </h6>
             </Col>
             <Col sm="auto">
@@ -70,7 +71,7 @@ const ListOrderComponent = () => {
                           onClick={() => setIsAsc(!isAsc)}
                         >
                           <FontAwesomeIcon
-                            icon={isAsc ? 'sort-amount-up' : 'sort-amount-down'}
+                            icon={isAsc ? "sort-amount-up" : "sort-amount-down"}
                           />
                         </InputGroup.Text>
                       </InputGroup>
@@ -81,17 +82,17 @@ const ListOrderComponent = () => {
                   <OverlayTrigger
                     placement="top"
                     overlay={
-                      <Tooltip>Product {isList ? 'Grid' : 'List'}</Tooltip>
+                      <Tooltip>Product {isList ? "Grid" : "List"}</Tooltip>
                     }
                   >
                     <Link
                       to={`/e-commerce/product/product-${
-                        isList ? 'grid' : 'list'
+                        isList ? "grid" : "list"
                       }`}
                       className="text-600 px-1"
                     >
                       <FontAwesomeIcon
-                        icon={classNames({ th: isList, 'list-ul': isGrid })}
+                        icon={classNames({ th: isList, "list-ul": isGrid })}
                       />
                     </Link>
                   </OverlayTrigger>

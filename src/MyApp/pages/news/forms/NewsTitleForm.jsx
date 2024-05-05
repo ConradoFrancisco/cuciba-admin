@@ -7,8 +7,9 @@ import IconButton from "components/common/IconButton";
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaSave } from "react-icons/fa";
+import { toast } from "react-toastify";
 
-export default function NewsTitleForm({ setData, closeModal }) {
+export default function NewsTitleForm({ setData, closeModal,settotalResults,limit }) {
   const [loading, setLoading] = React.useState();
   const formik = useFormik({
     initialValues: {
@@ -20,7 +21,20 @@ export default function NewsTitleForm({ setData, closeModal }) {
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        await NewsInstance.create(values.title);
+        const response = await NewsInstance.create(values.title);
+        if (response.statusCode === 200){
+          toast.success("Se creó la noticia satisfactoriamente \n puedes editarla ahora", {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            style:{color:'#fff',fontWeight:'500'} // Añade un borde al texto}
+            
+          });
+        }
         closeModal();
       } catch (e) {
         console.log(e);
@@ -29,38 +43,14 @@ export default function NewsTitleForm({ setData, closeModal }) {
       }
 
       try {
-        let response = await NewsInstance.getAll();
-        const mappedData = response.results.map((item) => ({
-          ...item,
-          acciones: (
-            <>
-              <div className="d-flex justify-content-around">
-                <Link to={`/noticias/editar/${item.id}`}>
-                  <IconButton
-                    className="m-1"
-                    size="sm"
-                    variant="success"
-                    icon="edit"
-                  />
-                </Link>
-                <IconButton
-                  className="m-1"
-                  size="sm"
-                  variant="primary"
-                  icon="external-link-alt"
-                />
-                <IconButton
-                  className="m-1"
-                  size="sm"
-                  variant="danger"
-                  icon="trash-alt"
-                />
-              </div>
-            </>
-          ),
-        }));
-        setData(mappedData);
-        console.log(mappedData);
+        let response;
+        if(limit !== null){
+          response = await NewsInstance.getAll({limit:limit})
+        }else{
+          response = await NewsInstance.getAll({})
+        }
+        setData(response.results)
+        settotalResults(response.totalResults)
       } catch (error) {
         console.error("Error fetching data:", error);
         closeModal();
@@ -80,11 +70,11 @@ export default function NewsTitleForm({ setData, closeModal }) {
           placeholder="Titulo de la noticia"
           onChange={formik.handleChange}
           value={formik.values.title}
+          isInvalid={formik.touched.title && formik.errors.title} 
         />
-        <span className="text-danger">
-          {formik.errors.title ? <div>{formik.errors.title}</div> : null}
-        </span>
-        
+        <Form.Control.Feedback type="invalid">
+          {formik.errors.title}
+        </Form.Control.Feedback>
         {loading ? (
               <Button
                 variant="primary"

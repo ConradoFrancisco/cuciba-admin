@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import * as Yup from "yup";
 import { useDropzone } from "react-dropzone";
 import { useFormik } from "formik";
 import { Button, Col, Row, Form, Spinner } from "react-bootstrap";
@@ -7,21 +6,17 @@ import TinymceEditor from "components/common/TinymceEditor";
 import Flex from "components/common/Flex";
 import { FaSave } from "react-icons/fa";
 import cloudUpload from "assets/img/icons/cloud-upload.svg";
-import { } from "react-tag-input";
-
+import "react-toastify/dist/ReactToastify.css";
 import "./style.css";
 import { WithContext as ReactTags } from "react-tag-input";
 import { NewsInstance } from "services/NewsServices";
-import { redirect } from "react-router-dom";
-
-const KeyCodes = {
-  comma: 188,
-  enter: 13,
-};
-
-const delimiters = [KeyCodes.comma, KeyCodes.enter];
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { validationSchema } from "./validationSchemas/editValidationSchema";
 
 export default function NewsEditForm({ noticia }) {
+  const [errors, setErrors] = useState(true);
+  const history = useNavigate();
   const [loading, setLoading] = useState(false);
   const [tags, setTags] = React.useState([]);
   const [tagError, setTagError] = useState(0);
@@ -32,17 +27,31 @@ export default function NewsEditForm({ noticia }) {
 
   const handleAddition = (tag) => {
     setTags([...tags, tag]);
-    console.log(tags);
   };
 
   const handleDrag = (tag, currPos, newPos) => {
     const newTags = tags.slice();
-
     newTags.splice(currPos, 1);
     newTags.splice(newPos, 0, tag);
-
     // re-render
     setTags(newTags);
+  };
+
+  const handleValidation = () => {
+    let errors = 0;
+    if (imagePreviews.length === 0) {
+      setFileError("Debes subir al menos una imagen");
+      errors++;
+    }
+    if (tags.length === 0) {
+      setTagError("Debes poner al menos 1 etiqueta");
+      errors++;
+    }
+    if (errors > 0) {
+      setErrors(true);
+    } else {
+      setErrors(false);
+    }
   };
 
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -57,11 +66,7 @@ export default function NewsEditForm({ noticia }) {
       setImagePreviews([...imagePreviews, ...newPreviews]);
     },
   });
-  const validationSchema = Yup.object().shape({
-    category: Yup.string().required("La categoría es requerida"),
 
-    content: Yup.string().required("El contenido es requerida"),
-  });
   const formik = useFormik({
     initialValues: {
       title: "",
@@ -70,15 +75,9 @@ export default function NewsEditForm({ noticia }) {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      if (imagePreviews.length === 0) {
-        setFileError("Debes subir al menos una imagen");
+      if (errors) {
         return;
       }
-      if (tags.length === 0) {
-        setTagError("Debes poner al menos 1 etiqueta");
-        return;
-      }
-
       const allData = {
         values,
         tags,
@@ -98,15 +97,33 @@ export default function NewsEditForm({ noticia }) {
         );
         if (response.statusCode === 200) {
           console.log(response);
+          toast.success("Se creó la noticia satisfactoriamente!", {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            style: { color: "#fff", fontWeight: "500" }, // Añade un borde al texto}
+          });
+          history("/noticias/listar");
         }
       } catch (e) {
         console.error(e);
       } finally {
         setLoading(false);
-        redirect('/noticias/listar')
       }
     },
   });
+  useEffect(() => {
+    console.log(tagError);
+    if (tags) {
+      tags.length > 0 || tagError === 0
+        ? setTagError(null)
+        : setTagError("*Debes poner al menos una etiqueta");
+    }
+  }, [tags]);
 
   useEffect(() => {
     if (noticia && noticia.title) {
@@ -114,27 +131,22 @@ export default function NewsEditForm({ noticia }) {
         ...formik.values,
         content: noticia.body,
         category: noticia.category,
-        title: noticia.title
+        title: noticia.title,
       });
-      noticia.tags ? setTags(noticia.tags) : setTags([])
-      setImagePreviews(noticia.images)
+      noticia.tags ? setTags(noticia.tags) : setTags([]);
+      setTagError(0);
+      setImagePreviews(noticia.images);
+      setFileError(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noticia.body]);
-  useEffect(() => {
-    console.log(noticia.id);
-    if (tags) {
-      tags.length > 0 || tagError === 0
-        ? setTagError(null)
-        : setTagError("Debes poner al menos una etiqueta");
 
+  useEffect(() => {
+    if (imagePreviews) {
+      imagePreviews.length > 0 || fileError === 0
+        ? setFileError(null)
+        : setFileError("*Debes subir al menos una Imagen");
     }
-  }, [tags]);
-
-  useEffect(() => {
-    imagePreviews.length > 0 || fileError === 0
-      ? setFileError(null)
-      : setFileError("Debes subir al menos una Imagen");
   }, [imagePreviews]);
 
   const files = imagePreviews.map((file, key) => (
@@ -166,7 +178,16 @@ export default function NewsEditForm({ noticia }) {
           <Col xl={12}>
             <Form.Group className="mb-3">
               <Form.Label>Titulo</Form.Label>
-              <Form.Control onChange={formik.handleChange} type="text" name="title" value={formik.values.title} />
+              <Form.Control
+                onChange={formik.handleChange}
+                type="text"
+                name="title"
+                value={formik.values.title}
+                isInvalid={formik.touched.title && formik.errors.title}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formik.errors.title}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col xl={6}>
@@ -200,7 +221,7 @@ export default function NewsEditForm({ noticia }) {
                     : "ReactTags__tagInputField",
                 }}
                 tags={tags}
-                delimiters={delimiters}
+                /* delimiters={delimiters} */
                 handleDelete={handleDelete}
                 handleAddition={handleAddition}
                 handleDrag={handleDrag}
@@ -239,8 +260,9 @@ export default function NewsEditForm({ noticia }) {
               <div
                 className={`${fileError ? "inputError" : ""}`}
                 {...getRootProps({
-                  className: `dropzone-area py-6 ${fileError ? "inputError" : ""
-                    }`,
+                  className: `dropzone-area py-6 ${
+                    fileError ? "inputError" : ""
+                  }`,
                 })}
               >
                 <input {...getInputProps()} />
@@ -260,12 +282,14 @@ export default function NewsEditForm({ noticia }) {
         </Row>
         <Row>
           <div className="mt-3">
-            {imagePreviews ? imagePreviews.length > 0 && (
-              <>
-                <h6>Imagenes adjuntadas</h6>
-                <div className="d-flex">{files}</div>
-              </>
-            ) : ''}
+            {imagePreviews
+              ? imagePreviews.length > 0 && (
+                  <>
+                    <h6>Imagenes adjuntadas</h6>
+                    <div className="d-flex">{files}</div>
+                  </>
+                )
+              : ""}
           </div>
         </Row>
         <Row>
@@ -287,7 +311,7 @@ export default function NewsEditForm({ noticia }) {
                 <span className=""> Cargando...</span>
               </Button>
             ) : (
-              <Button type="submit">
+              <Button type="submit" onClick={handleValidation}>
                 <FaSave className="me-2" />
                 Guardar Cambios
               </Button>
