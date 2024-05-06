@@ -19,8 +19,8 @@ export default function NewsListPage() {
   const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState([]);
   const [isPublished] = React.useState(true);
-  const [limit,setLimit] = useState(false);
-  const [totalResults,settotalResults] = useState(false);
+  const [limit, setLimit] = useState(false);
+  const [totalResults, settotalResults] = useState(false);
   const openModal = () => {
     setSmShow(true);
   };
@@ -30,19 +30,17 @@ export default function NewsListPage() {
   const [smShow, setSmShow] = useState(false);
 
   React.useEffect(() => {
-    console.log(limit)
     const fetchData = async () => {
       try {
         setLoading(true);
         let response;
-        if(limit !== null){
-          response = await NewsInstance.getAll({limit:limit})
-        }else{
-          response = await NewsInstance.getAll({})
+        if (limit !== null) {
+          response = await NewsInstance.getAll({ limit: limit });
+        } else {
+          response = await NewsInstance.getAll({});
         }
-        setData(response.results)
-        settotalResults(response.totalResults)
-        console.log(response.totalResults)
+        setData(response.results);
+        settotalResults(response.totalResults);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -71,7 +69,12 @@ export default function NewsListPage() {
             <FalconCloseButton onClick={() => setSmShow(false)} />
           </Modal.Header>
           <Modal.Body>
-            <NewsTitleForm setData={setData} closeModal={closeModal} limit={limit} settotalResults={settotalResults} />
+            <NewsTitleForm
+              setData={setData}
+              closeModal={closeModal}
+              limit={limit}
+              settotalResults={settotalResults}
+            />
           </Modal.Body>
         </Modal>
       </PageHeader>
@@ -86,13 +89,16 @@ export default function NewsListPage() {
             <MyLoadingComponent />
           ) : (
             <>
-              <ListOrderComponent totalResults={totalResults} limit={limit} setLimit={setLimit}/>
-              {data.map((noticia, key) => (
-                <NewListItem key={key} noticia={noticia} />
+              <ListOrderComponent
+                totalResults={totalResults}
+                limit={limit}
+                setLimit={setLimit}
+              />
+              {data?.map((noticia, key) => (
+                <NewListItem key={key} noticia={noticia} setData={setData} />
               ))}
             </>
           )}
-
         </Col>
       </Row>
     </>

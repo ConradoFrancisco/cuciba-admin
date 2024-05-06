@@ -1,27 +1,55 @@
 import IconButton from "MyApp/components/common/IconButton";
 import FalconCloseButton from "components/common/FalconCloseButton";
 import { useState } from "react";
-import { Card, Col, Image, Modal, Row } from "react-bootstrap";
+import { Button, Card, Col, Image, Modal, Row, Spinner } from "react-bootstrap";
+import { FaSave } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { NewsInstance } from "services/NewsServices";
 
-export default function NewListItem({ noticia }) {
+export default function NewListItem({ noticia, setData }) {
   const [smShow, setSmShow] = useState(false);
   const [smShowPublic, setSmShowPublic] = useState(false);
-  const [loading,setLoading] = useState(false)
+  const [smShowPause, setSmShowPause] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleDeleteNoticia = async (id) =>{
-    
-    setLoading(true)
-    try{
-      const data = await NewsInstance.delete(id)
-      console.log(data)
-    }catch(e){
-      console.error('error al eliminar')
-    }finally{
-      setLoading(false)
+  const handleDeleteNoticia = async (id) => {
+    setLoading(true);
+    try {
+      const data = await NewsInstance.delete(id);
+      setData(data.data);
+      console.log(data.data);
+    } catch (e) {
+      console.error("error al eliminar");
+    } finally {
+      setLoading(false);
+      setSmShow(false);
     }
-  }
+  };
+
+  const handlePublicarNoticia = async (id) => {
+    setLoading(true);
+    try {
+      const data = await NewsInstance.publicar(id);
+      setData(data.data);
+    } catch (e) {
+      console.error("error al eliminar");
+    } finally {
+      setLoading(false);
+      setSmShowPublic(false);
+    }
+  };
+  const handlePausarNoticia = async (id) => {
+    setLoading(true);
+    try {
+      const data = await NewsInstance.pausar(id);
+      setData(data.data);
+    } catch (e) {
+      console.error("error al eliminar");
+    } finally {
+      setLoading(false);
+      setSmShowPause(false);
+    }
+  };
   return noticia ? (
     <>
       <Card className="mt-2">
@@ -77,14 +105,19 @@ export default function NewListItem({ noticia }) {
                   />
                 </button>
               ) : (
-                <IconButton
-                  className="m-1"
-                  size="sm"
-                  variant="secondary"
-                  icon=""
+                <button
+                  onClick={() => setSmShowPause(true)}
+                  style={{ border: "none", padding: "0px", background: "none" }}
                 >
-                  <strong>II</strong>
-                </IconButton>
+                  <IconButton
+                    className="m-1"
+                    size="sm"
+                    variant="secondary"
+                    icon=""
+                  >
+                    <strong>II</strong>
+                  </IconButton>
+                </button>
               )}
 
               <Link to={`/noticias/editar/${noticia.id}`}>
@@ -95,13 +128,14 @@ export default function NewListItem({ noticia }) {
                   icon="edit"
                 />
               </Link>
-
-              <IconButton
-                className="m-1 border"
-                size="sm"
-                variant="light"
-                icon="external-link-alt"
-              />
+              <Link to={`${process.env.FRONTEND_URL}/noticias${noticia.id}`}>
+                <IconButton
+                  className="m-1 border"
+                  size="sm"
+                  variant="light"
+                  icon="external-link-alt"
+                />
+              </Link>
               <button
                 onClick={() => setSmShow(true)}
                 style={{ border: "none", padding: "0px", background: "none" }}
@@ -126,15 +160,36 @@ export default function NewListItem({ noticia }) {
         <div className="d-flex justify-content-end">
           <FalconCloseButton onClick={() => setSmShow(false)} className="p-2" />
         </div>
-
         <Modal.Body>
           <div>
             <h5>
               Usted esta a punto de eliminar la noticia: '{noticia.title}'.
               ¿desea Proseguir?
               <div className="d-flex justify-content-center gap-3 pt-3">
-                
-                <button onClick={()=>handleDeleteNoticia(noticia.id)} className="btn btn-success">Confimar</button>
+                {loading ? (
+                  <Button
+                    variant="success"
+                    className="d-inline-flex flex-center"
+                    disabled
+                  >
+                    <Spinner
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="me-2"
+                    />
+                    <span className=""> Cargando...</span>
+                  </Button>
+                ) : (
+                  <Button
+                    variant="success"
+                    type="submit"
+                    onClick={() => handleDeleteNoticia(noticia.id)}
+                  >
+                    Continuar
+                  </Button>
+                )}
                 <button
                   onClick={() => setSmShow(false)}
                   className="btn btn-danger"
@@ -164,9 +219,85 @@ export default function NewListItem({ noticia }) {
               Usted esta a punto de Publicar la noticia: '{noticia.title}'.
               ¿desea Proseguir?
               <div className="d-flex justify-content-center gap-3 pt-3">
-                <button className="btn btn-success">Confimar</button>
+                {loading ? (
+                  <Button
+                    variant="success"
+                    className="d-inline-flex flex-center"
+                    disabled
+                  >
+                    <Spinner
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="me-2"
+                    />
+                    <span className=""> Cargando...</span>
+                  </Button>
+                ) : (
+                  <Button
+                    variant="success"
+                    type="submit"
+                    onClick={() => handlePublicarNoticia(noticia.id)}
+                  >
+                    Continuar
+                  </Button>
+                )}
                 <button
                   onClick={() => setSmShowPublic(false)}
+                  className="btn btn-danger asd"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </h5>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        size="lg"
+        show={smShowPause}
+        onHide={() => setSmShowPause(false)}
+        aria-labelledby="example-modal-sizes-title-sm"
+      >
+        <div className="d-flex justify-content-end">
+          <FalconCloseButton
+            onClick={() => setSmShowPause(false)}
+            className="p-2"
+          />
+        </div>
+        <Modal.Body>
+          <div>
+            <h5>
+              Usted esta a punto de Pausar la noticia: '{noticia.title}'. ¿desea
+              Proseguir?
+              <div className="d-flex justify-content-center gap-3 pt-3">
+                {loading ? (
+                  <Button
+                    variant="success"
+                    className="d-inline-flex flex-center"
+                    disabled
+                  >
+                    <Spinner
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="me-2"
+                    />
+                    <span className=""> Cargando...</span>
+                  </Button>
+                ) : (
+                  <Button
+                    variant="success"
+                    type="submit"
+                    onClick={() => handlePausarNoticia(noticia.id)}
+                  >
+                    Continuar
+                  </Button>
+                )}
+                <button
+                  onClick={() => setSmShowPause(false)}
                   className="btn btn-danger asd"
                 >
                   Cancelar
