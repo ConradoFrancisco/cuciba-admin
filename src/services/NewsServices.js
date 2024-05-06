@@ -20,6 +20,7 @@ class NewsService {
               totalResults: data.length ,
               statusCode: 200,
             };
+            console.log(response)
             resolve(response);
           }else{
             const mappedData = data.map(({ id, title, estado,imageUrl }) => ({
@@ -35,6 +36,8 @@ class NewsService {
               totalResults: data.length ,
               statusCode: 200,
             };
+            console.log(response)
+
             resolve(response);
           }
           
@@ -91,7 +94,7 @@ class NewsService {
       }, 2000);
     });
   }
-  async edit(id,portada,title, category, content, tags, images) {
+  async edit(id,portada,title, category, content, tags, images,edited) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (true) {
@@ -103,7 +106,7 @@ class NewsService {
           noticia[0].category = category;
           noticia[0].images = images;
           noticia[0].cantFotos = images.length;
-
+          noticia[0].edited= edited
           const response = {
             noticia: noticia[0],
             statusCode: 200,
@@ -114,6 +117,24 @@ class NewsService {
         }
       }, 2000);
     });
+  }
+  async delete(id){
+    return new Promise((resolve,reject)=>{
+      if(true){
+        console.log(id)
+        const newData = data.filter(noticia => noticia.id !== parseInt(id));
+        console.log(newData)
+        const response = {
+          data: newData,
+          statusCode: 200,
+        };
+        
+        resolve(response);
+        } else {
+          reject(new Error("no se ha podido cumplir la promesa"));
+        }
+      
+    })
   }
 }
 

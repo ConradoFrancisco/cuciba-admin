@@ -68,7 +68,6 @@ export default function NewsListPage() {
           aria-labelledby="example-modal-sizes-title-sm"
         >
           <Modal.Header>
-            <Modal.Title id="example-modal-sizes-title-sm"></Modal.Title>
             <FalconCloseButton onClick={() => setSmShow(false)} />
           </Modal.Header>
           <Modal.Body>

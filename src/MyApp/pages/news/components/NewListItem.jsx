@@ -1,32 +1,43 @@
 import IconButton from "MyApp/components/common/IconButton";
-import { Card, Col, Image, Row } from "react-bootstrap";
+import FalconCloseButton from "components/common/FalconCloseButton";
+import { useState } from "react";
+import { Card, Col, Image, Modal, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { NewsInstance } from "services/NewsServices";
 
-export default function NewListItem({noticia}){
-    return (
-        noticia ? (<Card className="mt-2">
+export default function NewListItem({ noticia }) {
+  const [smShow, setSmShow] = useState(false);
+  const [smShowPublic, setSmShowPublic] = useState(false);
+  const [loading,setLoading] = useState(false)
+
+  const handleDeleteNoticia = async (id) =>{
+    
+    setLoading(true)
+    try{
+      const data = await NewsInstance.delete(id)
+      console.log(data)
+    }catch(e){
+      console.error('error al eliminar')
+    }finally{
+      setLoading(false)
+    }
+  }
+  return noticia ? (
+    <>
+      <Card className="mt-2">
         <Card.Body>
           <Row>
             <Col xs={12} sm={3}>
-              <Image
-                src={noticia.imageUrl}
-                fluid
-              />
+              <Image src={noticia.imageUrl} fluid />
             </Col>
             <Col xs={12} sm={6}>
-              <span className="d-block fw-bold">
-                {noticia.title}
-              </span>
-        
-        
+              <span className="d-block fw-bold">{noticia.title}</span>
             </Col>
             <Col xs={12} sm={3}>
               <Row className="mb-3">
                 <Col className="">
                   <Row>
-                    <Col>
-        
-                    </Col>
+                    <Col></Col>
                     <Col className="d-flex justify-content-end">
                       <span className="small">
                         Estado: <strong>{noticia.estado}</strong>
@@ -35,8 +46,6 @@ export default function NewListItem({noticia}){
                   </Row>
                 </Col>
               </Row>
-        
-        
             </Col>
           </Row>
         </Card.Body>
@@ -55,19 +64,29 @@ export default function NewListItem({noticia}){
               </span>
             </Col>
             <Col className="d-flex align-items-end justify-content-end m-0">
-              {noticia.estado === 'no publicada' ? (
+              {noticia.estado === "no publicada" ? (
+                <button
+                  onClick={() => setSmShowPublic(true)}
+                  style={{ border: "none", padding: "0px", background: "none" }}
+                >
+                  <IconButton
+                    className="m-1"
+                    size="sm"
+                    variant="success"
+                    icon="chevron-right"
+                  />
+                </button>
+              ) : (
                 <IconButton
                   className="m-1"
                   size="sm"
-                  variant="success"
-                  icon="chevron-right"
-                />
-              ) : (
-                <IconButton className="m-1" size="sm" variant="secondary" icon="">
+                  variant="secondary"
+                  icon=""
+                >
                   <strong>II</strong>
                 </IconButton>
               )}
-        
+
               <Link to={`/noticias/editar/${noticia.id}`}>
                 <IconButton
                   className="m-1"
@@ -76,24 +95,89 @@ export default function NewListItem({noticia}){
                   icon="edit"
                 />
               </Link>
-        
+
               <IconButton
-                
                 className="m-1 border"
                 size="sm"
                 variant="light"
                 icon="external-link-alt"
               />
-        
-              <IconButton
-                className="m-1"
-                size="sm"
-                variant="danger"
-                icon="trash-alt"
-              />
+              <button
+                onClick={() => setSmShow(true)}
+                style={{ border: "none", padding: "0px", background: "none" }}
+              >
+                <IconButton
+                  className="m-1"
+                  size="sm"
+                  variant="danger"
+                  icon="trash-alt"
+                />
+              </button>
             </Col>
           </Row>
         </Card.Footer>
-        </Card>) : ''
-    )
-} 
+      </Card>
+      <Modal
+        size="lg"
+        show={smShow}
+        onHide={() => setSmShow(false)}
+        aria-labelledby="example-modal-sizes-title-sm"
+      >
+        <div className="d-flex justify-content-end">
+          <FalconCloseButton onClick={() => setSmShow(false)} className="p-2" />
+        </div>
+
+        <Modal.Body>
+          <div>
+            <h5>
+              Usted esta a punto de eliminar la noticia: '{noticia.title}'.
+              ¿desea Proseguir?
+              <div className="d-flex justify-content-center gap-3 pt-3">
+                
+                <button onClick={()=>handleDeleteNoticia(noticia.id)} className="btn btn-success">Confimar</button>
+                <button
+                  onClick={() => setSmShow(false)}
+                  className="btn btn-danger"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </h5>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        size="lg"
+        show={smShowPublic}
+        onHide={() => setSmShowPublic(false)}
+        aria-labelledby="example-modal-sizes-title-sm"
+      >
+        <div className="d-flex justify-content-end">
+          <FalconCloseButton
+            onClick={() => setSmShowPublic(false)}
+            className="p-2"
+          />
+        </div>
+        <Modal.Body>
+          <div>
+            <h5>
+              Usted esta a punto de Publicar la noticia: '{noticia.title}'.
+              ¿desea Proseguir?
+              <div className="d-flex justify-content-center gap-3 pt-3">
+                <button className="btn btn-success">Confimar</button>
+                <button
+                  onClick={() => setSmShowPublic(false)}
+                  className="btn btn-danger asd"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </h5>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
+  ) : (
+    ""
+  );
+}

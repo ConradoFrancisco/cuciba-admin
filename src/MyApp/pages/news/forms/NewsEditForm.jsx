@@ -21,6 +21,7 @@ export default function NewsEditForm({ noticia }) {
   const [tags, setTags] = React.useState([]);
   const [tagError, setTagError] = useState(0);
   const [fileError, setFileError] = useState(0);
+  const [edited,setEdited] = useState(false);
   const handleDelete = (i) => {
     setTags(tags.filter((tag, index) => index !== i));
   };
@@ -63,7 +64,8 @@ export default function NewsEditForm({ noticia }) {
           preview: URL.createObjectURL(file),
         })
       );
-      setImagePreviews([...imagePreviews, ...newPreviews]);
+      const images = newPreviews.map((file)=> file.preview)
+      setImagePreviews([...imagePreviews, ...images]);
     },
   });
 
@@ -88,12 +90,13 @@ export default function NewsEditForm({ noticia }) {
         setLoading(true);
         const response = await NewsInstance.edit(
           noticia.id,
-          allData.imagePreviews[0].preview,
+          allData.imagePreviews[0],
           values.title,
           values.category,
           allData.values.content,
           allData.tags,
-          allData.imagePreviews
+          allData.imagePreviews,
+          true
         );
         if (response.statusCode === 200) {
           console.log(response);
@@ -117,7 +120,6 @@ export default function NewsEditForm({ noticia }) {
     },
   });
   useEffect(() => {
-    console.log(tagError);
     if (tags) {
       tags.length > 0 || tagError === 0
         ? setTagError(null)
@@ -135,8 +137,13 @@ export default function NewsEditForm({ noticia }) {
       });
       noticia.tags ? setTags(noticia.tags) : setTags([]);
       setTagError(0);
-      setImagePreviews(noticia.images);
-      setFileError(0);
+      //console.log(noticia.images)
+      setEdited(noticia.edited)
+    }
+    if (noticia.images && noticia.edited === false) {
+      console.log(noticia.edited)
+      const newImages = [noticia.imageUrl, ...noticia.images];
+      setImagePreviews(newImages);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [noticia.body]);
@@ -162,8 +169,8 @@ export default function NewsEditForm({ noticia }) {
         <img
           className="fluid"
           style={{ objectFit: "cover", marginRight: ".4em" }}
-          src={file.preview}
-          alt={file.name}
+          src={file}
+          alt={file}
           width={200}
           height={150}
         />
