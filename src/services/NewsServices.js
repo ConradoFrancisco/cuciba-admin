@@ -143,15 +143,9 @@ class NewsService {
       if (true) {
         const index = data.findIndex((noticia) => noticia.id === id);
         if (index !== -1) {
-          let newData = [...data]; // Clona el array 'data'
-          newData[index].estado = "publicada"; // Actualiza el estado de la noticia encontrada
+          let newData = [...data];
+          newData[index].estado = "publicada"; 
           console.log(newData[index]);
-          //let newData = [...data]; // Clona el array 'data'
-          //console.log(newData[id + 1].estado);
-          //newData[id - 1].estado = "publicada";
-          //console.log(newData[id + 1].estado);
-          //console.log(newData);
-
           const response = {
             data: newData,
             statusCode: 200,
@@ -166,17 +160,19 @@ class NewsService {
   async pausar(id) {
     return new Promise((resolve, reject) => {
       if (true) {
-        let newData = [...data]; // Clona el array 'data'
-        //console.log(newData[id + 1].estado);
-        newData[id - 1].estado = "no publicada";
-        //console.log(newData[id + 1].estado);
-        //console.log(newData);
+        const index = data.findIndex((noticia) => noticia.id === id);
 
-        const response = {
-          data: newData,
-          statusCode: 200,
-        };
-        resolve(response);
+        if (index !== -1) {
+          let newData = [...data]; 
+          newData[index].estado = "no publicada"; 
+          console.log(newData[index]);
+
+          const response = {
+            data: newData,
+            statusCode: 200,
+          };
+          resolve(response);
+        }
       } else {
         reject(new Error("no se ha podido cumplir la promesa"));
       }

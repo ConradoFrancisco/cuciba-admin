@@ -17,7 +17,6 @@ export default function NewListItem({ noticia, setData }) {
     try {
       const data = await NewsInstance.delete(id);
       setData(data.data);
-      console.log(data.data);
     } catch (e) {
       console.error("error al eliminar");
     } finally {
@@ -65,7 +64,7 @@ export default function NewListItem({ noticia, setData }) {
               <Row className="mb-3">
                 <Col className="">
                   <Row>
-                    <Col></Col>
+                    
                     <Col className="d-flex justify-content-end">
                       <span className="small">
                         Estado: <strong>{noticia.estado}</strong>
