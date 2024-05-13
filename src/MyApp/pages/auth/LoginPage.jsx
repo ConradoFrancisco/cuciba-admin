@@ -1,9 +1,12 @@
-import React from 'react';
+import MyLogin from "MyApp/components/MyLogin";
+import React from "react";
 
 const LoginPage = () => {
   return (
     <>
-      <h1>Login Page</h1>
+      <div className="card p-4 ">
+        <MyLogin />
+      </div>
     </>
   );
 };

@@ -55,7 +55,7 @@ const MyRoutes = () => {
             <Route path="listar" element={<BranchListPage />} />
             <Route path="editar/:id" element={<BranchEditPage />} />
           </Route>
-          <Route path="/">
+          <Route path="/" element={<PrincipalPage />}>
             <Route path="principal" element={<PrincipalPage />} />
             <Route path="estadisticas" element={<EstadisticasPage />} />
           </Route>
@@ -71,7 +71,7 @@ const MyRoutes = () => {
           <Route path="/property">
             <Route path="listar" element={<PropertyListPage />} />
           </Route>
-          
+
           <Route path="/inmobiliaria">
             <Route path="ver/:id" element={<BranchShowPage />} />
           </Route>

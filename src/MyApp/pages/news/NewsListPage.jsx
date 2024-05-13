@@ -14,6 +14,7 @@ import MyLoadingComponent from "MyApp/my-components/MyLoadingComponent";
 import NewListItem from "./components/NewListItem";
 import ListFilterComponent from "../property/components/ListFilterComponent";
 import ListOrderComponent from "../property/components/ListOrderComponent";
+import { useUser } from "MyApp/context/AuthProvider";
 
 export default function NewsListPage() {
   const [loading, setLoading] = React.useState(false);
