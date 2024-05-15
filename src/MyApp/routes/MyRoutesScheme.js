@@ -1,21 +1,21 @@
-export const dashboardRoutes = {
-  label: "Panel Principal",
+export const institucionalRoutes = {
+  label: "Institucional",
   labelDisable: false,
   children: [
     {
-      name: "Panel Principal",
+      name: "Institucional",
       active: true,
-      icon: "chart-pie",
+      icon: "computer-mouse",
       children: [
         {
-          name: "Resumen",
-          to: "/principal",
+          name: "Autoridades",
+          to: "/institucional/autoridades",
           exact: true,
           active: true,
         },
         {
-          name: "Estadísticas",
-          to: "/estadisticas",
+          name: "Personal del colegio por áreas",
+          to: "/institucional/personal",
           exact: true,
           active: true,
         },
@@ -24,30 +24,24 @@ export const dashboardRoutes = {
   ],
 };
 
-export const propertiesRoutes = {
+export const noticiasRoutes = {
   label: "Noticias",
   labelDisable: false,
   children: [
     {
       name: "Noticias",
       active: true,
-      icon: "home",
+      icon: "computer-mouse",
       children: [
         {
-          name: "Listado",
+          name: "Listado de noticias",
           to: "/noticias/listar",
           exact: true,
           active: true,
         },
         {
-          name: "Compartidas",
-          to: "/propiedades/compartidas/listar",
-          exact: true,
-          active: true,
-        },
-        {
-          name: "Interesados",
-          to: "/propiedades/interesados",
+          name: "Agregar noticia",
+          to: "/noticias",
           exact: true,
           active: true,
         },
@@ -121,8 +115,8 @@ export const helpRoutes = {
 };
 
 export const serviciosRoutes = {
-  label:'Servicios',
-  labelDisable:false,
+  label: "Servicios",
+  labelDisable: false,
   children: [
     {
       name: "Servicios",
@@ -210,7 +204,7 @@ export const serviciosRoutes = {
       ],
     },
   ],
-}
+};
 
 export const cucicbaRoutes = {
   label: "CUCICBA",
@@ -283,11 +277,12 @@ export const webmasterRoutes = {
 };
 
 export default [
-  dashboardRoutes,
-  propertiesRoutes,
+  institucionalRoutes,
+  noticiasRoutes,
   serviciosRoutes,
-  settingsRoutes,
+  /* settingsRoutes,
   helpRoutes,
   cucicbaRoutes,
-  webmasterRoutes,
+  webmasterRoutes */
+  ,
 ];

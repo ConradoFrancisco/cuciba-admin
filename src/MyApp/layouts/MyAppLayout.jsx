@@ -10,7 +10,6 @@ const MyAppLayout = () => {
     <>
       <main>
         <Container fluid>
-          <NavbarVertical routes={MyRoutesScheme} />
           <div className="content">
             <NavbarTop />
             <Outlet />

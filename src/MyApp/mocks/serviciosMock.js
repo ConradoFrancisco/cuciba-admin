@@ -25,7 +25,7 @@ export const publicaciones = [
     descripcion:
       "FORMULARIO N° 2 – PERSONAS JURÍDICAS / ASOCIACIONES / FUNDACIONES / OTROS",
     categoria: "UIF - Lavado de dinero",
-    estado: "pausada",
+    estado: "publicada",
   },
   {
     fecha: "22/11/23",

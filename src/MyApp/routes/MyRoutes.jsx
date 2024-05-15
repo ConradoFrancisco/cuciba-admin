@@ -23,6 +23,8 @@ import FaqPage from "MyApp/pages/help/FaqPage";
 import TutorialsPage from "MyApp/pages/help/TutorialsPage";
 import EstadisticasPage from "MyApp/pages/home/EstadisticasPage";
 import PrincipalPage from "MyApp/pages/home/PrincipalPage";
+import AutoridadesPage from "MyApp/pages/institucional/AutoridadesPage";
+import PersonalPage from "MyApp/pages/institucional/PersonalPage";
 import MessagesListPage from "MyApp/pages/mensajes/MessagesListPage";
 import EditNewsPage from "MyApp/pages/news/EditNewsPage";
 import NewsListPage from "MyApp/pages/news/NewsListPage";
@@ -62,25 +64,39 @@ const MyRoutes = () => {
           <Route path="register" element={<RegisterPage />} />
           <Route path="restore" element={<RestorePage />} />
         </Route>
+
         <Route element={<MyAppLayout />}>
           <Route path="/sucursales">
             <Route path="listar" element={<BranchListPage />} />
             <Route path="editar/:id" element={<BranchEditPage />} />
           </Route>
+          <Route path="/institucional">
+            <Route path="autoridades" element={<AutoridadesPage />} />
+            <Route path="personal" element={<PersonalPage />} />
+          </Route>
           <Route path="/servicios">
             <Route path="listado" element={<BranchListPage />} />
-            <Route path="observatorio-estadistico" element={<ObservatorioEstadisticoPage />} />
-            <Route path="calculadora" element={<CalculadoraDeAlquilerPage/>} />
+            <Route
+              path="observatorio-estadistico"
+              element={<ObservatorioEstadisticoPage />}
+            />
+            <Route path="calculadora" element={<CalculadoraDeAlquilerPage />} />
             <Route path="renaper" element={<RenaperPage />} />
             <Route path="revista-cucicba" element={<RevistaCucicbaPage />} />
             <Route path="matriculacion" element={<MatriculacionPage />} />
-            <Route path="preguntas-frecuentes" element={<PreguntasFrecuentesPage />} />
-            <Route path="biblioteca-digital" element={<BibliotecaDigitalPage />} />
+            <Route
+              path="preguntas-frecuentes"
+              element={<PreguntasFrecuentesPage />}
+            />
+            <Route
+              path="biblioteca-digital"
+              element={<BibliotecaDigitalPage />}
+            />
             <Route path="ilegales" element={<IlegalesPage />} />
             <Route path="ilegales-penal" element={<IlegalesPenalPage />} />
             <Route path="sanciones" element={<SancionesPage />} />
             <Route path="infractores" element={<InfractoresPage />} />
-            <Route path="denuncias" element={<DenunciasPage/>} />
+            <Route path="denuncias" element={<DenunciasPage />} />
           </Route>
           <Route path="/" element={<PrincipalPage />}>
             <Route path="principal" element={<PrincipalPage />} />

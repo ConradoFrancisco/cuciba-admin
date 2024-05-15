@@ -5,10 +5,12 @@ import AdvanceTableWrapper from "MyApp/components/common/advance-table/AdvanceTa
 import PageHeader from "components/common/PageHeader";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { FaCheck, FaEdit, FaTrash } from "react-icons/fa";
+import { FaCheck, FaEdit, FaTrash, FaPlay } from "react-icons/fa";
 import { CiPause1 } from "react-icons/ci";
+import { MdOutlinePendingActions } from "react-icons/md";
 import { useEffect, useState } from "react";
 import bibliotecaInstance from "services/servicios/bibliotecaDigitalService";
+import { FiPlus } from "react-icons/fi";
 const columns = [
   {
     accessor: "fecha",
@@ -37,10 +39,8 @@ const columns = [
   },
 ];
 
-
 export default function BibliotecaDigitalPage() {
-
-  const [data,setData] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,25 +48,50 @@ export default function BibliotecaDigitalPage() {
         const response = await bibliotecaInstance.getAll();
         const mappedData = response.data.map((publicacion) => ({
           ...publicacion,
-          estado: (
-            <div
-              className="fw-bold flex-shrink-0"
-              style={{
-                padding: "4px",
-                borderRadius: "3px",
-                backgroundColor: "#d9f8eb",
-              }}
-            >
-              <span style={{ color: "#00894f", fontSize: "14px" }}>
-                {publicacion.estado}
-              </span>
-              <FaCheck fill="#00894f" />
-            </div>
-          ),
+          estado:
+            publicacion.estado === "publicada" ? (
+              <div
+                className="fw-bold flex-shrink-0"
+                style={{
+                  padding: "4px",
+                  borderRadius: "3px",
+                  backgroundColor: "#d9f8eb",
+                }}
+              >
+                <span style={{ color: "#00894f", fontSize: "14px" }}>
+                  {publicacion.estado}
+                </span>
+                <FaCheck fill="#00894f" />
+              </div>
+            ) : (
+              <div
+                className="fw-bold flex-shrink-0"
+                style={{
+                  padding: "4px",
+                  borderRadius: "3px",
+                  backgroundColor: "#fde6d8",
+                }}
+              >
+                <span
+                  className="ms-2"
+                  style={{ color: "#ac5a2b", fontSize: "14px" }}
+                >
+                  {publicacion.estado}
+                </span>
+                <MdOutlinePendingActions fill="#ac5a2b" />
+              </div>
+            ),
           acciones: (
             <div className="d-flex gap-1">
-              <Button size="sm" className="btn btn-secondary">
-                <CiPause1 />
+              <Button
+                size="sm"
+                className={`btn ${
+                  publicacion.estado === "publicada"
+                    ? "btn-secondary"
+                    : "btn-success"
+                }`}
+              >
+                {publicacion.estado === "publicada" ? <CiPause1 /> : <FaPlay />}
               </Button>
               <Button size="sm" className="btn btn-primary">
                 <FaEdit size={18} />
@@ -78,7 +103,6 @@ export default function BibliotecaDigitalPage() {
           ),
         }));
         setData(mappedData);
-        console.log(mappedData);
       } catch (e) {
         console.log(e);
       }
@@ -92,8 +116,12 @@ export default function BibliotecaDigitalPage() {
         title="Biblioteca digital"
         description="En esta sección puedes ver las publicaciones listadas,crear nuevas,editarlas y publicarlas"
         className="mb-3"
-      />
-      <Card className="p-2 ">
+      >
+        <button className="btn btn-sm btn-primary">
+          <FiPlus /> Agregar publicación
+        </button>
+      </PageHeader>
+      <Card className="p-2">
         <AdvanceTableWrapper
           columns={columns}
           data={data}
@@ -108,6 +136,7 @@ export default function BibliotecaDigitalPage() {
           </Row>
           <AdvanceTable
             table
+            size="sm"
             headerClassName="bg-200 text-nowrap align-middle"
             rowClassName="align-middle white-space-nowrap"
             tableProps={{
