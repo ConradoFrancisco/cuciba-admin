@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import Flex from '../Flex';
-
 export const AdvanceTableFooter = ({
   page,
   pageSize,
@@ -31,14 +30,14 @@ export const AdvanceTableFooter = ({
         {rowInfo && (
           <p className="mb-0">
             <span className="d-none d-sm-inline-block me-2">
-              {pageSize * pageIndex + 1} to {pageSize * pageIndex + page.length}{' '}
-              of {rowCount}
+              {pageSize * pageIndex + 1} a {pageSize * pageIndex + page.length}{' '}
+              de {rowCount}
             </span>
           </p>
         )}
         {rowsPerPageSelection && (
           <>
-            <p className="mb-0 mx-2">Rows per page:</p>
+            <p className="mb-0 mx-2">Filas por pagina:</p>
             <Form.Select
               size="sm"
               className="w-auto"
@@ -62,7 +61,7 @@ export const AdvanceTableFooter = ({
             onClick={() => previousPage()}
             className={classNames({ disabled: !canPreviousPage })}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             size="sm"
@@ -72,7 +71,7 @@ export const AdvanceTableFooter = ({
             })}
             onClick={() => nextPage()}
           >
-            Next
+            Siguiente
           </Button>
         </Flex>
       )}

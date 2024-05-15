@@ -31,6 +31,18 @@ import PropertyInterestedPage from "MyApp/pages/property/PropertyInterestedPage"
 import PropertyListPage from "MyApp/pages/property/PropertyListPage";
 import PropertySharedPage from "MyApp/pages/property/PropertySharePage";
 import RoleListPage from "MyApp/pages/role/RoleListPage";
+import BibliotecaDigitalPage from "MyApp/pages/servicios/BibliotecaDigitalPage";
+import CalculadoraDeAlquilerPage from "MyApp/pages/servicios/CalculadoraDeAlquilerPage";
+import DenunciasPage from "MyApp/pages/servicios/DenunciasPage";
+import IlegalesPage from "MyApp/pages/servicios/IlegalesPage";
+import IlegalesPenalPage from "MyApp/pages/servicios/IlegalesPenalPage";
+import InfractoresPage from "MyApp/pages/servicios/InfactoresPage";
+import MatriculacionPage from "MyApp/pages/servicios/MatriculacionPage";
+import ObservatorioEstadisticoPage from "MyApp/pages/servicios/ObservatorioEstadisticoPage";
+import PreguntasFrecuentesPage from "MyApp/pages/servicios/PreguntasFrecuentesPage";
+import RenaperPage from "MyApp/pages/servicios/RenaperPage";
+import RevistaCucicbaPage from "MyApp/pages/servicios/RevistaCucicbaPage";
+import SancionesPage from "MyApp/pages/servicios/SancionesPage";
 import UserCreatePage from "MyApp/pages/user/UserEditPage";
 import UserEditPage from "MyApp/pages/user/UserEditPage";
 import UserListPage from "MyApp/pages/user/UserListPage";
@@ -54,6 +66,21 @@ const MyRoutes = () => {
           <Route path="/sucursales">
             <Route path="listar" element={<BranchListPage />} />
             <Route path="editar/:id" element={<BranchEditPage />} />
+          </Route>
+          <Route path="/servicios">
+            <Route path="listado" element={<BranchListPage />} />
+            <Route path="observatorio-estadistico" element={<ObservatorioEstadisticoPage />} />
+            <Route path="calculadora" element={<CalculadoraDeAlquilerPage/>} />
+            <Route path="renaper" element={<RenaperPage />} />
+            <Route path="revista-cucicba" element={<RevistaCucicbaPage />} />
+            <Route path="matriculacion" element={<MatriculacionPage />} />
+            <Route path="preguntas-frecuentes" element={<PreguntasFrecuentesPage />} />
+            <Route path="biblioteca-digital" element={<BibliotecaDigitalPage />} />
+            <Route path="ilegales" element={<IlegalesPage />} />
+            <Route path="ilegales-penal" element={<IlegalesPenalPage />} />
+            <Route path="sanciones" element={<SancionesPage />} />
+            <Route path="infractores" element={<InfractoresPage />} />
+            <Route path="denuncias" element={<DenunciasPage/>} />
           </Route>
           <Route path="/" element={<PrincipalPage />}>
             <Route path="principal" element={<PrincipalPage />} />

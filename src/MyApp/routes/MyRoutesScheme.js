@@ -120,6 +120,98 @@ export const helpRoutes = {
   ],
 };
 
+export const serviciosRoutes = {
+  label:'Servicios',
+  labelDisable:false,
+  children: [
+    {
+      name: "Servicios",
+      active: true,
+      icon: "computer-mouse",
+      children: [
+        {
+          name: "Listado",
+          to: "/servicios/listado",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Observatorio estadístico del sector inmobiliario",
+          to: "/servicios/observatorio-estadistico",
+          exact: true,
+          active: false,
+        },
+        {
+          name: "Calculadora de actualización de alquiler",
+          to: "/servicios/calculadora",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Consultas de RENAPER",
+          to: "/servicios/renaper",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Revista CUCICBA",
+          to: "/servicios/revista-cucicba",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Requisitos de matriculación",
+          to: "/servicios/matriculacion",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Preguntas frecuentes",
+          to: "/servicios/preguntas-frecuentes",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Biblioteca digital",
+          to: "/servicios/biblioteca-digital",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Listado de inmobiliarias ilegales",
+          to: "/servicios/ilegales",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Listado de inmobiliarias ilegales con causa penal",
+          to: "/servicios/ilegales-penal",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Sanciones del tribunal",
+          to: "/servicios/sanciones",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Listado de infractores",
+          to: "/servicios/infractores",
+          exact: true,
+          active: true,
+        },
+        {
+          name: "Denuncias",
+          to: "/servicios/denuncias",
+          exact: true,
+          active: true,
+        },
+      ],
+    },
+  ],
+}
+
 export const cucicbaRoutes = {
   label: "CUCICBA",
   labelDisable: false,
@@ -193,6 +285,7 @@ export const webmasterRoutes = {
 export default [
   dashboardRoutes,
   propertiesRoutes,
+  serviciosRoutes,
   settingsRoutes,
   helpRoutes,
   cucicbaRoutes,

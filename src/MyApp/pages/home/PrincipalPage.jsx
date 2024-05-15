@@ -3,6 +3,7 @@ import React from "react";
 import PageHeader from "components/common/PageHeader";
 import { Card, CardHeader, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import CardService from "components/pages/landing/CardService";
 
 const PrincipalPage = () => {
   return (
@@ -53,6 +54,11 @@ const PrincipalPage = () => {
         <Col xl={4}>
           <Card className="p-1">asd</Card>
         </Col>
+      </Row>
+      <Row className="mt-6">
+        <Col xl={4}><CardService description="esta es la descripcion n*1" title="Servicio de consultas renaper"/></Col>
+        <Col xl={4}><CardService description="esta es la descripcion n*1" title="Servicio de consultas renaper"/></Col>
+        <Col xl={4}><CardService description="esta es la descripcion n*1" title="Servicio de consultas renaper"/></Col>
       </Row>
     </>
   );
