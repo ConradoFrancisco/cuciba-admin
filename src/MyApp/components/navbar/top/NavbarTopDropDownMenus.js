@@ -1,7 +1,7 @@
 import React from "react";
 import NavbarDropdown from "./NavbarDropdown";
 
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, NavDropdown, NavItem } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import MyRoutesScheme from "MyApp/routes/MyRoutesScheme";
@@ -26,6 +26,15 @@ const NavbarTopDropDownMenus = () => {
           </NavbarDropdown>
         );
       })}
+      <div>
+        <NavItem
+          className="nav-link fw-semi-bold"
+          as={Link}
+          to={"/noticias/listar"}
+        >
+          Noticias
+        </NavItem>
+      </div>
     </>
   );
 };

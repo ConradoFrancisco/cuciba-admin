@@ -24,24 +24,18 @@ export const institucionalRoutes = {
   ],
 };
 
-export const noticiasRoutes = {
-  label: "Noticias",
+export const matriculadosRoutes = {
+  label: "Matriculados",
   labelDisable: false,
   children: [
     {
-      name: "Noticias",
+      name: "Matriculados",
       active: true,
       icon: "computer-mouse",
       children: [
         {
-          name: "Listado de noticias",
-          to: "/noticias/listar",
-          exact: true,
-          active: true,
-        },
-        {
-          name: "Agregar noticia",
-          to: "/noticias",
+          name: "Capacitación",
+          to: "/matriculados/capacitacion",
           exact: true,
           active: true,
         },
@@ -276,13 +270,4 @@ export const webmasterRoutes = {
   ],
 };
 
-export default [
-  institucionalRoutes,
-  noticiasRoutes,
-  serviciosRoutes,
-  /* settingsRoutes,
-  helpRoutes,
-  cucicbaRoutes,
-  webmasterRoutes */
-  ,
-];
+export default [institucionalRoutes, matriculadosRoutes, serviciosRoutes];

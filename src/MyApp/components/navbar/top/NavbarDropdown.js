@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import { Link } from 'react-router-dom';
-import { Card, Dropdown } from 'react-bootstrap';
-import AuthCornerImage from 'assets/img/illustrations/authentication-corner.png';
-import { breakpoints, capitalize } from 'helpers/utils';
-import { topNavbarBreakpoint } from 'config';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import classNames from "classnames";
+import { Link } from "react-router-dom";
+import { Card, Dropdown } from "react-bootstrap";
+import AuthCornerImage from "assets/img/illustrations/authentication-corner.png";
+import { breakpoints, capitalize } from "helpers/utils";
+import { topNavbarBreakpoint } from "config";
 
 const NavbarDropdown = ({ title, children }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -33,25 +33,17 @@ const NavbarDropdown = ({ title, children }) => {
       <Dropdown.Menu className="dropdown-menu-card mt-0">
         {/* {children} */}
         <Card
-          className={classNames('shadow-none dark__bg-1000', {
-            'navbar-card-app': title === 'app',
-            'navbar-card-pages': title === 'pages',
-            'navbar-card-components': title === 'modules'
+          className={classNames("shadow-none dark__bg-1000", {
+            "navbar-card-app": title === "app",
+            "navbar-card-pages": title === "pages",
+            "navbar-card-components": title === "modules",
           })}
         >
           <Card.Body
-            className={classNames('scrollbar max-h-dropdown', {
-              'p-0 py-2': title === 'dashboard' || title === 'documentation'
+            className={classNames("scrollbar max-h-dropdown", {
+              "p-0 py-2": title === "dashboard" || title === "documentation",
             })}
           >
-            {title !== 'dashboard' && title !== 'documentation' && (
-              <img
-                src={AuthCornerImage}
-                alt=""
-                className="img-dropdown"
-                width={130}
-              />
-            )}
             {children}
           </Card.Body>
         </Card>
@@ -62,7 +54,7 @@ const NavbarDropdown = ({ title, children }) => {
 
 NavbarDropdown.propTypes = {
   title: PropTypes.string.isRequired,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default NavbarDropdown;

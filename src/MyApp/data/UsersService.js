@@ -56,11 +56,11 @@ class UserService {
     });
   }
 
-  GetUser(email, password) {
+  async GetUser(email, password) {
     return new Promise((resolve, reject) => {
       const user = {
         id: 1,
-        name: "Anna",
+        name: "Conrado",
         email: "aspirante@uno.com",
         phone: 113214971,
         created_at: "2021-01-01",
@@ -77,13 +77,14 @@ class UserService {
     });
   }
 
-  UpdateUser() {}
+  CheckUserLogged() {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  }
 
-  DisableUser() {}
-
-  EnableUser() {}
-
-  DeleteUser() {}
+  Logout() {
+    localStorage.removeItem("user");
+  }
 }
 
 export default new UserService();

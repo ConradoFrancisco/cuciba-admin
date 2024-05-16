@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import CardService from "components/pages/landing/CardService";
 
 const PrincipalPage = () => {
-  return <></>;
+  return <>no es aca</>;
 };
 
 export default PrincipalPage;
