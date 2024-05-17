@@ -1,48 +1,43 @@
-import PageHeader from "MyApp/components/common/PageHeader";
 import AdvanceTable from "MyApp/components/common/advance-table/AdvanceTable";
 import AdvanceTableFooter from "MyApp/components/common/advance-table/AdvanceTableFooter";
 import AdvanceTableSearchBox from "MyApp/components/common/advance-table/AdvanceTableSearchBox";
 import AdvanceTableWrapper from "MyApp/components/common/advance-table/AdvanceTableWrapper";
+import PageHeader from "components/common/PageHeader";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { CiPause1 } from "react-icons/ci";
 import { FaCheck, FaEdit, FaPlay, FaTrash } from "react-icons/fa";
 import { MdOutlinePendingActions } from "react-icons/md";
-import IlegalesInstance from "services/servicios/IlegalesService";
-const columns = [
-  {
-    accessor: "date",
-    Header: "Fecha",
-    headerProps: { className: "text-900" },
-  },
-  {
-    accessor: "fantasyName",
-    Header: "Nombre de fantasía",
-    headerProps: { className: "text-900" },
-  },
-  {
-    accessor: "address",
-    Header: "Dirección",
-    headerProps: { className: "text-900" },
-  },
-  {
-    accessor: "estado",
-    Header: "estado",
-    headerProps: { className: "text-900" },
-  },
-  {
-    accessor: "acciones",
-    Header: "Acciones",
-    headerProps: { className: "text-900" },
-  },
-];
-export default function IlegalesPenalPage() {
-  const [data, setData] = useState([]);
+import AreasInstance from "services/institucional/AreaService";
 
+export default function AbmAreas() {
+  const [data, setData] = useState([]);
+  const columns = [
+    {
+      accessor: "orden",
+      Header: "Orden",
+      headerProps: { className: "text-900" },
+    },
+    {
+      accessor: "title",
+      Header: "Nombre",
+      headerProps: { className: "text-900" },
+    },
+    {
+      accessor: "estado",
+      Header: "estado",
+      headerProps: { className: "text-900" },
+    },
+    {
+      accessor: "acciones",
+      Header: "Acciones",
+      headerProps: { className: "text-900" },
+    },
+  ];
   useEffect(() => {
-    const fetchData = async () => {
+    const FetchAreas = async () => {
       try {
-        const response = await IlegalesInstance.getAll();
+        const response = await AreasInstance.getAll();
         const mappedData = response.data.map((publicacion) => ({
           ...publicacion,
           estado:
@@ -101,18 +96,17 @@ export default function IlegalesPenalPage() {
         }));
         setData(mappedData);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     };
-    fetchData();
-  }, []);
-
+    FetchAreas();
+  });
   return (
     <>
-      <PageHeader title="Inmobiliarias ilegales con causa penal"></PageHeader>
-      <Row>
-        <Col xl={12} className="mt-4">
-          <Card className="p-2">
+      <PageHeader title="Áreas"></PageHeader>
+      <Row className="mt-4">
+        <Col>
+          <Card className="p-4">
             <AdvanceTableWrapper
               columns={columns}
               data={data}

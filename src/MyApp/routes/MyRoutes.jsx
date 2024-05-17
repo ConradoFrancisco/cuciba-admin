@@ -13,8 +13,10 @@ import FaqPage from "MyApp/pages/help/FaqPage";
 import TutorialsPage from "MyApp/pages/help/TutorialsPage";
 import EstadisticasPage from "MyApp/pages/home/EstadisticasPage";
 import PrincipalPage from "MyApp/pages/home/PrincipalPage";
+import AbmAreas from "MyApp/pages/institucional/AbmAreas";
 import AutoridadesPage from "MyApp/pages/institucional/AutoridadesPage";
 import PersonalPage from "MyApp/pages/institucional/PersonalPage";
+import CreateEditPage from "MyApp/pages/institucional/components/CreateEditPage";
 import CapacitacionPage from "MyApp/pages/matriculados/CapacitacionPage";
 import MessagesListPage from "MyApp/pages/mensajes/MessagesListPage";
 import EditNewsPage from "MyApp/pages/news/EditNewsPage";
@@ -52,16 +54,17 @@ const MyRoutes = () => {
           <Route path="register" element={<RegisterPage />} />
           <Route path="restore" element={<RestorePage />} />
         </Route>
-
         <Route element={<MyAppLayout />}>
           <Route path="/" element={<PrincipalPage />}>
             <Route path="principal" element={<PrincipalPage />} />
             <Route path="estadisticas" element={<EstadisticasPage />} />
           </Route>
-
           <Route path="/institucional">
             <Route path="autoridades" element={<AutoridadesPage />} />
-            <Route path="personal" element={<PersonalPage />} />
+            <Route path="personal" element={<PersonalPage />}>
+              <Route path="editar/:id" element={<CreateEditPage />} />
+            </Route>
+            <Route path="administrar-areas" element={<AbmAreas />} />
           </Route>
           <Route path="/matriculados">
             <Route path="capacitacion" element={<CapacitacionPage />} />
