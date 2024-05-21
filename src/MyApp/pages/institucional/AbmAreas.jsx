@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { CiPause1 } from "react-icons/ci";
 import { FaCheck, FaEdit, FaPlay, FaTrash } from "react-icons/fa";
+import { FiPlus } from "react-icons/fi";
 import { MdOutlinePendingActions } from "react-icons/md";
 import AreasInstance from "services/institucional/AreaService";
 
@@ -41,7 +42,7 @@ export default function AbmAreas() {
         const mappedData = response.data.map((publicacion) => ({
           ...publicacion,
           estado:
-            publicacion.estado === "publicada" ? (
+            publicacion.estado === 1 ? (
               <div
                 className="fw-bold flex-shrink-0"
                 style={{
@@ -51,7 +52,7 @@ export default function AbmAreas() {
                 }}
               >
                 <span style={{ color: "#00894f", fontSize: "14px" }}>
-                  {publicacion.estado}
+                  {"Activa "}
                 </span>
                 <FaCheck fill="#00894f" />
               </div>
@@ -68,22 +69,20 @@ export default function AbmAreas() {
                   className="ms-2"
                   style={{ color: "#ac5a2b", fontSize: "14px" }}
                 >
-                  {publicacion.estado}
+                  {"Inactiva "}
                 </span>
                 <MdOutlinePendingActions fill="#ac5a2b" />
               </div>
             ),
           acciones: (
-            <div className="d-flex gap-1">
+            <div className="d-flex gap-1 justify-content-evenly">
               <Button
                 size="sm"
                 className={`btn ${
-                  publicacion.estado === "publicada"
-                    ? "btn-secondary"
-                    : "btn-success"
+                  publicacion.estado === 1 ? "btn-secondary" : "btn-success"
                 }`}
               >
-                {publicacion.estado === "publicada" ? <CiPause1 /> : <FaPlay />}
+                {publicacion.estado === 1 ? <CiPause1 /> : <FaPlay />}
               </Button>
               <Button size="sm" className="btn btn-primary">
                 <FaEdit size={18} />
@@ -100,10 +99,14 @@ export default function AbmAreas() {
       }
     };
     FetchAreas();
-  });
+  }, []);
   return (
     <>
-      <PageHeader title="Áreas"></PageHeader>
+      <PageHeader title="Áreas">
+        <button className="btn btn-primary btn-sm">
+          <FiPlus /> Añadir área
+        </button>
+      </PageHeader>
       <Row className="mt-4">
         <Col>
           <Card className="p-4">
