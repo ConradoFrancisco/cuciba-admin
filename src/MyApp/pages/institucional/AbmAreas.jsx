@@ -2,17 +2,32 @@ import AdvanceTable from "MyApp/components/common/advance-table/AdvanceTable";
 import AdvanceTableFooter from "MyApp/components/common/advance-table/AdvanceTableFooter";
 import AdvanceTableSearchBox from "MyApp/components/common/advance-table/AdvanceTableSearchBox";
 import AdvanceTableWrapper from "MyApp/components/common/advance-table/AdvanceTableWrapper";
+import FalconCloseButton from "components/common/FalconCloseButton";
 import PageHeader from "components/common/PageHeader";
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Modal, Row } from "react-bootstrap";
 import { CiPause1 } from "react-icons/ci";
 import { FaCheck, FaEdit, FaPlay, FaTrash } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { MdOutlinePendingActions } from "react-icons/md";
 import AreasInstance from "services/institucional/AreaService";
+import Areaform from "./forms/AreaForm";
+import ModalContent from "./components/ModalContent";
 
 export default function AbmAreas() {
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedArea, setSelectedArea] = useState(null);
+  const [modalAction, setModalAction] = useState(null);
   const [data, setData] = useState([]);
+  const [flag, setFlag] = useState(0);
+
+  const handleOpenModal = (action, area = null) => {
+    setSelectedArea(area);
+    setModalAction(action);
+    setOpenModal(true);
+  };
+
+  
   const columns = [
     {
       accessor: "orden",
@@ -36,6 +51,7 @@ export default function AbmAreas() {
     },
   ];
   useEffect(() => {
+    console.log(flag);
     const FetchAreas = async () => {
       try {
         const response = await AreasInstance.getAll();
@@ -78,20 +94,27 @@ export default function AbmAreas() {
             <div className="d-flex gap-1 justify-content-evenly">
               <Button
                 size="sm"
+                onClick={
+                  publicacion.estado === 0
+                    ? () => handleOpenModal('activar',publicacion)
+                    : () => handleOpenModal('desactivar',publicacion)
+                }
                 className={`btn ${
                   publicacion.estado === 1 ? "btn-secondary" : "btn-success"
                 }`}
               >
-                {publicacion.estado === 1 ? <CiPause1 /> : <FaPlay />}
+                {publicacion.estado === 1 ? <CiPause1 /> : <FaPlay />} 
               </Button>
               <Button size="sm" className="btn btn-primary">
                 <FaEdit size={18} />
               </Button>
-              <Button size="sm" className="btn btn-danger">
+              <Button onClick={() => handleOpenModal('eliminar',publicacion)} size="sm" className="btn btn-danger">
                 <FaTrash />
               </Button>
+              
             </div>
           ),
+          
         }));
         setData(mappedData);
       } catch (e) {
@@ -99,11 +122,14 @@ export default function AbmAreas() {
       }
     };
     FetchAreas();
-  }, []);
+  }, [flag]);
   return (
     <>
       <PageHeader title="Áreas">
-        <button className="btn btn-primary btn-sm">
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => handleOpenModal('añadir')}
+        >
           <FiPlus /> Añadir área
         </button>
       </PageHeader>
@@ -146,6 +172,23 @@ export default function AbmAreas() {
           </Card>
         </Col>
       </Row>
+      <Modal size="lg" show={openModal}>
+        <ModalContent area={selectedArea} tipo={modalAction} flag={flag} setFlag={setFlag} setOpenModal={setOpenModal} />
+        {/* <div className="container">
+          <Modal.Header>
+            <h4>Ingrese un área</h4>
+            <FalconCloseButton onClick={() => setOpenModal(false)} />
+          </Modal.Header>
+          <Modal.Body>
+            <Areaform
+              setOpenModal={setOpenModal}
+              flag={flag}
+              setFlag={setFlag}
+            ></Areaform>
+          </Modal.Body>
+        </div> */}
+      </Modal>
+      
     </>
   );
 }
