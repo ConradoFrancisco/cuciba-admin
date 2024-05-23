@@ -1,17 +1,12 @@
-import AdvanceTable from "MyApp/components/common/advance-table/AdvanceTable";
-import AdvanceTableFooter from "MyApp/components/common/advance-table/AdvanceTableFooter";
-import AdvanceTableSearchBox from "MyApp/components/common/advance-table/AdvanceTableSearchBox";
-import AdvanceTableWrapper from "MyApp/components/common/advance-table/AdvanceTableWrapper";
-import FalconCloseButton from "components/common/FalconCloseButton";
+
 import PageHeader from "components/common/PageHeader";
 import { useEffect, useState } from "react";
 import { Accordion, AccordionBody, Button, Card, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import { CiPause1 } from "react-icons/ci";
 import { FaCheck, FaEdit, FaPlay, FaTrash } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
-import { MdOutlinePendingActions } from "react-icons/md";
 import AreasInstance from "services/institucional/AreaService";
-import Areaform from "./forms/AreaForm";
+
 import ModalContent from "./components/ModalContent";
 
 export default function AbmAreas() {
@@ -31,17 +26,29 @@ export default function AbmAreas() {
     setModalAction(action);
     setOpenModal(true);
   };
-  const handlesubmit = (e) =>{
+  const handlesubmit = async (e) =>{
     e.preventDefault();
+    setInputValue(input)
+    try {
+      const response = await AreasInstance.getAll({limit,offset,input});
+      console.log(response)
+      setTotal(response.data.total[0].total)
+      setData(response.data.data);
+    } catch (e) {
+      console.error(e);
+    }
     console.log("enviado")
     setoffset(0)
-    setInputValue(input)
   }
-  const clearFilters = () =>{
-    setInputValue("")
+  const clearFilters = (e) =>{
+    e.preventDefault();
+    setoffset(0);
+    setInput("")
+    setInputValue('')
+    console.log(inputValue)
   }
   const handleInput = (e) =>{
-    setInput(`%${e.target.value}%`)
+    setInput(e.target.value)
   }
   const handleChange = (e) =>{
     setoffset(0)
@@ -71,7 +78,6 @@ export default function AbmAreas() {
           <FiPlus /> Añadir área
         </button>
       </PageHeader>
-      
       <Row className="mt-4">
 
         <Col>
@@ -81,14 +87,14 @@ export default function AbmAreas() {
               Filtros
             </Accordion.Header>
             <AccordionBody>
-              <Form onSubmit={handlesubmit}>
+              <Form >
                 <Row>
                   <Col xl={3}>
                     <Form.Group>
                       <Form.Label>
                        Título
                       </Form.Label>
-                      <Form.Control onChange={handleInput}/>
+                      <Form.Control value={input} onChange={handleInput}/>
                     </Form.Group>
                   </Col>
                   <Col xl={3}>
@@ -112,7 +118,7 @@ export default function AbmAreas() {
                     </Form.Group>
                   </Col>
                   <Col xl={2} className="mt-4">
-                    <Button variant="primary" className="w-100" type="submit">Enviar</Button>
+                    <Button onClick={handlesubmit} variant="primary" className="w-100" >Enviar</Button>
                   </Col>
                   <Col xl={2} className="mt-4">
                     <Button onClick={clearFilters} variant="secondary" className="w-100">Limpiar filtros</Button>
@@ -181,7 +187,6 @@ export default function AbmAreas() {
           </Card>
         </Col>
       </Row>
-
       <Modal size="lg" show={openModal}>
         <ModalContent area={selectedArea} tipo={modalAction} flag={flag} setFlag={setFlag} setOpenModal={setOpenModal} />
       </Modal>
