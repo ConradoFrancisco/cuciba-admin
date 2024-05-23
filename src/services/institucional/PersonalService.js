@@ -1,3 +1,5 @@
+import axiosInstance from "MyApp/utils/axiosConfig";
+
 const { personalData } = require("MyApp/mocks/personalPorAreasMock");
 function findWorkerById(id) {
   for (const area of personalData) {
@@ -10,16 +12,18 @@ function findWorkerById(id) {
   return null; // Retorna null si no se encuentra ningún trabajador con el ID dado
 }
 class PersonalService {
-  async getAll(limit, offset) {
-    return new Promise((resolve, reject) => {
-      if (true) {
-        const data = personalData;
-        const statusCode = 200;
-        resolve({ data, statusCode });
-      } else {
-        reject(new Error("Error al obtener El personal del colegio"));
-      }
-    });
+  async getAll({ limit = 0, offset = 0 }) {
+    try {
+      const response = await axiosInstance.get('http://localhost:8080/personal', {
+        params: {
+          limit, offset
+        }
+      })
+      console.log(response)
+      return response
+    } catch (e) {
+      throw new Error("error al obtener el personal, intente nuevamente mas tarde")
+    }
   }
   async getSingleWorker(id) {
     return new Promise((resolve, reject) => {

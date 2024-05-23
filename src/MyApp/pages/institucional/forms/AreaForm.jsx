@@ -10,23 +10,30 @@ const areaSchema = yup.object().shape({
   orden: yup.number().required("el orden es requerido"),
 });
 
-export default function Areaform({ setOpenModal, setFlag, flag }) {
+export default function Areaform({ setOpenModal, setFlag, flag,tipo,area }) {
   const [loading, setLoading] = useState(false);
-  const initialValues = {
+  
+  const initialValues = tipo === 'editar' ? {
+    id: area.id,
+    title: area.title,
+    orden: area.orden,
+  } : {
     title: "",
     orden: "",
   };
 
+  console.log(tipo)
   const validationSchema = areaSchema;
-
+  const metodo = tipo === 'editar' ?  AreasInstance.update : AreasInstance.create
   const formik = useFormik({
     initialValues,
     validationSchema: areaSchema,
     onSubmit: async (values) => {
       try {
         setLoading(true);
-        console.log(flag);
-        const response = await AreasInstance.create(values);
+        console.log("init:",initialValues)
+        console.log("area:",area);
+        const response = await metodo(values);
         console.log(response);
         toast.success(response.data, {
           position: "bottom-right",
@@ -36,7 +43,7 @@ export default function Areaform({ setOpenModal, setFlag, flag }) {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          style: { color: "#fff", fontWeight: "500" }, // Añade un borde al texto}
+          style: { color: "#fff", fontWeight: "500" }, 
         });
         const newflag = flag + 1;
         console.log(newflag);

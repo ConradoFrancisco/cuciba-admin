@@ -2,6 +2,7 @@ import FalconCloseButton from "MyApp/components/common/FalconCloseButton";
 import { Button, Modal } from "react-bootstrap";
 import AreasInstance from "services/institucional/AreaService";
 import Areaform from "../forms/AreaForm";
+import { useEffect } from "react";
 
 export default function ModalContent({
   tipo,
@@ -48,6 +49,12 @@ export default function ModalContent({
     }
   };
 
+  useEffect(()=>{
+    console.log(area)
+  },[]
+)
+
+console.log(area)
   return (
     <>
       {tipo === "activar" ? (
@@ -60,7 +67,7 @@ export default function ModalContent({
           <Modal.Body>
             <div className="d-flex flex-column">
               <h5>
-                usted esta a punto de activar el área '{area.title}' ¿Desea
+                Ustéd esta a punto de activar el área '{area.title}' ¿Desea
                 proseguir?
               </h5>
               <div className="d-flex justify-content-center gap-3 pt-3">
@@ -85,7 +92,7 @@ export default function ModalContent({
           <Modal.Body>
             <div className="d-flex flex-column">
               <h5>
-                usted esta a punto de eliminar el área {area.title} ¿Desea
+                Ustéd esta a punto de eliminar el área '{area.title}' ¿Desea
                 proseguir?
               </h5>
               <div className="d-flex justify-content-center gap-3 pt-3">
@@ -110,7 +117,7 @@ export default function ModalContent({
           <Modal.Body>
             <div className="d-flex flex-column">
               <h5>
-                usted esta a punto de desactivar el área {area.title} ¿Desea
+                Ustéd esta a punto de desactivar el área '{area.title}' ¿Desea
                 proseguir?
               </h5>
               <div className="d-flex justify-content-center gap-3 pt-3">
@@ -130,12 +137,28 @@ export default function ModalContent({
       ) : tipo === "añadir" ? (
         <>
           <Modal.Header>
-            
             <h5>Añadir nueva área</h5>
             <FalconCloseButton onClick={() => setOpenModal(false)} />
           </Modal.Header>
           <Modal.Body>
             <Areaform
+              area={area}
+              setOpenModal={setOpenModal}
+              flag={flag}
+              setFlag={setFlag}
+            ></Areaform>
+          </Modal.Body>
+        </>
+      ) : tipo === "editar" ? (
+        <>
+          <Modal.Header>
+            <h5>actualizar area</h5>
+            <FalconCloseButton onClick={() => setOpenModal(false)} />
+          </Modal.Header>
+          <Modal.Body>
+            <Areaform
+              tipo={tipo}
+              area={area}
               setOpenModal={setOpenModal}
               flag={flag}
               setFlag={setFlag}

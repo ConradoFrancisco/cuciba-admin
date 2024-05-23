@@ -2,9 +2,14 @@ import axiosInstance from "MyApp/utils/axiosConfig";
 import { toast } from "react-toastify";
 
 class AreaService {
-  async getAll() {
+  async getAll({ limit = 0, offset = 0, input = "" }) {
     try {
-      const response = axiosInstance.get("http://localhost:8080/areas");
+      const response = await axiosInstance.get("http://localhost:8080/areas", {
+        params: {
+          limit, offset, input
+        }
+      });
+      console.log(response)
       return response;
     } catch (e) {
       throw new Error("hubo un error al obtener los datos");
@@ -27,11 +32,29 @@ class AreaService {
       throw new Error("error al insertar los datos en areas");
     }
   }
-  async setActive({ id,estado }) {
+
+  async update({ id, title, orden }) {
+    const body = { title, orden };
+    console.log(body)
+    try {
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/areas/modificar/${id}`,
+        body,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      console.log(response)
+      return response;
+    } catch (e) {
+      console.log(e)
+      throw new Error("error al insertar los datos en areas");
+    }
+  }
+
+  async setActive({ id, estado }) {
     const body = { estado };
     const area = estado === 1 ? 'Área publicada correctamente' : 'Área ahora inactiva'
     try {
-      const response = await axiosInstance.patch(`http://localhost:8080/areas/${id}`,body)
+      const response = await axiosInstance.patch(`http://localhost:8080/areas/${id}`, body)
       toast.success(area, {
         position: "bottom-right",
         autoClose: 3000,
@@ -62,7 +85,7 @@ class AreaService {
         style: { color: "#fff", fontWeight: "500" }, // Añade un borde al texto}
       });
       return response;
-      
+
     } catch (e) {
       console.log(e)
       throw new Error("error al eliminar el área");

@@ -27,7 +27,7 @@ const PageHeader = ({
     />
     <Card.Body className="position-relative">
       <Row>
-        <Col {...col}>
+        <Col xl={12} className='d-flex justify-content-between'>
           {preTitle && <h6 className="text-600">{preTitle}</h6>}
           <TitleTag className="mb-0">{title}</TitleTag>
           {description && (
