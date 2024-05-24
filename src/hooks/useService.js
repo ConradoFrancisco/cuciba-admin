@@ -1,32 +1,58 @@
 import { useEffect, useState } from "react";
 
-export default function useService({ offset = 0, limit, service, filter }) {
-  const [response, setResponse] = useState();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null); // Nuevo estado para manejar errores
+export default function useService( {service} ) {
+    const [input, setInput] = useState(undefined);
+    const [estado, setEstado] = useState(undefined);
+    const [orden, setOrden] = useState(undefined);
+    
+    const [limit, setLimit] = useState(5);
+    const [offset, setoffset] = useState(0);
+    const [total, setTotal] = useState();
+    const [data, setData] = useState([]);
+    const [flag, setFlag] = useState(0);
+    const [orderBy, setOrderBy] = useState(null);
+    const [orderDirection, setOrderDirection] = useState("asc");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        let response;
-        if (filter) {
-          response = await service(offset, limit, filter);
-        } else {
-          response = await service(offset, limit);
+    useEffect(() => {
+      const FetchData = async () => {
+        try {
+          const response = await service({
+            limit,
+            offset,
+            input,
+            estado,
+            orden,
+            orderBy,
+            orderDirection,
+          });
+          console.log(response);
+          setTotal(response.data.total[0].total);
+          setData(response.data.data);
+        } catch (e) {
+          console.error(e);
         }
-        setResponse(response.results);
-        setError(null); // Restablecer el estado de error si la solicitud es exitosa
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error); // Establecer el estado de error si ocurre un error
-      } finally {
-        setLoading(false);
-      }
+      };
+      FetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [flag, limit, offset, input, estado, orden, orderBy, orderDirection]);
+
+    const filterObject = {
+      setOrderBy,
+      setOrderDirection,
+      setoffset,
+      orderDirection,
+      orderBy,
+      flag,
+      setFlag,
+      setInput,
+      setEstado,
+      setOrden,
+      setData,
+      setLimit,
+      total,
+      data,
+      limit,
+      offset
     };
-
-    fetchData();
-  }, [offset, limit, filter]); // Ejecutar efecto nuevamente cuando cambien los parámetros
-
-  return { response, loading, error }; // Devolver el estado de error
+  return { filterObject }
 }

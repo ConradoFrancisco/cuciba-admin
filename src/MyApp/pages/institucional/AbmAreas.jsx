@@ -1,196 +1,74 @@
-
 import PageHeader from "components/common/PageHeader";
-import { useEffect, useState } from "react";
-import { Accordion, AccordionBody, Button, Card, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
-import { CiPause1 } from "react-icons/ci";
-import { FaCheck, FaEdit, FaPlay, FaTrash } from "react-icons/fa";
-import { FiPlus } from "react-icons/fi";
+
+import { Accordion, AccordionBody, Card, Col, Row } from "react-bootstrap";
+
 import AreasInstance from "services/institucional/AreaService";
 
-import ModalContent from "./components/ModalContent";
-
+import MyTableComponent from "MyApp/components/common/MyTableComponent";
+import MyTableFooter from "MyApp/my-components/MyTableFooter";
+import Filterform from "./forms/FilterForm";
+import useService from "hooks/useService";
+const columns = ["orden", "title", "estado"];
 export default function AbmAreas() {
-  const [input,setInput] = useState("")
-  const [inputValue, setInputValue] = useState("");
-  const [limit,setLimit] = useState(5);
-  const [offset,setoffset] = useState(0);
-  const [total,setTotal] = useState()
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedArea, setSelectedArea] = useState(null);
-  const [modalAction, setModalAction] = useState(null);
-  const [data, setData] = useState([]);
-  const [flag, setFlag] = useState(0);
+  const { filterObject } = useService({ service: AreasInstance.getAll });
 
-  const handleOpenModal = (action, area = null) => {
-    setSelectedArea(area);
-    setModalAction(action);
-    setOpenModal(true);
+  const {
+    data,
+    setEstado,
+    setInput,
+    setLimit,
+    setOrden,
+    setoffset,
+    total,
+    limit,
+    offset,
+  } = filterObject;
+
+  const formFilterObject = {
+    setoffset,
+    setInput,
+    setEstado,
+    setOrden,
   };
-  const handlesubmit = async (e) =>{
-    e.preventDefault();
-    setInputValue(input)
-    try {
-      const response = await AreasInstance.getAll({limit,offset,input});
-      console.log(response)
-      setTotal(response.data.total[0].total)
-      setData(response.data.data);
-    } catch (e) {
-      console.error(e);
-    }
-    console.log("enviado")
-    setoffset(0)
-  }
-  const clearFilters = (e) =>{
-    e.preventDefault();
-    setoffset(0);
-    setInput("")
-    setInputValue('')
-    console.log(inputValue)
-  }
-  const handleInput = (e) =>{
-    setInput(e.target.value)
-  }
-  const handleChange = (e) =>{
-    setoffset(0)
-    setLimit(parseInt(e.target.value))
-  }
-  
-  useEffect(() => {
-    const FetchAreas = async () => {
-      try {
-        const response = await AreasInstance.getAll({limit,offset,input});
-        console.log(response)
-        setTotal(response.data.total[0].total)
-        setData(response.data.data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    FetchAreas();
-  }, [flag,limit,offset,inputValue]);
+
   return (
     <>
       <PageHeader title="Áreas">
-        <button
+        {/* <button
           className="btn btn-primary btn-sm"
-          onClick={() => handleOpenModal('añadir')}
+          onClick={() => handleOpenModal("añadir")}
         >
           <FiPlus /> Añadir área
-        </button>
+        </button> */}
       </PageHeader>
       <Row className="mt-4">
-
         <Col>
-        <Card>
-          <Accordion className="rounded">
-            <Accordion.Header className="rounded">
-              Filtros
-            </Accordion.Header>
-            <AccordionBody>
-              <Form >
-                <Row>
-                  <Col xl={3}>
-                    <Form.Group>
-                      <Form.Label>
-                       Título
-                      </Form.Label>
-                      <Form.Control value={input} onChange={handleInput}/>
-                    </Form.Group>
-                  </Col>
-                  <Col xl={3}>
-                    <Form.Group>
-                      <Form.Label>
-                       Orden
-                      </Form.Label>
-                      <Form.Control type="number"/>
-                    </Form.Group>
-                  </Col>
-                  <Col xl={2}>
-                    <Form.Group>
-                      <Form.Label>
-                       Estado
-                      </Form.Label>
-                      <Form.Select>
-                          <option value="">Todas</option>
-                          <option value={1}>Activas</option>
-                          <option value={0}>Inactivas</option>
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                  <Col xl={2} className="mt-4">
-                    <Button onClick={handlesubmit} variant="primary" className="w-100" >Enviar</Button>
-                  </Col>
-                  <Col xl={2} className="mt-4">
-                    <Button onClick={clearFilters} variant="secondary" className="w-100">Limpiar filtros</Button>
-                  </Col>
-                </Row>
-              </Form>
-            </AccordionBody>
-          </Accordion>
-        </Card>
+          <Card>
+            <Accordion className="rounded">
+              <Accordion.Header className="rounded">Filtros</Accordion.Header>
+              <AccordionBody>
+                <Filterform formFilterObject={formFilterObject} />
+              </AccordionBody>
+            </Accordion>
+          </Card>
           <Card className="p-4 mt-4">
-            <table className="table table-striped table-bordered">
-              <thead className="thead-dark">
-                <tr>
-                  <th>Orden</th>
-                  <th style={{width:'65%'}}>Título</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => (
-                  <tr key={item.id}>
-                    <td>{item.orden}</td>
-                    <td>{item.title}</td>
-                    <td>
-                      <span
-                        className="badge"
-                        style={{
-                          backgroundColor: item.estado === 1 ? 'green' : 'red',
-                          color: 'white'
-                        }}
-                      >
-                        {item.estado === 1 ? "Activa" : "Inactiva"}
-                      </span>
-                    </td>
-                    <td className="d-flex justify-content-around">
-                      <button className={`btn btn-${item.estado === 1 ? 'secondary' : 'success'} btn-sm mr-2`} onClick={item.estado === 1 ? ()=>handleOpenModal('desactivar',item) : ()=>handleOpenModal('activar',item)}>
-                        {item.estado === 1 ? <CiPause1 /> : <FaPlay />}
-                      </button>
-                      <button className="btn btn-primary btn-sm mr-2"  onClick={()=>handleOpenModal('editar',item)}>
-                      <FaEdit size={18} />
-                      </button>
-                      <button className="btn btn-danger btn-sm" onClick={()=>handleOpenModal('eliminar',item)}>
-                      <FaTrash />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {data.length > 0 ? (
+              <MyTableComponent data={data} filterObject={filterObject} columns={columns} />
+            ) : (
+              <h4>No hay datos que coincidan con tus busquedas</h4>
+            )}
             <div className="row">
-              <div className="col-6 gap-2 d-flex">
-                <span>mostrando de {offset + 1 } - {(limit + offset) > total ? total : limit + offset} resultados de: {total}</span>
-                <select name="" id="" onChange={handleChange}>
-                  
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={15}>15</option>
-                </select>
-              </div>
-              <div className="col-6 gap-2 d-flex justify-content-end">
-                <Button type="button" variant="primary" disabled={offset === 0 ? true : false}onClick={()=> setoffset(offset-limit)}>Anterior</Button>
-                <Button type="button" variant="primary" disabled={(limit + offset) > total ? true : false} onClick={()=> setoffset(offset+limit)}>Siguiente</Button>
-              </div>
+              <MyTableFooter
+                limit={limit}
+                offset={offset}
+                setLimit={setLimit}
+                setoffset={setoffset}
+                total={total}
+              />
             </div>
           </Card>
         </Col>
       </Row>
-      <Modal size="lg" show={openModal}>
-        <ModalContent area={selectedArea} tipo={modalAction} flag={flag} setFlag={setFlag} setOpenModal={setOpenModal} />
-      </Modal>
-
     </>
   );
 }

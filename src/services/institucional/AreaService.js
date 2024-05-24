@@ -2,11 +2,11 @@ import axiosInstance from "MyApp/utils/axiosConfig";
 import { toast } from "react-toastify";
 
 class AreaService {
-  async getAll({ limit = 0, offset = 0, input = "" }) {
+  async getAll({ limit = 0, offset = 0, input = "",estado="",orden="",orderBy="",orderDirection="" }) {
     try {
       const response = await axiosInstance.get("http://localhost:8080/areas", {
         params: {
-          limit, offset, input
+          limit, offset, input ,estado,orden,orderBy,orderDirection
         }
       });
       console.log(response)
