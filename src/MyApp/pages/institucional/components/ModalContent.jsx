@@ -5,15 +5,18 @@ import Areaform from "../forms/AreaForm";
 import { useEffect } from "react";
 
 export default function ModalContent({
+  AddFormComponent,
+  setActiveFunction, deleteFunction,
   tipo,
-  area,
+  item,
   flag,
   setFlag,
   setOpenModal,
 }) {
+  console.log(tipo)
   const handleActivateArea = async (id, estado) => {
     try {
-      const response = await AreasInstance.setActive({ id: id, estado });
+      const response = await setActiveFunction({ id: id, estado });
       console.log(response);
       const newflag = flag + 1;
       setFlag(newflag);
@@ -25,7 +28,7 @@ export default function ModalContent({
   };
   const handleDeactivateArea = async (id, estado) => {
     try {
-      const response = await AreasInstance.setActive({ id: id, estado });
+      const response = await setActiveFunction({ id: id, estado });
       console.log(response);
       const newflag = flag + 1;
       setFlag(newflag);
@@ -38,7 +41,7 @@ export default function ModalContent({
 
   const handleDeleteArea = async (id) => {
     try {
-      const response = await AreasInstance.delete({ id: id });
+      const response = await deleteFunction({ id: id });
       console.log(response);
       const newflag = flag + 1;
       setFlag(newflag);
@@ -48,13 +51,6 @@ export default function ModalContent({
       setOpenModal(false);
     }
   };
-
-  useEffect(()=>{
-    console.log(area)
-  },[]
-)
-
-console.log(area)
   return (
     <>
       {tipo === "activar" ? (
@@ -67,13 +63,13 @@ console.log(area)
           <Modal.Body>
             <div className="d-flex flex-column">
               <h5>
-                Ustéd esta a punto de activar el área '{area.title}' ¿Desea
+                Ustéd esta a punto de activar el área '{item.title}' ¿Desea
                 proseguir?
               </h5>
               <div className="d-flex justify-content-center gap-3 pt-3">
                 <Button
                   variant="success"
-                  onClick={() => handleActivateArea(area.id, 1)}
+                  onClick={() => handleActivateArea(item.id, 1)}
                 >
                   Continuar
                 </Button>
@@ -92,13 +88,13 @@ console.log(area)
           <Modal.Body>
             <div className="d-flex flex-column">
               <h5>
-                Ustéd esta a punto de eliminar el área '{area.title}' ¿Desea
+                Ustéd esta a punto de eliminar el área '{item.title}' ¿Desea
                 proseguir?
               </h5>
               <div className="d-flex justify-content-center gap-3 pt-3">
                 <Button
                   variant="success"
-                  onClick={() => handleDeleteArea(area.id)}
+                  onClick={() => handleDeleteArea(item.id)}
                 >
                   Continuar
                 </Button>
@@ -117,13 +113,13 @@ console.log(area)
           <Modal.Body>
             <div className="d-flex flex-column">
               <h5>
-                Ustéd esta a punto de desactivar el área '{area.title}' ¿Desea
+                Ustéd esta a punto de desactivar el área '{item.title}' ¿Desea
                 proseguir?
               </h5>
               <div className="d-flex justify-content-center gap-3 pt-3">
                 <Button
                   variant="success"
-                  onClick={() => handleDeactivateArea(area.id, 0)}
+                  onClick={() => handleDeactivateArea(item.id, 0)}
                 >
                   Continuar
                 </Button>
@@ -141,12 +137,7 @@ console.log(area)
             <FalconCloseButton onClick={() => setOpenModal(false)} />
           </Modal.Header>
           <Modal.Body>
-            <Areaform
-              area={area}
-              setOpenModal={setOpenModal}
-              flag={flag}
-              setFlag={setFlag}
-            ></Areaform>
+            {AddFormComponent}
           </Modal.Body>
         </>
       ) : tipo === "editar" ? (
@@ -156,13 +147,13 @@ console.log(area)
             <FalconCloseButton onClick={() => setOpenModal(false)} />
           </Modal.Header>
           <Modal.Body>
-            <Areaform
+            <AddFormComponent
               tipo={tipo}
-              area={area}
+              area={item}
               setOpenModal={setOpenModal}
               flag={flag}
               setFlag={setFlag}
-            ></Areaform>
+            ></AddFormComponent>
           </Modal.Body>
         </>
       ) : (

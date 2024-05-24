@@ -10,12 +10,13 @@ import {
   FaSortUp,
   FaTrash,
 } from "react-icons/fa";
+import { FiPlus } from "react-icons/fi";
 
 
 
-export default function MyTableComponent({ data, filterObject,columns, }) {
+export default function MyTableComponent({ data, filterObject,columns,section,setActiveFunction,deleteFunction,addFormComponent }) {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedArea, setSelectedArea] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [modalAction, setModalAction] = useState(null);
 
   const { setOrderBy, setOrderDirection, setoffset, orderDirection, orderBy } =
@@ -46,14 +47,24 @@ export default function MyTableComponent({ data, filterObject,columns, }) {
       setOrderDirection("asc");
     }
   };
-  const handleOpenModal = (action, area = null) => {
-    setSelectedArea(area);
+  const handleOpenModal = (action, item = null) => {
+    setSelectedItem(item);
     setModalAction(action);
     setOpenModal(true);
+    console.log(action)
   };
   return (
     <>
+    <div className="d-flex justify-content-end mb-4">
+      <button
+          className="btn btn-primary btn-sm"
+          onClick={() => handleOpenModal("añadir")}
+        >
+          <FiPlus /> Añadir {section}
+        </button>
+      </div>
     <table className="table table-striped table-bordered">
+      
       <thead className="thead-dark">
         <tr>
           {columns.map((column, key) => (
@@ -61,6 +72,7 @@ export default function MyTableComponent({ data, filterObject,columns, }) {
               {column} {getOrderIcon(column)}
             </th>
           ))}
+          
           <th>Acciones</th>
         </tr>
       </thead>
@@ -69,7 +81,7 @@ export default function MyTableComponent({ data, filterObject,columns, }) {
           <tr key={item.id}>
             {columns.map((column)=>{
                 return(
-                    column === "estado" ? "" :<td>{item[column]}</td>
+                    column === "estado" ? "" : item.column === null ? <td>-</td> : <td>{item[column]}</td>
                 )    
             })}
             <td>
@@ -115,7 +127,10 @@ export default function MyTableComponent({ data, filterObject,columns, }) {
     </table>
     <Modal size="lg" show={openModal}>
         <ModalContent
-          area={selectedArea}
+          addFormComponent={addFormComponent}
+          setActiveFunction={setActiveFunction}
+          deleteFunction={deleteFunction}
+          item={selectedItem}
           tipo={modalAction}
           flag={filterObject.flag}
           setFlag={filterObject.setFlag}
