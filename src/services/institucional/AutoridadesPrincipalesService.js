@@ -1,22 +1,19 @@
 import axiosInstance from "MyApp/utils/axiosConfig";
 import { toast } from "react-toastify";
 
-const { personalData } = require("MyApp/mocks/personalPorAreasMock");
-function findWorkerById(id) {
-  for (const area of personalData) {
-    for (const worker of area.workers) {
-      if (worker.id === id) {
-        return worker;
-      }
-    }
-  }
-  return null; // Retorna null si no se encuentra ningún trabajador con el ID dado
-}
 class PersonalService {
-  async getAll({ limit = 0, offset = 0, input = undefined,estado=undefined,area=undefined,orderBy="",orderDirection="" }) {
+  async getAll({
+    limit = 0,
+    offset = 0,
+    input = undefined,
+    estado = undefined,
+    area = undefined,
+    orderBy = "",
+    orderDirection = "",
+  }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/personal",
+        "http://localhost:8080/autoridades",
         {
           params: {
             input,
@@ -25,7 +22,7 @@ class PersonalService {
             limit,
             offset,
             orderDirection,
-            orderBy
+            orderBy,
           },
         }
       );
@@ -33,28 +30,15 @@ class PersonalService {
       return response;
     } catch (e) {
       throw new Error(
-        "error al obtener el personal, intente nuevamente mas tarde"
+        "error al obtener las autoridades, intente nuevamente mas tarde"
       );
     }
   }
-  async getSingleWorker(id) {
-    return new Promise((resolve, reject) => {
-      if (true) {
-        console.log(id);
-        const data = findWorkerById(id);
-        console.log(data);
-        const statusCode = 200;
-        resolve({ data, statusCode });
-      } else {
-        reject(new Error("error al obtener el trabajador"));
-      }
-    });
-  }
-  async create({ nombre, apellido, telefono, email, cargo, area }) {
-    const body = { nombre, apellido, telefono, email, cargo, area };
+  async create({ nombre, apellido, avatar, puesto, orden }) {
+    const body = { nombre, apellido, avatar, puesto, orden };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/personal",
+        "http://localhost:8080/autoridades",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -66,10 +50,14 @@ class PersonalService {
   }
   async setActive({ id, estado }) {
     const body = { estado };
-    const personal = estado === 1 ? 'Personal dado de alta!' : 'Personal inactivo'
+    const area =
+      estado === 1 ? "Autoridad dada de alta!" : "Autoridad ahora inactiva";
     try {
-      const response = await axiosInstance.patch(`http://localhost:8080/personal/${id}`, body)
-      toast.success(personal, {
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/autoridades/${id}`,
+        body
+      );
+      toast.success(area, {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -81,14 +69,16 @@ class PersonalService {
       });
       return response;
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw new Error("error al publicar el área");
     }
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(`http://localhost:8080/personal/${id}`)
-      toast.success('Personal eliminado correctamente', {
+      const response = await axiosInstance.delete(
+        `http://localhost:8080/autoridades/${id}`
+      );
+      toast.success("Autoridad eliminada correctamente", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -99,18 +89,17 @@ class PersonalService {
         style: { color: "#fff", fontWeight: "500" }, // Añade un borde al texto}
       });
       return response;
-
     } catch (e) {
-      console.log(e)
-      throw new Error("error al eliminar el personal");
+      console.log(e);
+      throw new Error("error al eliminar el área");
     }
   }
-  async update({id, nombre, apellido, telefono, email, cargo, area }) {
-    const body = {id, nombre, apellido, telefono, email, cargo, area };
+  async update({ id, nombre, apellido, avatar, puesto, orden }) {
+    const body = { nombre, apellido, avatar, puesto, orden };
     console.log(body)
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/personal/modificar/${id}`,
+        `http://localhost:8080/autoridades/modificar/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -122,6 +111,4 @@ class PersonalService {
     }
   }
 }
-const PersonalInstance = new PersonalService();
-
-export default PersonalInstance;
+export default new PersonalService();

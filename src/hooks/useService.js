@@ -14,9 +14,12 @@ export default function useService( {service} ) {
     const [orderDirection, setOrderDirection] = useState("asc");
 
     useEffect(() => {
+      console.log('render')
+      console.log(estado)
       const FetchData = async () => {
         try {
           const response = await service({
+            area:orden,
             limit,
             offset,
             input,

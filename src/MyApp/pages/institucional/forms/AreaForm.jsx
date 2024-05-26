@@ -10,20 +10,18 @@ const areaSchema = yup.object().shape({
   orden: yup.number().required("el orden es requerido"),
 });
 
-export default function Areaform({ setOpenModal, setFlag, flag,tipo,area }) {
+export default function Areaform({ props:setOpenModal, setFlag, flag,tipo,item }) {
   const [loading, setLoading] = useState(false);
   
   const initialValues = tipo === 'editar' ? {
-    id: area.id,
-    title: area.title,
-    orden: area.orden,
+    id: item.id,
+    title: item.title,
+    orden: item.orden,
   } : {
     title: "",
     orden: "",
   };
 
-  console.log(tipo)
-  const validationSchema = areaSchema;
   const metodo = tipo === 'editar' ?  AreasInstance.update : AreasInstance.create
   const formik = useFormik({
     initialValues,
@@ -32,7 +30,7 @@ export default function Areaform({ setOpenModal, setFlag, flag,tipo,area }) {
       try {
         setLoading(true);
         console.log("init:",initialValues)
-        console.log("area:",area);
+        console.log("area:",item);
         const response = await metodo(values);
         console.log(response);
         toast.success(response.data, {
@@ -94,8 +92,8 @@ export default function Areaform({ setOpenModal, setFlag, flag,tipo,area }) {
             </Form.Group>
           </Col>
           <Col xl={4} className="mt-4">
-            <button type="submit" className="btn btn-primary">
-              Guardar Cambios
+            <button type="submit" className="btn btn-success">
+              {tipo ==='añadir' ? "Crear" : "Guardar Cambios"}
             </button>
           </Col>
         </Row>

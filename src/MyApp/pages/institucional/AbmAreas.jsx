@@ -6,13 +6,12 @@ import AreasInstance from "services/institucional/AreaService";
 
 import MyTableComponent from "MyApp/components/common/MyTableComponent";
 import MyTableFooter from "MyApp/my-components/MyTableFooter";
-import Filterform from "./forms/FilterForm";
 import useService from "hooks/useService";
 import Areaform from "./forms/AreaForm";
+import FilterAreaform from "./forms/filterForms/FilterAreaForm";
 const columns = ["orden", "title", "estado"];
 export default function AbmAreas() {
   const { filterObject } = useService({ service: AreasInstance.getAll });
-  const AddFormComponent = () => <Areaform />
   const {
     data,
     setEstado,
@@ -34,21 +33,28 @@ export default function AbmAreas() {
 
   return (
     <>
-      <PageHeader title="Áreas">
-      </PageHeader>
+      <PageHeader title="Áreas"></PageHeader>
       <Row className="mt-4">
         <Col>
           <Card>
             <Accordion className="rounded">
               <Accordion.Header className="rounded">Filtros</Accordion.Header>
               <AccordionBody>
-                <Filterform formFilterObject={formFilterObject} />
+                <FilterAreaform formFilterObject={formFilterObject} />
               </AccordionBody>
             </Accordion>
           </Card>
           <Card className="p-4 mt-4">
             {data.length > 0 ? (
-              <MyTableComponent addFormComponent={AddFormComponent} setActiveFunction={AreasInstance.setActive} deleteFunction={AreasInstance.delete} data={data} filterObject={filterObject} columns={columns} section={'area'} />
+              <MyTableComponent
+                AddFormComponent={<Areaform area={null} flag={null} setFlag={null} tipo={null} />}
+                setActiveFunction={AreasInstance.setActive}
+                deleteFunction={AreasInstance.delete}
+                data={data}
+                filterObject={filterObject}
+                columns={columns}
+                section={"area"}
+              />
             ) : (
               <h4>No hay datos que coincidan con tus busquedas</h4>
             )}

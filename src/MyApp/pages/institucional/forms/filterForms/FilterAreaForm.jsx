@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 
-export default function Filterform({ formFilterObject }) {
+export default function FilterAreaform({ formFilterObject }) {
   const clearFilters = (e) => {
     e.preventDefault();
     formFilterObject.setoffset(0);

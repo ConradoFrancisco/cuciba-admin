@@ -1,4 +1,3 @@
-
 import MyTableComponent from "MyApp/components/common/MyTableComponent";
 import MyPersonalTable from "MyApp/my-components/MyPersonalTable";
 import MyTableFooter from "MyApp/my-components/MyTableFooter";
@@ -6,23 +5,30 @@ import MyTableFooter from "MyApp/my-components/MyTableFooter";
 import PageHeader from "components/common/PageHeader";
 import useService from "hooks/useService";
 import { useEffect, useState } from "react";
-import { Card, Col, Row, Table } from "react-bootstrap";
+import { Accordion, AccordionBody, Card, Col, Row, Table } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { Outlet, useLocation } from "react-router-dom";
 import PersonalInstance from "services/institucional/PersonalService";
 import NewsTitleForm from "../news/forms/NewsTitleForm";
+import PersonalForm from "./forms/PersonalForm";
+import FilterPersonalform from "./forms/filterForms/FilterPersonalForm";
 
 export default function PersonalPage() {
-  const columns = ["nombre","telefono","email","cargo","area","estado"]
-  const Component = <NewsTitleForm/>
+  const columns = ["nombre", "telefono", "email", "cargo", "area", "estado"];
   const location = useLocation();
-  
-  const {filterObject} = useService({service:PersonalInstance.getAll})
 
-  const {data,limit,offset,setLimit,setoffset,total} = filterObject
+  const { filterObject } = useService({ service: PersonalInstance.getAll });
+
+  const { data, limit, offset, setLimit, setoffset, total,setInput,input,setEstado,setOrden,orderDirection,orderBy } = filterObject;
   const isEditRoute = location.pathname.includes("/editar/");
-
+  const formFilterObject = {
+    setoffset,
+    setInput,
+    setEstado,
+    setOrden,
+    input
+  };
   return (
     <>
       {!isEditRoute ? (
@@ -39,22 +45,37 @@ export default function PersonalPage() {
           </PageHeader>
           <Row className="mt-4">
             <Col>
-            <Card className="p-4 mt-4">
-            {data.length > 0 ? (
-              <MyTableComponent addFormComponent={Component} data={data} filterObject={filterObject} columns={columns} />
-            ) : (
-              <h4>No hay datos que coincidan con tus busquedas</h4>
-            )}
-            <div className="row">
-              <MyTableFooter
-                limit={limit}
-                offset={offset}
-                setLimit={setLimit}
-                setoffset={setoffset}
-                total={total}
-              />
-            </div>
+            <Card>
+            <Accordion className="rounded">
+              <Accordion.Header className="rounded">Filtros</Accordion.Header>
+              <AccordionBody>
+                <FilterPersonalform formFilterObject={formFilterObject} />
+              </AccordionBody>
+            </Accordion>
           </Card>
+              <Card className="p-4 mt-4">
+                {data.length > 0 ? (
+                  <MyTableComponent
+                    deleteFunction={PersonalInstance.delete}
+                    setActiveFunction={PersonalInstance.setActive}
+                    AddFormComponent={<PersonalForm />}
+                    data={data}
+                    filterObject={filterObject}
+                    columns={columns}
+                  />
+                ) : (
+                  <h4>No hay datos que coincidan con tus busquedas</h4>
+                )}
+                <div className="row">
+                  <MyTableFooter
+                    limit={limit}
+                    offset={offset}
+                    setLimit={setLimit}
+                    setoffset={setoffset}
+                    total={total}
+                  />
+                </div>
+              </Card>
             </Col>
           </Row>
         </>

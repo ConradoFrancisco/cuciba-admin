@@ -1,6 +1,11 @@
+import MyTableComponent from "MyApp/components/common/MyTableComponent";
 import MyTable from "MyApp/my-components/MyTable";
+import MyTableFooter from "MyApp/my-components/MyTableFooter";
 import PageHeader from "components/common/PageHeader";
+import useService from "hooks/useService";
 import { Card, Col, Row } from "react-bootstrap";
+import AutoridadesPrincipalesService from "services/institucional/AutoridadesPrincipalesService";
+import AutoridadForm from "./forms/AutoridadForm";
 
 export default function AutoridadesPage() {
   const autoridadesPrinciaples = [
@@ -153,6 +158,13 @@ export default function AutoridadesPage() {
       estado: "Activo",
     },
   ];
+  const { filterObject } = useService({
+    service: AutoridadesPrincipalesService.getAll,
+  });
+
+  const { data, limit, offset, setLimit, setoffset, total } = filterObject;
+  const columns = ["Nombre","Apellido","Orden", "puesto", "estado"];
+  console.log(data)
   return (
     <>
       <PageHeader title="Autoridades"></PageHeader>
@@ -163,27 +175,28 @@ export default function AutoridadesPage() {
               <h4>Autoridades Principales</h4>
             </Card.Header>
             <Card.Body>
-              <MyTable data={autoridadesPrinciaples} />
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xl={6} className="mt-4 d-flex">
-          <Card className="w-100">
-            <Card.Header style={{ paddingBottom: "0px" }}>
-              <h4 className="m-auto">Tribunal de ética y disciplina</h4>
-            </Card.Header>
-            <Card.Body>
-              <MyTable data={tribunaleticaDisciplina} />
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col xl={6} className="mt-4 d-flex ">
-          <Card className="w-100">
-            <Card.Header style={{ paddingBottom: "0px" }}>
-              <h4>Comisión revisadora de cuentas</h4>
-            </Card.Header>
-            <Card.Body>
-              <MyTable data={comisionRevisadoraDeCuentas} />
+              {data.length > 0 ? (
+                <MyTableComponent
+                  deleteFunction={AutoridadesPrincipalesService.delete}
+                  setActiveFunction={AutoridadesPrincipalesService.setActive}
+                  AddFormComponent={<AutoridadForm/>}
+                  section={"Autoridades"}
+                  data={data}
+                  columns={columns}
+                  filterObject={filterObject}
+                />
+              ) : (
+                <h4>No hay datos que coincidan con tus busquedas</h4>
+              )}
+              <div className="row">
+                <MyTableFooter
+                  limit={limit}
+                  offset={offset}
+                  setLimit={setLimit}
+                  setoffset={setoffset}
+                  total={total}
+                />
+              </div>
             </Card.Body>
           </Card>
         </Col>
