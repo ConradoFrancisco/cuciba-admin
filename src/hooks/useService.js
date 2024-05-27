@@ -4,6 +4,7 @@ export default function useService( {service} ) {
     const [input, setInput] = useState(undefined);
     const [estado, setEstado] = useState(undefined);
     const [orden, setOrden] = useState(undefined);
+    const [puesto, setPuesto] = useState(undefined);
     
     const [limit, setLimit] = useState(5);
     const [offset, setoffset] = useState(0);
@@ -14,12 +15,11 @@ export default function useService( {service} ) {
     const [orderDirection, setOrderDirection] = useState("asc");
 
     useEffect(() => {
-      console.log('render')
-      console.log(estado)
       const FetchData = async () => {
         try {
           const response = await service({
             area:orden,
+            puesto,
             limit,
             offset,
             input,
@@ -37,7 +37,7 @@ export default function useService( {service} ) {
       };
       FetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [flag, limit, offset, input, estado, orden, orderBy, orderDirection]);
+    }, [flag, limit, offset, input, estado, orden, orderBy, orderDirection,puesto]);
 
     const filterObject = {
       setOrderBy,
@@ -50,6 +50,7 @@ export default function useService( {service} ) {
       setInput,
       setEstado,
       setOrden,
+      setPuesto,
       setData,
       setLimit,
       total,

@@ -61,7 +61,6 @@ export default function MyTableComponent({
     console.log(action);
   };
 
-  console.log(setActiveFunction);
   return (
     <>
       <div className="d-flex justify-content-end mb-4">

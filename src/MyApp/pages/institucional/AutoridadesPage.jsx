@@ -3,9 +3,10 @@ import MyTable from "MyApp/my-components/MyTable";
 import MyTableFooter from "MyApp/my-components/MyTableFooter";
 import PageHeader from "components/common/PageHeader";
 import useService from "hooks/useService";
-import { Card, Col, Row } from "react-bootstrap";
+import { Accordion, AccordionBody, Card, Col, Row } from "react-bootstrap";
 import AutoridadesPrincipalesService from "services/institucional/AutoridadesPrincipalesService";
 import AutoridadForm from "./forms/AutoridadForm";
+import FilterAutoridadForm from "./forms/filterForms/FilterAutoridadForm";
 
 export default function AutoridadesPage() {
   const autoridadesPrinciaples = [
@@ -162,14 +163,29 @@ export default function AutoridadesPage() {
     service: AutoridadesPrincipalesService.getAll,
   });
 
-  const { data, limit, offset, setLimit, setoffset, total } = filterObject;
+  const { data, limit, offset, setLimit, setoffset, total,setInput,setEstado,setOrden,setPuesto } = filterObject;
   const columns = ["Nombre","Apellido","Orden", "puesto", "estado"];
+  const formFilterObject = {
+    setoffset,
+    setInput,
+    setEstado,
+    setOrden,
+    setPuesto
+  };
   console.log(data)
   return (
     <>
       <PageHeader title="Autoridades"></PageHeader>
       <Row>
         <Col xl={12} className="mt-4">
+        <Card className="mb-4">
+            <Accordion className="rounded">
+              <Accordion.Header className="rounded">Filtros</Accordion.Header>
+              <AccordionBody>
+                <FilterAutoridadForm formFilterObject={formFilterObject} />
+              </AccordionBody>
+            </Accordion>
+          </Card>
           <Card>
             <Card.Header style={{ paddingBottom: "0px" }}>
               <h4>Autoridades Principales</h4>

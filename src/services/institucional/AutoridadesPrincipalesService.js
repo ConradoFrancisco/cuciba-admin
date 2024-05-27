@@ -7,7 +7,8 @@ class PersonalService {
     offset = 0,
     input = undefined,
     estado = undefined,
-    area = undefined,
+    orden = undefined,
+    puesto = undefined,
     orderBy = "",
     orderDirection = "",
   }) {
@@ -16,9 +17,10 @@ class PersonalService {
         "http://localhost:8080/autoridades",
         {
           params: {
+            puesto,
             input,
             estado,
-            area,
+            orden,
             limit,
             offset,
             orderDirection,
