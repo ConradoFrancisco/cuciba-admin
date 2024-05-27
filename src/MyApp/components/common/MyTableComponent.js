@@ -75,11 +75,10 @@ export default function MyTableComponent({
         <thead className="thead-dark">
           <tr>
             {columns.map((column, key) => (
-              <th onClick={() => handleOrderBy(column)}>
+              <th key={key} onClick={() => handleOrderBy(column)}>
                 {column} {getOrderIcon(column)}
               </th>
             ))}
-
             <th>Acciones</th>
           </tr>
         </thead>

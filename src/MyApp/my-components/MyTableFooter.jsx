@@ -32,7 +32,7 @@ export default function MyTableFooter({offset,limit,total,setoffset,setLimit}) {
         <Button
           type="button"
           variant="primary"
-          disabled={limit + offset > total ? true : false}
+          disabled={limit + offset >= total ? true : false}
           onClick={() => setoffset(offset + limit)}
         >
           Siguiente

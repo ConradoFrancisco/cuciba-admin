@@ -26,6 +26,7 @@ export default function ModalContent({
     setOpenModal,
     tipo,
   };
+  console.log(setOpenModal)
   const ClonedComponent = cloneComponentWithProps(AddFormComponent, formProps);
   let compo = AddFormComponent
   console.log(setActiveFunction);
@@ -157,7 +158,7 @@ export default function ModalContent({
       ) : tipo === "editar" ? (
         <>
           <Modal.Header>
-            <h5>actualizar area</h5>
+            <h5>actualizar {seccion}</h5>
             <FalconCloseButton onClick={() => setOpenModal(false)} />
           </Modal.Header>
           <Modal.Body>

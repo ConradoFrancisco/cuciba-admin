@@ -14,6 +14,7 @@ import TutorialsPage from "MyApp/pages/help/TutorialsPage";
 import EstadisticasPage from "MyApp/pages/home/EstadisticasPage";
 import PrincipalPage from "MyApp/pages/home/PrincipalPage";
 import AbmAreas from "MyApp/pages/institucional/AbmAreas";
+import AutoridadesTribunalPage from "MyApp/pages/institucional/Autoridades/AutoridadesTribunalPage";
 import AutoridadesPage from "MyApp/pages/institucional/AutoridadesPage";
 import PersonalPage from "MyApp/pages/institucional/PersonalPage";
 import CreateEditPage from "MyApp/pages/institucional/components/CreateEditPage";
@@ -60,7 +61,9 @@ const MyRoutes = () => {
             <Route path="estadisticas" element={<EstadisticasPage />} />
           </Route>
           <Route path="/institucional">
-            <Route path="autoridades" element={<AutoridadesPage />} />
+            <Route path="autoridades" element={<AutoridadesPage />}>
+            </Route>
+            <Route path="tribunal" element={<AutoridadesTribunalPage/>}/>
             <Route path="personal" element={<PersonalPage />}>
               <Route path="editar/:id" element={<CreateEditPage />} />
             </Route>

@@ -7,6 +7,7 @@ import { Accordion, AccordionBody, Card, Col, Row } from "react-bootstrap";
 import AutoridadesPrincipalesService from "services/institucional/AutoridadesPrincipalesService";
 import AutoridadForm from "./forms/AutoridadForm";
 import FilterAutoridadForm from "./forms/filterForms/FilterAutoridadForm";
+import { Link } from "react-router-dom";
 
 export default function AutoridadesPage() {
   const autoridadesPrinciaples = [
@@ -163,8 +164,8 @@ export default function AutoridadesPage() {
     service: AutoridadesPrincipalesService.getAll,
   });
 
-  const { data, limit, offset, setLimit, setoffset, total,setInput,setEstado,setOrden,setPuesto } = filterObject;
-  const columns = ["Nombre","Apellido","Orden", "puesto", "estado"];
+  const { data, limit, offset, setLimit, setoffset, total, setInput, setEstado, setOrden, setPuesto } = filterObject;
+  const columns = ["Nombre", "Apellido", "Orden", "puesto", "estado"];
   const formFilterObject = {
     setoffset,
     setInput,
@@ -175,10 +176,25 @@ export default function AutoridadesPage() {
   console.log(data)
   return (
     <>
-      <PageHeader title="Autoridades"></PageHeader>
+      <PageHeader title="Autoridades">
+        <div className="d-flex gap-2 mt-3">
+          <Link
+            to={"/institucional/administrar-areas"}
+            className="btn btn-primary btn-sm"
+          >
+            Comisión revisadora de cuentas
+          </Link>
+        <Link
+            to={"/institucional/tribunal"}
+            className="btn btn-primary btn-sm"
+          >
+            Tribunal de ética y disciplina
+          </Link>
+        </div>
+      </PageHeader>
       <Row>
         <Col xl={12} className="mt-4">
-        <Card className="mb-4">
+          <Card className="mb-4">
             <Accordion className="rounded">
               <Accordion.Header className="rounded">Filtros</Accordion.Header>
               <AccordionBody>
@@ -195,7 +211,7 @@ export default function AutoridadesPage() {
                 <MyTableComponent
                   deleteFunction={AutoridadesPrincipalesService.delete}
                   setActiveFunction={AutoridadesPrincipalesService.setActive}
-                  AddFormComponent={<AutoridadForm/>}
+                  AddFormComponent={<AutoridadForm />}
                   section={"Autoridades"}
                   data={data}
                   columns={columns}
