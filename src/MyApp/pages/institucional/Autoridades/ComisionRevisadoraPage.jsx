@@ -7,9 +7,11 @@ import { Link } from "react-router-dom";
 import TribunalEticaService from "services/institucional/TribunalEticaService";
 import Tribunalform from "../forms/TribunalForm";
 import FilterTribunalForm from "../forms/filterForms/FilterTribunalForm";
+import ComisionRevisadoraService from "services/institucional/ComisionRevisadoraService";
+import Comisionform from "../forms/ComisionForm";
 
-export default function AutoridadesTribunalPage() {
-  const { filterObject } = useService({ service: TribunalEticaService.getAll });
+export default function ComisionRevisadoraPage() {
+  const { filterObject } = useService({ service: ComisionRevisadoraService.getAll });
   const columns = ["nombre", "apellido", "orden", "posicion", "estado"];
   const {
     data,
@@ -44,17 +46,16 @@ export default function AutoridadesTribunalPage() {
             Autoridades Principales
           </Link>
           <Link
-            to={"/institucional/comision-revisadora"}
+            to={"/institucional/tribunal"}
             className="btn btn-primary btn-sm"
           >
-            Comisión revisadora de cuentas
+            Tribunal de ética y disciplina
           </Link>
         </div>
       </PageHeader>
       <Row>
         <Col xl={12}>
           <Card className="mb-4 mt-4">
-            
             <Accordion className="rounded">
               <Accordion.Header className="rounded">Filtros</Accordion.Header>
               <AccordionBody>
@@ -64,16 +65,16 @@ export default function AutoridadesTribunalPage() {
           </Card>
           <Card className="p-4 mt-4">
           <Card.Header style={{ paddingBottom: "0px" }}>
-              <h4>Tribunal de ética y disciplina</h4>
-            </Card.Header>
+                  <h4>Comisión revisadora de cuentas</h4>
+                </Card.Header>
             {data.length > 0 ? (
               <MyTableComponent
-                deleteFunction={TribunalEticaService.delete}
-                setActiveFunction={TribunalEticaService.setActive}
+                deleteFunction={ComisionRevisadoraService.delete}
+                setActiveFunction={ComisionRevisadoraService.setActive}
                 data={data}
                 filterObject={filterObject}
                 columns={columns}
-                AddFormComponent={<Tribunalform />}
+                AddFormComponent={<Comisionform />}
               />
             ) : (
               <h4>No hay datos que coincidan con tus busquedas</h4>
