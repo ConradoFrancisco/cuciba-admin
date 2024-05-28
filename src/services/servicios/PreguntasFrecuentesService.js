@@ -67,10 +67,10 @@ class PreguntasFrecuentesService {
   async setActive({ id, estado }) {
     const body = { estado };
     const area =
-      estado === 1 ? "Autoridad dada de alta!" : "Autoridad ahora inactiva";
+      estado === 1 ? "Pregunta Publicada con éxito!" : "Pregunta dada de baja";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/comision/${id}`,
+        `http://localhost:8080/servicios/preguntas-frecuentes/${id}`,
         body
       );
       toast.success(area, {
@@ -92,7 +92,7 @@ class PreguntasFrecuentesService {
   async delete({ id }) {
     try {
       const response = await axiosInstance.delete(
-        `http://localhost:8080/comision/${id}`
+        `http://localhost:8080/servicios/preguntas-frecuentes/${id}`
       );
       toast.success("Autoridad eliminada correctamente", {
         position: "bottom-right",
@@ -110,11 +110,11 @@ class PreguntasFrecuentesService {
       throw new Error("error al eliminar el área");
     }
   }
-  async update({ id, nombre, apellido,orden,posicion }) {
-    const body = { nombre, apellido,orden,posicion };
+  async update({ id, pregunta,respuesta,categoria }) {
+    const body = { pregunta,respuesta,categoria };
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/comision/modificar/${id}`,
+        `http://localhost:8080/servicios/preguntas-frecuentes/modificar/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );

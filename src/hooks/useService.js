@@ -5,6 +5,7 @@ export default function useService( {service} ) {
     const [estado, setEstado] = useState(undefined);
     const [orden, setOrden] = useState(undefined);
     const [puesto, setPuesto] = useState(undefined);
+    const [categoria, setcategoria] = useState(undefined);
     
     const [limit, setLimit] = useState(5);
     const [offset, setoffset] = useState(0);
@@ -19,6 +20,7 @@ export default function useService( {service} ) {
         try {
           const response = await service({
             area:orden,
+            categoria,
             puesto,
             limit,
             offset,
@@ -37,9 +39,10 @@ export default function useService( {service} ) {
       };
       FetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [flag, limit, offset, input, estado, orden, orderBy, orderDirection,puesto]);
+    }, [flag, limit, offset, input, estado, orden, orderBy, orderDirection,puesto,categoria]);
 
     const filterObject = {
+      setcategoria,
       setOrderBy,
       setOrderDirection,
       setoffset,

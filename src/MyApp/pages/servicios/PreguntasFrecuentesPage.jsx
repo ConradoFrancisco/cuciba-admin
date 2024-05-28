@@ -5,20 +5,22 @@ import useService from "hooks/useService";
 import { Accordion, AccordionBody, Card, Col, Row } from "react-bootstrap";
 import PreguntasFrecuentesService from "services/servicios/PreguntasFrecuentesService";
 import PreguntaFrecuenteForm from "./Forms/PreguntaFrecuenteForm";
+import PreguntasFrecuentesFilterForm from "./Forms/FilterForms/PreguntasFrecuentesFilterForm";
 
 export default function PreguntasFrecuentesPage(){
     const { filterObject } = useService({
         service: PreguntasFrecuentesService.getAll,
       });
     
-      const { data, limit, offset, setLimit, setoffset, total, setInput, setEstado, setOrden, setPuesto } = filterObject;
+      const { data, limit, offset, setLimit, setoffset, total, setInput, setEstado, setOrden, setPuesto,setcategoria } = filterObject;
       const columns = ["pregunta", "categoria", "estado"];
       const formFilterObject = {
         setoffset,
         setInput,
         setEstado,
         setOrden,
-        setPuesto
+        setPuesto,
+        setcategoria
       };
       console.log(data)
       return (
@@ -31,6 +33,7 @@ export default function PreguntasFrecuentesPage(){
                 <Accordion className="rounded">
                   <Accordion.Header className="rounded">Filtros</Accordion.Header>
                   <AccordionBody>
+                    <PreguntasFrecuentesFilterForm formFilterObject={formFilterObject}/>
                   </AccordionBody>
                 </Accordion>
               </Card>
@@ -41,6 +44,8 @@ export default function PreguntasFrecuentesPage(){
                 <Card.Body>
                   {data.length > 0 ? (
                     <MyTableComponent
+                      setActiveFunction={PreguntasFrecuentesService.setActive}
+                      deleteFunction={PreguntasFrecuentesService.delete}
                       AddFormComponent={<PreguntaFrecuenteForm/>}
                       section={"Pregunta"}
                       data={data}

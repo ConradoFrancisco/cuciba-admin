@@ -16,9 +16,9 @@ export default function PreguntaFrecuenteForm({
   setFlag,
   setOpenModal,
 }) {
-  const autoridadSchema = yup.object().shape({
+  const faQSchema = yup.object().shape({
     pregunta: yup.string().required("la pregunta es requerido"),
-    categoria: yup.string().required("la gategoria es requerida"),
+    categoria: yup.number().required("la categoria es requerida"),
     content: yup.string().required("la respuesta es requerido"),
   });
 
@@ -26,38 +26,37 @@ export default function PreguntaFrecuenteForm({
   const [loading, setLoading] = useState(false);
   const metodo =
     tipo === "editar"
-      ? AutoridadesPrincipalesService.update
-      : AutoridadesPrincipalesService.create;
+      ? PreguntasFrecuentesService.update
+      : PreguntasFrecuentesService.create;
 
   const initialValues =
     tipo === "editar"
       ? {
-          pregunta: item.pregunta,
-          content: item.respuesta,
-          categoria: item.categoria_id,
-        }
+        id: item.id,
+        pregunta: item.pregunta,
+        content: item.respuesta,
+        categoria: item.categoria_id,
+      }
       : {
-          pregunta: "",
-          content: "",
-          categoria: "",
-        };
+        pregunta: "",
+        content: "",
+        categoria: "",
+      };
 
   const formik = useFormik({
     initialValues,
     context: { tipo },
-    validationSchema: autoridadSchema,
+    validationSchema: faQSchema,
     onSubmit: async (values) => {
       console.log(values);
-
       setLoading(true);
-      let avatarPath = values.avatar;
-
-      const { pregunta, content, categoria } = values;
+      const { pregunta, content, categoria,id } = values;
       try {
-        const result = await PreguntasFrecuentesService.create({
+        const result = await metodo({
           categoria,
           pregunta,
           respuesta: content,
+          id
         });
         console.log(result);
         toast.success(result.data, {
@@ -72,8 +71,9 @@ export default function PreguntaFrecuenteForm({
         });
       } catch (e) {
         console.log(e);
+      } finally {
+        setOpenModal(false)
       }
-
       const newflag = flag + 1;
       setFlag(newflag);
     },
@@ -139,9 +139,13 @@ export default function PreguntaFrecuenteForm({
           <Form.Group>
             <Form.Label>Respuesta:</Form.Label>
             <TinymceEditor
+              handleBlur={formik.handleBlur}
               handleChange={formik.handleChange}
               value={formik.values.content}
             />
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.content}
+            </Form.Control.Feedback>
           </Form.Group>
         </Col>
         <Col xs={12} className="text-center mt-4">
