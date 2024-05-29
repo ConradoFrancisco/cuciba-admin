@@ -11,7 +11,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
-
+import { format } from 'date-fns';
 export default function MyTableComponent({
   data,
   filterObject,
@@ -88,8 +88,8 @@ export default function MyTableComponent({
               {columns.map((column) => {
                 return column === "estado" ? (
                   ""
-                ) : item.column === null ? (
-                  <td>-</td>
+                ) : column === 'fecha' ? (
+                  <td>{format(item['fecha'], 'dd-MM-yyyy')}</td>
                 ) : (
                   <td>{item[column]}</td>
                 );
