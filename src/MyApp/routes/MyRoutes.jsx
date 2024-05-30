@@ -21,6 +21,7 @@ import PersonalPage from "MyApp/pages/institucional/PersonalPage";
 import CreateEditPage from "MyApp/pages/institucional/components/CreateEditPage";
 import CapacitacionPage from "MyApp/pages/matriculados/CapacitacionPage";
 import MessagesListPage from "MyApp/pages/mensajes/MessagesListPage";
+import AddNewPage from "MyApp/pages/news/AddNewPage";
 import EditNewsPage from "MyApp/pages/news/EditNewsPage";
 import NewsListPage from "MyApp/pages/news/NewsListPage";
 import PropertyInterestedPage from "MyApp/pages/property/PropertyInterestedPage";
@@ -105,7 +106,7 @@ const MyRoutes = () => {
           <Route path="/noticias">
             <Route path="listar" element={<NewsListPage />} />
             <Route path="editar/:id" element={<EditNewsPage />} />
-            <Route path="compartidas/listar" element={<PropertySharedPage />} />
+            <Route path="añadir" element={<AddNewPage/>} />
             <Route path="interesados" element={<PropertyInterestedPage />} />
           </Route>
 

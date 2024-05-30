@@ -1,54 +1,15 @@
+import { toast } from "react-toastify";
 import { data } from "../MyApp/mocks/NewsMock";
+import axiosInstance from "../MyApp/utils/axiosConfig";
 
 class NewsService {
   async getAll({ offset = 0, limit }) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (true) {
-          // Logica para el pedido a la db
-          if (limit) {
-            const mappedData = data
-              .map(({ id, title, estado, imageUrl }) => ({
-                id,
-                title,
-                estado,
-                imageUrl,
-              }))
-              .slice(offset, offset + limit);
-            console.log(mappedData);
-            const response = {
-              results: mappedData,
-              length: mappedData.length,
-              totalResults: data.length,
-              statusCode: 200,
-            };
-            console.log(response);
-            resolve(response);
-          } else {
-            const mappedData = data
-              .map(({ id, title, estado, imageUrl }) => ({
-                id,
-                title,
-                estado,
-                imageUrl,
-              }))
-              .slice();
-            console.log(mappedData);
-            const response = {
-              results: mappedData,
-              length: mappedData.length,
-              totalResults: data.length,
-              statusCode: 200,
-            };
-            console.log(response);
-
-            resolve(response);
-          }
-        } else {
-          reject(new Error("no se ha podido cumplir la promesa"));
-        }
-      }, 2000);
-    });
+    try{
+      const response = await axiosInstance.get("http://localhost:8080/noticias");
+      return response;
+    }catch(e){
+      toast.danger("error al obtener las noticias",{position:"bottom-right"})
+    }
   }
   async getUnique(id) {
     return new Promise((resolve, reject) => {
@@ -66,37 +27,24 @@ class NewsService {
       }
     });
   }
-  async create(title) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (true) {
-          // Logica para el pedido a la db
-          data.unshift({
-            id: data.length + 1,
-            title: title,
-            estado: "no publicada",
-            imageUrl:
-              "https://img.freepik.com/vector-premium/imagen-miniatura-predeterminada-icono-imagen-grafico-pictograma-plano-simple-no-disponible-foto-faltante_101884-2515.jpg?w=826",
-            date: "",
-            description: "",
-            cantFotos: "",
-            body: "",
-            images: [],
-            quote: "",
-            tags: [],
-          });
-
-          const response = {
-            results: data,
-            length: 2,
-            statusCode: 200,
-          };
-          resolve(response);
-        } else {
-          reject(new Error("no se ha podido cumplir la promesa"));
-        }
-      }, 2000);
-    });
+  async create({date,title,description,body,orden}) {
+    const cuerpo = {date,title,description,body,orden}
+    try{
+      const response = await axiosInstance.post('http://localhost:8080/noticias',cuerpo,{ headers: { "Content-Type": "application/json" } })
+      return response;
+    }catch(e){
+      throw new Error("error al intentar publicar la noticia");
+    }
+  }
+  async uploadImagesUrl({id,files}) {
+    const cuerpo = {id,files}
+    try{
+      const response = await axiosInstance.post('http://localhost:8080/noticias/images/',cuerpo,{ headers: { "Content-Type": "application/json" } })
+      console.log(response)
+      return response;
+    }catch(e){
+      throw new Error("error al intentar publicar la noticia");
+    }
   }
   async edit(id, portada, title, category, content, tags, images, edited) {
     return new Promise((resolve, reject) => {
