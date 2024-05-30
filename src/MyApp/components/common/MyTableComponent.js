@@ -89,7 +89,7 @@ export default function MyTableComponent({
                 return column === "estado" ? (
                   ""
                 ) : column === 'fecha' ? (
-                  <td>{format(item['fecha'], 'dd-MM-yyyy')}</td>
+                  <td>{item.fecha}</td>
                 ) : (
                   <td>{item[column]}</td>
                 );
