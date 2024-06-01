@@ -12,7 +12,7 @@ export default function NewsListPage() {
 
   const { filterObject } = useService({ service: NewsInstance.getAll })
 
-  const { data, total } = filterObject
+  const { data,setFlag,flag } = filterObject
   console.log(data)
  
 
@@ -28,7 +28,7 @@ export default function NewsListPage() {
         <Col xl={2}></Col>
         <Col xl={10}>
           {data?.map((item) => (
-            <NewListItem item={item}/>
+            <NewListItem item={item} flag={flag} setFlag={setFlag}/>
           ))}
         </Col>
       </Row>

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import CardService from "components/pages/landing/CardService";
 
 const PrincipalPage = () => {
-  return <>no es aca</>;
+  return <PageHeader title={"Panel de administrador del Colegio Inmobiliario"}></PageHeader>
 };
 
 export default PrincipalPage;

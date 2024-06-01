@@ -7,7 +7,7 @@ export default function useService( {service} ) {
     const [puesto, setPuesto] = useState(undefined);
     const [categoria, setcategoria] = useState(undefined);
     
-    const [limit, setLimit] = useState(5);
+    const [limit, setLimit] = useState(15);
     const [offset, setoffset] = useState(0);
     const [total, setTotal] = useState();
     const [data, setData] = useState([]);

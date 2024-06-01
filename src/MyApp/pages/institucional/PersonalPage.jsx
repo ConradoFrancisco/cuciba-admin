@@ -15,7 +15,7 @@ import PersonalForm from "./forms/PersonalForm";
 import FilterPersonalform from "./forms/filterForms/FilterPersonalForm";
 
 export default function PersonalPage() {
-  const columns = ["nombre", "telefono", "email", "cargo", "area", "estado"];
+  const columns = ["nombre","area","cargo","email","telefono", "estado"];
   const location = useLocation();
 
   const { filterObject } = useService({ service: PersonalInstance.getAll });

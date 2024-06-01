@@ -9,7 +9,7 @@ import PreguntasFrecuentesFilterForm from "./Forms/FilterForms/PreguntasFrecuent
 import InmobiliariasIlegalesServices from "services/servicios/InmobiliariasIlegalesServices";
 import InmobiliariasIlegalesPenalForm from "./Forms/InmobiliariasIlegalesPenalForm";
 
-export default function PreguntasFrecuentesPage(){
+export default function IlegalesPenalPage(){
     const { filterObject } = useService({
         service: InmobiliariasIlegalesServices.getAll,
       });

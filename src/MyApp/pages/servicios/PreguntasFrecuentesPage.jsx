@@ -7,67 +7,79 @@ import PreguntasFrecuentesService from "services/servicios/PreguntasFrecuentesSe
 import PreguntaFrecuenteForm from "./Forms/PreguntaFrecuenteForm";
 import PreguntasFrecuentesFilterForm from "./Forms/FilterForms/PreguntasFrecuentesFilterForm";
 
-export default function PreguntasFrecuentesPage(){
-    const { filterObject } = useService({
-        service: PreguntasFrecuentesService.getAll,
-      });
-    
-      const { data, limit, offset, setLimit, setoffset, total, setInput, setEstado, setOrden, setPuesto,setcategoria } = filterObject;
-      const columns = ["pregunta", "categoria", "estado"];
-      const formFilterObject = {
-        setoffset,
-        setInput,
-        setEstado,
-        setOrden,
-        setPuesto,
-        setcategoria
-      };
-      console.log(data)
-      return (
-        <>
-          <PageHeader title="Preguntas Frecuentes">
-          </PageHeader>
-          <Row>
-            <Col xl={12} className="mt-4">
-              <Card className="mb-4">
-                <Accordion className="rounded">
-                  <Accordion.Header className="rounded">Filtros</Accordion.Header>
-                  <AccordionBody>
-                    <PreguntasFrecuentesFilterForm formFilterObject={formFilterObject}/>
-                  </AccordionBody>
-                </Accordion>
-              </Card>
-              <Card>
-                <Card.Header style={{ paddingBottom: "0px" }}>
-                  <h4>Preguntas Frecuentes</h4>
-                </Card.Header>
-                <Card.Body>
-                  {data.length > 0 ? (
-                    <MyTableComponent
-                      setActiveFunction={PreguntasFrecuentesService.setActive}
-                      deleteFunction={PreguntasFrecuentesService.delete}
-                      AddFormComponent={<PreguntaFrecuenteForm/>}
-                      section={"Pregunta"}
-                      data={data}
-                      columns={columns}
-                      filterObject={filterObject}
-                    />
-                  ) : (
-                    <h4>No hay datos que coincidan con tus busquedas</h4>
-                  )}
-                  <div className="row">
-                    <MyTableFooter
-                      limit={limit}
-                      offset={offset}
-                      setLimit={setLimit}
-                      setoffset={setoffset}
-                      total={total}
-                    />
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </>
-      );
+export default function PreguntasFrecuentesPage() {
+  const { filterObject } = useService({
+    service: PreguntasFrecuentesService.getAll,
+  });
+
+  const {
+    data,
+    limit,
+    offset,
+    setLimit,
+    setoffset,
+    total,
+    setInput,
+    setEstado,
+    setOrden,
+    setPuesto,
+    setcategoria,
+  } = filterObject;
+  const columns = ["pregunta", "categoria", "estado"];
+  const formFilterObject = {
+    setoffset,
+    setInput,
+    setEstado,
+    setOrden,
+    setPuesto,
+    setcategoria,
+  };
+  return (
+    <>
+      <PageHeader title="Preguntas Frecuentes"></PageHeader>
+      <Row>
+        <Col xl={12} className="mt-4">
+          <Card className="mb-4">
+            <Accordion className="rounded">
+              <Accordion.Header className="rounded">Filtros</Accordion.Header>
+              <AccordionBody>
+                <PreguntasFrecuentesFilterForm
+                  formFilterObject={formFilterObject}
+                />
+              </AccordionBody>
+            </Accordion>
+          </Card>
+          <Card>
+            <Card.Header style={{ paddingBottom: "0px" }}>
+              <h4>Preguntas Frecuentes</h4>
+            </Card.Header>
+            <Card.Body>
+              {data.length > 0 ? (
+                <MyTableComponent
+                  setActiveFunction={PreguntasFrecuentesService.setActive}
+                  deleteFunction={PreguntasFrecuentesService.delete}
+                  AddFormComponent={<PreguntaFrecuenteForm />}
+                  section={"Pregunta"}
+                  data={data}
+                  columns={columns}
+                  filterObject={filterObject}
+                />
+              ) : (
+                <h4>No hay datos que coincidan con tus busquedas</h4>
+              )}
+              <div className="row">
+                <MyTableFooter
+                  limit={limit}
+                  offset={offset}
+                  setLimit={setLimit}
+                  setoffset={setoffset}
+                  total={total}
+                />
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
 }

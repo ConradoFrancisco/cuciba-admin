@@ -8,6 +8,7 @@ import PreguntaFrecuenteForm from "./Forms/PreguntaFrecuenteForm";
 import PreguntasFrecuentesFilterForm from "./Forms/FilterForms/PreguntasFrecuentesFilterForm";
 import InmobiliariasIlegalesServices from "services/servicios/InmobiliariasIlegalesServices";
 import InmobiliariasIlegalesPenalForm from "./Forms/InmobiliariasIlegalesPenalForm";
+import InmobiliariasIlegalesForm from "./Forms/FilterForms/InmobiliariasIlegalesForm";
 
 export default function IlegalesPage(){
     const { filterObject } = useService({
@@ -46,7 +47,7 @@ export default function IlegalesPage(){
                     <MyTableComponent
                       setActiveFunction={InmobiliariasIlegalesServices.setActive}
                       deleteFunction={InmobiliariasIlegalesServices.delete}
-                      AddFormComponent={<InmobiliariasIlegalesPenalForm/>}
+                      AddFormComponent={<InmobiliariasIlegalesForm/>}
                       section={"inmobiliaria"}
                       data={data}
                       columns={columns}

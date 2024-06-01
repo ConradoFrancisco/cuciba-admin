@@ -66,8 +66,8 @@ class inmobiliariasIlegalesService {
       );
     }
   }
-  async create({ nombre, direccion,fecha }) {
-    const body = { nombre, direccion,fecha };
+  async create({ nombre, direccion,fecha,causa }) {
+    const body = { nombre, direccion,fecha,causa };
     try {
       const response = await axiosInstance.post(
         "http://localhost:8080/servicios/inmobiliarias-penal",

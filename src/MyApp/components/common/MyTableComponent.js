@@ -11,7 +11,7 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 export default function MyTableComponent({
   data,
   filterObject,
@@ -74,12 +74,25 @@ export default function MyTableComponent({
       <table className="table table-striped table-bordered">
         <thead className="thead-dark">
           <tr>
-            {columns.map((column, key) => (
-              <th key={key} onClick={() => handleOrderBy(column)}>
-                {column} {getOrderIcon(column)}
-              </th>
-            ))}
-            <th>Acciones</th>
+            {columns.map((column, key) => {
+              let espacio = key === 0 || key === 1 ? "33%" :'';
+               if(column === 'orden'){
+                  espacio = "15%"
+               }
+               if(column === 'estado'){
+                espacio = "5%"
+               }
+              return (
+                <th
+                  key={key}
+                  style={{ width: espacio }}
+                  onClick={() => handleOrderBy(column)}
+                >
+                  {column} {getOrderIcon(column)}
+                </th>
+              );
+            })}
+            <th style={{width:'12%'}}>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -88,7 +101,7 @@ export default function MyTableComponent({
               {columns.map((column) => {
                 return column === "estado" ? (
                   ""
-                ) : column === 'fecha' ? (
+                ) : column === "fecha" ? (
                   <td>{item.fecha}</td>
                 ) : (
                   <td>{item[column]}</td>

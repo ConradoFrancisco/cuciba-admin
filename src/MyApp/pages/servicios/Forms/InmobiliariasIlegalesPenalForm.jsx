@@ -14,11 +14,12 @@ export default function InmobiliariasIlegalesPenalForm({
     setFlag,
     setOpenModal,
 }) {
-    console.log(item)
+    
     const inmobiliariaIlegalPenalSchema = yup.object().shape({
         nombre: yup.string().required("el nombre es requerido"),
         direccion: yup.string().required("la direccion es requerida"),
         fecha: yup.date().required("la fecha es requerida"),
+        
     });
 
     const [loading, setLoading] = useState(false);
@@ -33,12 +34,14 @@ export default function InmobiliariasIlegalesPenalForm({
                 id: item.id,
                 nombre: item.nombre,
                 direccion: item.direccion,
-                fecha: format(item.fecha, 'dd-MM-yyyy'),
+                fecha: item.fecha_edit,
+                causa: 1
             }
             : {
                 nombre: "",
                 direccion: "",
                 fecha: "",
+                causa: 1
             };
 
     const formik = useFormik({
@@ -46,12 +49,12 @@ export default function InmobiliariasIlegalesPenalForm({
         context: { tipo },
         validationSchema: inmobiliariaIlegalPenalSchema,
         onSubmit: async (values) => {
-            console.log(values);
+            
             setLoading(true);
-            const { nombre,direccion,fecha,id} = values;
+            const { nombre,direccion,fecha,id,causa} = values;
             try {
                 const result = await metodo({
-                    nombre,direccion,fecha,id
+                    nombre,direccion,fecha,id,causa
                 });
                 console.log(result);
                 toast.success(result.data, {

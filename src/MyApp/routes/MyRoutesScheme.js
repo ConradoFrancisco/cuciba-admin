@@ -124,32 +124,8 @@ export const serviciosRoutes = {
           active: true,
         },
         {
-          name: "Observatorio estadístico del sector inmobiliario",
-          to: "/servicios/observatorio-estadistico",
-          exact: true,
-          active: false,
-        },
-        {
-          name: "Calculadora de actualización de alquiler",
-          to: "/servicios/calculadora",
-          exact: true,
-          active: true,
-        },
-        {
-          name: "Consultas de RENAPER",
-          to: "/servicios/renaper",
-          exact: true,
-          active: true,
-        },
-        {
           name: "Revista CUCICBA",
           to: "/servicios/revista-cucicba",
-          exact: true,
-          active: true,
-        },
-        {
-          name: "Requisitos de matriculación",
-          to: "/servicios/matriculacion",
           exact: true,
           active: true,
         },
@@ -186,12 +162,6 @@ export const serviciosRoutes = {
         {
           name: "Listado de infractores",
           to: "/servicios/infractores",
-          exact: true,
-          active: true,
-        },
-        {
-          name: "Denuncias",
-          to: "/servicios/denuncias",
           exact: true,
           active: true,
         },

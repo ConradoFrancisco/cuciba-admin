@@ -14,7 +14,7 @@ export default function MyTableFooter({offset,limit,total,setoffset,setLimit}) {
           {limit + offset > total ? total : limit + offset} resultados de:{" "}
           {total}
         </span>
-        <select name="" id="" onChange={handleChange}>
+        <select value={15} name="" id="" onChange={handleChange}>
           <option value={5}>5</option>
           <option value={10}>10</option>
           <option value={15}>15</option>
