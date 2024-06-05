@@ -10,7 +10,7 @@ export default function NewListItem({ item,flag,setFlag }) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalAction, setModalAction] = useState(null);
-
+  console.log(item)
   const handleSetActive = async ( id, estado ) => {
     try {
       const response = await NewsInstance.setActive({ id, estado });
@@ -63,7 +63,7 @@ export default function NewListItem({ item,flag,setFlag }) {
         <Card.Body className="d-flex gap-3">
           <img
             style={{ maxWidth: "100px" }}
-            src={`http://localhost:8080/${item.imageUrl}`}
+            src={`http://localhost:8080/${item.Imagens[0].imageUrl}`}
           />
           <p>{item.description}</p>
         </Card.Body>

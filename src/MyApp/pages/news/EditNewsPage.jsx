@@ -76,17 +76,17 @@ export default function EditNewsPage() {
     const fetchNew = async () => {
       try {
         const response = await NewsInstance.getByid({ id });
-        console.log(response.data[0]);
-        setNoticia(response.data[0]);
+        console.log(response);
+        setNoticia(response.noticia);
         formik.setValues({
-          titulo: response.data[0].title,
-          date: response.data[0].fecha_edit,
-          orden: response.data[0].orden,
-          descripcion: response.data[0].description,
-          content: response.data[0].body,
+          titulo: response.noticia.title,
+          date: response.noticia.date,
+          orden: response.noticia.orden,
+          descripcion: response.noticia.description,
+          content: response.noticia.body,
         });
 
-         setImages(response.data[0].imagenes.split(';'));
+         /* setImages(response.data[0].imagenes.split(';')); */
         
       } catch (e) {
         console.log(e);
