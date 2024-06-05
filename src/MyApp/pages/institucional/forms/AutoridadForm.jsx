@@ -60,7 +60,7 @@ export default function PersonalForm({
       reader.readAsDataURL(file);
     }
   };
-
+console.log(item)
   const [puestos, setPuestos] = useState([]);
   const [loading, setLoading] = useState(false);
   const metodo =
@@ -73,11 +73,11 @@ export default function PersonalForm({
       ? {
           tipo,
           id: item.id,
-          nombre: item.Nombre,
-          apellido: item.Apellido,
+          nombre: item.nombre,
+          apellido: item.apellido,
           puesto: item.puesto_id,
-          avatar: item.avatar_autoridad,
-          orden: item.Orden,
+          avatar: item.avatar,
+          orden: item.orden,
         }
       : {
           nombre: "",
@@ -249,7 +249,7 @@ export default function PersonalForm({
                 <img
                   src={
                     !thumbnail && tipo === "editar"
-                      ? "http://localhost:8080/" + item.avatar_autoridad
+                      ? "http://localhost:8080/" + item.avatar
                       : thumbnail
                   }
                   alt="Thumbnail"

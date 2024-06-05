@@ -15,7 +15,7 @@ export default function AutoridadesPage() {
   });
 
   const { data, limit, offset, setLimit, setoffset, total, setInput, setEstado, setOrden, setPuesto } = filterObject;
-  const columns = ["Nombre", "Apellido", "Orden", "puesto", "estado"];
+  const columns = ["nombre", "apellido", "orden", "puesto", "estado"];
   const formFilterObject = {
     setoffset,
     setInput,
@@ -23,7 +23,7 @@ export default function AutoridadesPage() {
     setOrden,
     setPuesto
   };
-  console.log(data)
+  console.log(total)
   return (
     <>
       <PageHeader title="Autoridades">

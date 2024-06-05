@@ -21,7 +21,7 @@ export default function InmobiliariasIlegalesForm({
   const [loading, setLoading] = useState(false);
   const metodo =
     tipo === "editar"
-      ? InmobiliariasIlegalesServices.update
+      ? InmobiliariasIlegalesServices.updateNoCausa
       : InmobiliariasIlegalesServices.create;
 
   const initialValues =
@@ -45,6 +45,7 @@ export default function InmobiliariasIlegalesForm({
     context: { tipo },
     validationSchema: inmobiliariaIlegalSchema,
     onSubmit: async (values) => {
+      console.log(values)
       setLoading(true);
       const { nombre, direccion, fecha, id, causa } = values;
       try {

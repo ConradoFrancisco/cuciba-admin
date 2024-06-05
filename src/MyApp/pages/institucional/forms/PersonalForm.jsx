@@ -22,16 +22,18 @@ export default function PersonalForm({
 }) {
   const [areas, setAreas] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const metodo =
+    tipo === "editar" ? PersonalInstance.update : PersonalInstance.create;
   const initialValues =
     tipo === "editar"
       ? {
+          id: item.id,
           nombre: item.nombre,
           apellido: item.apellido,
           telefono: item.telefono,
           email: item.email,
           cargo: item.cargo,
-          area: areas.find((element) => element.area === tipo.area)?.id,
+          area: item.area_id,
         }
       : {
           nombre: "",
@@ -41,17 +43,15 @@ export default function PersonalForm({
           cargo: "",
           area: "-",
         };
-  console.log(initialValues);
-  console.log(typeof initialValues.area);
+
 
   const formik = useFormik({
     initialValues,
     validationSchema: personalSchema,
     onSubmit: async (values) => {
-      console.log("asd");
       try {
         setLoading(true);
-        const response = await PersonalInstance.create(values);
+        const response = await metodo(values);
         console.log(response);
         toast.success(response.data, {
           position: "bottom-right",

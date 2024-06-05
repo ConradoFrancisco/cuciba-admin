@@ -142,9 +142,9 @@ class inmobiliariasIlegalesService {
       throw new Error("error al insertar los datos en areas");
     }
   }
-  async updateNoCausa({ id, nombre,direccion,fecha }) {
-    const body = {nombre,direccion,fecha };
-    console.log(body)
+  async updateNoCausa({ id, nombre,direccion,fecha,causa }) {
+    const body = {nombre,direccion,fecha,causa };
+    console.log('body:',body)
     try {
       const response = await axiosInstance.patch(
         `http://localhost:8080/servicios/inmobiliarias-penal/no-causa/modificar/${id}`,

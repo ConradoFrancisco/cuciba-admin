@@ -31,7 +31,7 @@ export default function useService( {service} ) {
             orderDirection,
           });
           console.log(response);
-          setTotal(response.data.total[0].total);
+          setTotal(response.data.total);
           setData(response.data.data);
         } catch (e) {
           console.error(e);
