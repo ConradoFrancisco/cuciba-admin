@@ -7,6 +7,7 @@ import SancionesService from "services/servicios/SancionesService";
 import SancionesForm from "./Forms/SancionesForm";
 import SancionesFilterForm from "./Forms/FilterForms/SancionesFilterForm";
 import RevistaCucicbaService from "services/servicios/RevistaCucicbaService";
+import RevistaForm from "./Forms/RevistaForm";
 
 export default function RevistaCucicbaPage(){
     const { filterObject } = useService({
@@ -14,7 +15,7 @@ export default function RevistaCucicbaPage(){
       });
     
       const { data, limit, offset, setLimit, setoffset, total, setInput, setEstado, setOrden, setPuesto,setcategoria } = filterObject;
-      const columns = ["categoria","descripcion","fecha", "estado"];
+      const columns = ["descripcion","fecha", "estado"];
       const formFilterObject = {
         setoffset,
         setInput,
@@ -43,10 +44,10 @@ export default function RevistaCucicbaPage(){
                 <Card.Body>
                   {data.length > 0 ? (
                     <MyTableComponent
-                      setActiveFunction={SancionesService.setActive}
-                      deleteFunction={SancionesService.delete}
-                      AddFormComponent={<SancionesForm/>}
-                      section={"inmobiliaria"}
+                      setActiveFunction={RevistaCucicbaService.setActive}
+                      deleteFunction={RevistaCucicbaService.delete}
+                      AddFormComponent={<RevistaForm/>}
+                      section={"revista"}
                       data={data}
                       columns={columns}
                       filterObject={filterObject}
