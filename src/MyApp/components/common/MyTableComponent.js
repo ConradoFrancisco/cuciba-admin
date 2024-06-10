@@ -71,6 +71,7 @@ export default function MyTableComponent({
           <FiPlus /> Añadir {section}
         </button>
       </div>
+      
       <table className="table table-striped table-bordered">
         <thead className="thead-dark">
           <tr>
@@ -95,7 +96,7 @@ export default function MyTableComponent({
             <th style={{width:'12%'}}>Acciones</th>
           </tr>
         </thead>
-        <tbody>
+        {data.length > 0 ? ( <tbody>
           {data.map((item) => (
             <tr key={item.id}>
               {columns.map((column) => {
@@ -146,7 +147,10 @@ export default function MyTableComponent({
               </td>
             </tr>
           ))}
-        </tbody>
+        </tbody>) : (
+                    <h4 className="mt-2">No hay datos que coincidan con tus busquedas</h4>
+                  )}
+       
       </table>
       <Modal size="lg" show={openModal}>
         {AddFormComponent ? (
