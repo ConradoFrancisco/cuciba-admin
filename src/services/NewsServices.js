@@ -3,10 +3,13 @@ import { data } from "../MyApp/mocks/NewsMock";
 import axiosInstance from "../MyApp/utils/axiosConfig";
 
 class NewsService {
-  async getAll({ offset = 0, limit }) {
+  async getAll({ limit = 0,
+    offset = 0,
+    input = undefined,
+    estado = undefined, }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/noticias"
+        "http://localhost:8080/noticias", { params: {limit,input,offset,estado} }
       );
       return response;
     } catch (e) {
@@ -15,13 +18,13 @@ class NewsService {
       });
     }
   }
-  async getByid({id}) {
-    try{
+  async getByid({ id }) {
+    try {
       const response = await axiosInstance.get(`http://localhost:8080/noticias/${id}`)
       return response.data
-      
-    }catch(e){
-      throw new Error ("error al conseguir la noticia");
+
+    } catch (e) {
+      throw new Error("error al conseguir la noticia");
     }
   }
   async create({ date, title, description, body, orden }) {
@@ -33,6 +36,30 @@ class NewsService {
         { headers: { "Content-Type": "application/json" } }
       );
       toast.success("Noticia agregada correctamente", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: { color: "#fff", fontWeight: "500" }, // Añade un borde al texto}
+      });
+      return response;
+    } catch (e) {
+      throw new Error("error al intentar publicar la noticia");
+    }
+  }
+  async update({id, date, title, description, body, orden }) {
+    console.log('me ejecuto')
+    const cuerpo = { date, title, description, body, orden };
+    try {
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/noticias/modificar/${id}`,
+        cuerpo,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      toast.success("Noticia modificada correctamente", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -86,20 +113,23 @@ class NewsService {
     });
   }
   async delete(id) {
-    return new Promise((resolve, reject) => {
-      if (true) {
-        const newData = data.filter((noticia) => noticia.id !== parseInt(id));
-        console.log(newData);
-        const response = {
-          data: newData,
-          statusCode: 200,
-        };
-
-        resolve(response);
-      } else {
-        reject(new Error("no se ha podido cumplir la promesa"));
-      }
-    });
+    try {
+      const response = await axiosInstance.delete(`http://localhost:8080/noticias/${id}`)
+      toast.success("Noticia eliminada satisfactoriamente", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: { color: "#fff", fontWeight: "500" }, // Añade un borde al texto}
+      });
+      return response;
+    } catch (e) {
+      console.log(e)
+      throw new Error("error al publicar la noticia");
+    }
   }
   async setActive({ id, estado }) {
     const body = { estado };

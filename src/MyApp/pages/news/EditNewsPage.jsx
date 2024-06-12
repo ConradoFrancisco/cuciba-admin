@@ -55,18 +55,20 @@ export default function EditNewsPage() {
       if (response.status === 200) {
         const files = response.data.filePaths;
         try {
-          const result = await NewsInstance.create({
+          const result = await NewsInstance.update({
+            id:id,
             body: values.content,
             date: values.date,
             description: values.descripcion,
             orden: values.orden,
             title: values.titulo,
           });
-          const id = result.data.insertId;
-          const response = await NewsInstance.uploadImagesUrl({ id, files });
+          
+          const response = await NewsInstance.uploadImagesUrl({ id:id, files });
           console.log(response);
           navigate("/noticias/listar");
         } catch (e) {
+          console.error(e)
           throw new Error("error al insertar la noticia o sus imagenes");
         }
       }
@@ -96,7 +98,7 @@ export default function EditNewsPage() {
   }, []);
   return (
     <>
-      <PageHeader title="Añadir Noticia" />
+      <PageHeader title="Editar Noticia" />
       <Row className="mt-4">
         <Col xl={12}>
           <Card className="p-4">
@@ -193,7 +195,7 @@ export default function EditNewsPage() {
                   </Col>
                   <Col xl={4} className="mt-4">
                     <Button variant="success" type="submit">
-                      Crear noticia
+                      Guardar cambios
                     </Button>
                   </Col>
                 </Row>

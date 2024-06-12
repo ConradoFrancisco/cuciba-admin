@@ -24,6 +24,19 @@ export default function NewListItem({ item,flag,setFlag }) {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await NewsInstance.delete(id);
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setOpenModal(false);
+      const newflag = flag + 1;
+      setFlag(newflag)
+    }
+  }
+
   const handleOpenModal = (action, item = null) => {
     setSelectedItem(item);
     setModalAction(action);
@@ -148,7 +161,33 @@ export default function NewListItem({ item,flag,setFlag }) {
               </div>
             </Modal.Body>
           </>
-        ) : ''}
+        ) : modalAction === 'eliminar' ? (
+          <>
+            <Modal.Header>
+              <h5>Eliminar noticia</h5>
+              <FalconCloseButton onClick={() => setOpenModal(false)} />
+            </Modal.Header>
+            <Modal.Body>
+              <div className="d-flex flex-column">
+                <h5 className="text-center">
+                  Ustéd esta a punto de eliminar la noticia '{item.title}' ¿Desea
+                  proseguir?
+                </h5>
+                <div className="d-flex justify-content-center gap-3 pt-3">
+                  <Button
+                    variant="success"
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    Continuar
+                  </Button>
+                  <Button onClick={() => setOpenModal(false)} variant="danger">
+                    Cancelar
+                  </Button>
+                </div>
+              </div>
+            </Modal.Body>
+          </>
+        ):''}
       </Modal>
     </>
   );

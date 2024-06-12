@@ -117,12 +117,7 @@ export const serviciosRoutes = {
       active: true,
       icon: "computer-mouse",
       children: [
-        {
-          name: "Listado",
-          to: "/servicios/listado",
-          exact: true,
-          active: true,
-        },
+
         {
           name: "Revista CUCICBA",
           to: "/servicios/revista-cucicba",

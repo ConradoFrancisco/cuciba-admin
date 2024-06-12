@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
-import { Form, Row } from "react-bootstrap";
+import { Form, Row, Button } from "react-bootstrap";
 import Flex from "components/common/Flex";
 import cloudUpload from "assets/img/icons/cloud-upload.svg";
 import "./style.css";
@@ -30,8 +30,13 @@ const ImageUploader = ({ initialImages = [], setFileError, setFiles }) => {
     }
   }, [filePreviews, setFileError, setFiles]);
 
+  const handleDeleteImage = (index) => {
+    const newFilePreviews = filePreviews.filter((_, i) => i !== index);
+    setFilePreviews(newFilePreviews);
+  };
+
   const files = filePreviews.map((file, key) => (
-    <div key={key} className="d-flex" style={{ flexDirection: "column" }}>
+    <div key={key} id={'este id'} className="d-flex" style={{ flexDirection: "column" }}>
       {key === 0 ? (
         <p className="d-inline" style={{ padding: "px" }}>
           Portada
@@ -47,6 +52,13 @@ const ImageUploader = ({ initialImages = [], setFileError, setFiles }) => {
         width={200}
         height={150}
       />
+      <Button
+        variant="danger"
+        onClick={() => handleDeleteImage(key)}
+        className="mt-2"
+      >
+        Eliminar
+      </Button>
     </div>
   ));
 
