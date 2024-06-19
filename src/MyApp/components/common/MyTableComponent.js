@@ -58,7 +58,6 @@ export default function MyTableComponent({
     setSelectedItem(item);
     setModalAction(action);
     setOpenModal(true);
-    console.log(action);
   };
 
   return (
@@ -112,25 +111,25 @@ export default function MyTableComponent({
                 <span
                   className="badge"
                   style={{
-                    backgroundColor: item.estado === 1 ? "green" : "red",
+                    backgroundColor: item.estado === true ? "green" : "red",
                     color: "white",
                   }}
                 >
-                  {item.estado === 1 ? "Activa" : "Inactiva"}
+                  {item.estado === true ? "Activa" : "Inactiva"}
                 </span>
               </td>
               <td className="d-flex justify-content-around">
                 <button
                   className={`btn btn-${
-                    item.estado === 1 ? "secondary" : "success"
+                    item.estado === true ? "secondary" : "success"
                   } btn-sm mr-2`}
                   onClick={
-                    item.estado === 1
+                    item.estado === true
                       ? () => handleOpenModal("desactivar", item)
                       : () => handleOpenModal("activar", item)
                   }
                 >
-                  {item.estado === 1 ? <CiPause1 /> : <FaPlay />}
+                  {item.estado === true ? <CiPause1 /> : <FaPlay />}
                 </button>
                 <button
                   className="btn btn-primary btn-sm mr-2"

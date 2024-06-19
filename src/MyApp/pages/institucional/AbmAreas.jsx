@@ -9,7 +9,8 @@ import MyTableFooter from "MyApp/my-components/MyTableFooter";
 import useService from "hooks/useService";
 import Areaform from "./forms/AreaForm";
 import FilterAreaform from "./forms/filterForms/FilterAreaForm";
-const columns = ["orden", "title", "estado"];
+import { useEffect } from "react";
+const columns = ["orden", "nombre","descripcion", "estado"];
 export default function AbmAreas() {
   const { filterObject } = useService({ service: AreasInstance.getAll });
   const {
@@ -30,6 +31,10 @@ export default function AbmAreas() {
     setEstado,
     setOrden,
   };
+
+useEffect(()=>{
+  console.log(data)
+},[])
 
   return (
     <>

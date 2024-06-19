@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 class AreaService {
   async getAll({ limit = 0, offset = 0, input = "",estado="",orden="",orderBy="",orderDirection="" }) {
     try {
-      const response = await axiosInstance.get("http://localhost:8080/areas", {
+      const response = await axiosInstance.get("http://localhost:8080/api/v1/areas", {
         params: {
           limit, offset, input ,estado,orden,orderBy,orderDirection
         }
@@ -52,10 +52,11 @@ class AreaService {
 
   async setActive({ id, estado }) {
     const body = { estado };
+    console.log(estado)
     const area = estado === 1 ? 'Área publicada correctamente' : 'Área ahora inactiva'
     try {
-      const response = await axiosInstance.patch(`http://localhost:8080/areas/${id}`, body)
-      toast.success(area, {
+      const response = await axiosInstance.patch(`http://localhost:8080/api/v1/areas/active/${id}`, body)
+      toast.success(response.data, {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: false,

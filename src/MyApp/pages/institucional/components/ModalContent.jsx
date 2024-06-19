@@ -26,10 +26,7 @@ export default function ModalContent({
     setOpenModal,
     tipo,
   };
-  console.log(setOpenModal)
   const ClonedComponent = cloneComponentWithProps(AddFormComponent, formProps);
-  let compo = AddFormComponent
-  console.log(setActiveFunction);
   const handleActivateArea = async (id, estado) => {
     try {
       const response = await setActiveFunction({ id: id, estado });
@@ -45,7 +42,7 @@ export default function ModalContent({
   const handleDeactivateArea = async (id, estado) => {
     try {
       const response = await setActiveFunction({ id: id, estado });
-      console.log(response);
+      console.log(estado);
       const newflag = flag + 1;
       setFlag(newflag);
     } catch (e) {
@@ -84,7 +81,7 @@ export default function ModalContent({
               <div className="d-flex justify-content-center gap-3 pt-3">
                 <Button
                   variant="success"
-                  onClick={() => handleActivateArea(item.id, 1)}
+                  onClick={() => handleActivateArea(item.id, true)}
                 >
                   Continuar
                 </Button>
@@ -136,7 +133,7 @@ export default function ModalContent({
               <div className="d-flex justify-content-center gap-3 pt-3">
                 <Button
                   variant="success"
-                  onClick={() => handleDeactivateArea(item.id, 0)}
+                  onClick={() => handleDeactivateArea(item.id, false)}
                 >
                   Continuar
                 </Button>
