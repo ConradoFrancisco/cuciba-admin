@@ -4,35 +4,41 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import PreguntasFrecuentesService from "services/servicios/PreguntasFrecuentesService";
 
 export default function PreguntasFrecuentesFilterForm({ formFilterObject }) {
-  const [puestos, setPuestos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const formRef = useRef(null);
 
   const clearFilters = (e) => {
+    const form = formRef.current;
+    form.reset();
     e.preventDefault();
     formFilterObject.setoffset(0);
     formFilterObject.setInput(undefined);
-    formFilterObject.setEstado(undefined);
+    formFilterObject.setEstado(null);
     formFilterObject.setOrden(undefined);
+    formFilterObject.setcategoria(undefined)
   };
 
-  const formRef = useRef(null);
   const handleSubmit = (e) => {
     e.preventDefault();
     const form = formRef.current;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+    console.log(data)
+    data.estado = data.estado === "Todas" ? null : data.estado;
+    data.categoria = data.categoria === "Todas" ? null : data.categoria;
     formFilterObject.setoffset(0);
     formFilterObject.setEstado(data.estado);
     formFilterObject.setInput(data.input);
     formFilterObject.setOrden(data.orden);
-    formFilterObject.setPuesto(data.categoria);
-    /* formFilterObject.setcategoria(data.categoria) */
+    /* formFilterObject.setPuesto(data.categoria); */
+    formFilterObject.setcategoria(data.categoria)
   };
   useEffect(() => {
     const fetchCategorias = async () => {
       try {
         const response = await PreguntasFrecuentesService.getCategorys();
         console.log(response.data);
-        setPuestos(response.data);
+        setCategorias(response.data);
       } catch (e) {
         console.error("hubo un problema con la obtencion de datos");
       }
@@ -54,9 +60,9 @@ export default function PreguntasFrecuentesFilterForm({ formFilterObject }) {
             <Form.Group>
               <Form.Label>Estado</Form.Label>
               <Form.Select name="estado">
-                <option value="">Todas</option>
-                <option value={1}>Activas</option>
-                <option value={0}>Inactivas</option>
+                <option value={null}>Todas</option>
+                <option value={true}>Activas</option>
+                <option value={false}>Inactivas</option>
               </Form.Select>
             </Form.Group>
           </Col>
@@ -65,8 +71,8 @@ export default function PreguntasFrecuentesFilterForm({ formFilterObject }) {
               <Form.Label>Categoría</Form.Label>
               <Form.Select name="categoria">
                 <option value={undefined}>Todas</option>
-                {puestos?.map((puesto)=>(
-                    <option value={puesto.id}>{puesto.titulo}</option>
+                {categorias?.map((categoria)=>(
+                    <option value={categoria.id}>{categoria.nombre}</option>
                 ))}
               </Form.Select>
             </Form.Group>

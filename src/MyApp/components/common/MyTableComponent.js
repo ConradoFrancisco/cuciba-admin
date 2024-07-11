@@ -99,13 +99,14 @@ export default function MyTableComponent({
           {data.map((item) => (
             <tr key={item.id}>
               {columns.map((column) => {
+                
                 return column === "estado" ? (
                   ""
                 ) : column === "fecha" ? (
                   <td>{item.fecha}</td>
-                ) : (
+                ) : column === "categoria" ? <td>{item[column].nombre}</td>: (
                   <td>{item[column]}</td>
-                );
+                ) 
               })}
               <td>
                 <span

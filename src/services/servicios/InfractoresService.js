@@ -10,12 +10,14 @@ class infractoresService {
     fecha = undefined,
     orderBy = "",
     orderDirection = "",
+    direccion = ""
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/servicios/infractores",
+        "http://localhost:8080/api/v1/servicios/infractores",
         {
           params: {
+            direccion,
             fecha,
             input,
             estado,
@@ -39,7 +41,7 @@ class infractoresService {
     const body = { nombre, direccion,fecha };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/servicios/infractores",
+        "http://localhost:8080/api/v1/servicios/infractores",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -55,7 +57,7 @@ class infractoresService {
       estado === 1 ? "Infractor Publicado!" : "Infractor dado de baja";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/infractores/${id}`,
+        `http://localhost:8080/api/v1/servicios/infractores/active/${id}`,
         body
       );
       toast.success(area, {
@@ -76,8 +78,8 @@ class infractoresService {
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(
-        `http://localhost:8080/servicios/infractores/${id}`
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/api/v1/servicios/infractores/delete/${id}`
       );
       toast.success("Infractor eliminado correctamente", {
         position: "bottom-right",
@@ -100,7 +102,7 @@ class infractoresService {
     console.log(body)
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/infractores/modificar/${id}`,
+        `http://localhost:8080/api/v1/servicios/infractores/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );

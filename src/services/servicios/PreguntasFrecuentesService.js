@@ -8,16 +8,16 @@ class PreguntasFrecuentesService {
     input = undefined,
     estado = undefined,
     orden = undefined,
-    puesto = undefined,
+    categoria = undefined,
     orderBy = "",
     orderDirection = "",
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/servicios/preguntas-frecuentes",
+        "http://localhost:8080/api/v1/servicios/preguntas-frecuentes",
         {
           params: {
-            puesto,
+            categoria,
             input,
             estado,
             orden,
@@ -39,7 +39,7 @@ class PreguntasFrecuentesService {
   async getCategorys(){
     try {
         const response = await axiosInstance.get(
-          "http://localhost:8080/servicios/preguntas-frecuentes/categorias",
+          "http://localhost:8080/api/v1/servicios/preguntas-frecuentes/categorias",
           );
         console.log(response);
         return response;
@@ -54,7 +54,7 @@ class PreguntasFrecuentesService {
     const body = { pregunta,respuesta,categoria };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/servicios/preguntas-frecuentes",
+        "http://localhost:8080/api/v1/servicios/preguntas-frecuentes",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -70,7 +70,7 @@ class PreguntasFrecuentesService {
       estado === 1 ? "Pregunta Publicada con éxito!" : "Pregunta dada de baja";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/preguntas-frecuentes/${id}`,
+        `http://localhost:8080/api/v1/servicios/preguntas-frecuentes/active/${id}`,
         body
       );
       toast.success(area, {
@@ -91,8 +91,8 @@ class PreguntasFrecuentesService {
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(
-        `http://localhost:8080/servicios/preguntas-frecuentes/${id}`
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/api/v1/servicios/preguntas-frecuentes/delete/${id}`
       );
       toast.success("Autoridad eliminada correctamente", {
         position: "bottom-right",
@@ -104,7 +104,7 @@ class PreguntasFrecuentesService {
         progress: undefined,
         style: { color: "#fff", fontWeight: "500" }, // Añade un borde al texto}
       });
-      return response;
+     
     } catch (e) {
       console.log(e);
       throw new Error("error al eliminar el área");
@@ -114,7 +114,7 @@ class PreguntasFrecuentesService {
     const body = { pregunta,respuesta,categoria };
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/preguntas-frecuentes/modificar/${id}`,
+        `http://localhost:8080/api/v1/servicios/preguntas-frecuentes/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );

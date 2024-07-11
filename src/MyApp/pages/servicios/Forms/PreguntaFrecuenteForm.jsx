@@ -35,7 +35,7 @@ export default function PreguntaFrecuenteForm({
         id: item.id,
         pregunta: item.pregunta,
         content: item.respuesta,
-        categoria: item.categoria_id,
+        categoria: item.categoria.id,
       }
       : {
         pregunta: "",
@@ -53,7 +53,7 @@ export default function PreguntaFrecuenteForm({
       const { pregunta, content, categoria,id } = values;
       try {
         const result = await metodo({
-          categoria,
+          categoria:{id:categoria},
           pregunta,
           respuesta: content,
           id
@@ -73,9 +73,9 @@ export default function PreguntaFrecuenteForm({
         console.log(e);
       } finally {
         setOpenModal(false)
+        const newflag = flag + 1;
+        setFlag(newflag);
       }
-      const newflag = flag + 1;
-      setFlag(newflag);
     },
   });
 
@@ -126,7 +126,7 @@ export default function PreguntaFrecuenteForm({
               <option value="-">-</option>
               {categorias?.map((categoria) => (
                 <option key={categoria.id} value={categoria.id}>
-                  {categoria.titulo}
+                  {categoria.nombre}
                 </option>
               ))}
             </Form.Select>

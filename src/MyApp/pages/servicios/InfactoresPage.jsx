@@ -10,6 +10,7 @@ import InmobiliariasIlegalesServices from "services/servicios/InmobiliariasIlega
 import InmobiliariasIlegalesPenalForm from "./Forms/InmobiliariasIlegalesPenalForm";
 import InfractoresService from "services/servicios/InfractoresService";
 import InfractorForm from "./Forms/InfractorForm";
+import InfractorFilterForm from "./Forms/FilterForms/InfractorFilterForm";
 
 export default function InfractoresPage(){
     const { filterObject } = useService({
@@ -37,7 +38,7 @@ export default function InfractoresPage(){
                 <Accordion className="rounded">
                   <Accordion.Header className="rounded">Filtros</Accordion.Header>
                   <AccordionBody>
-                    <PreguntasFrecuentesFilterForm formFilterObject={formFilterObject}/>
+                    <InfractorFilterForm formFilterObject={formFilterObject}/>
                   </AccordionBody>
                 </Accordion>
               </Card>

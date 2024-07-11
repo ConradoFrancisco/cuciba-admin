@@ -14,6 +14,7 @@ export default function InfractorForm({
   setFlag,
   setOpenModal,
 }) {
+  console.log(item)
   const infractorSchema = yup.object().shape({
     nombre: yup.string().required("el nombre es requerido"),
     direccion: yup.string().required("la direccion es requerida"),
@@ -32,7 +33,7 @@ export default function InfractorForm({
           id: item.id,
           nombre: item.nombre,
           direccion: item.direccion,
-          fecha: item.fecha_edit,
+          fecha: item.fecha,
           causa: 1,
         }
       : {

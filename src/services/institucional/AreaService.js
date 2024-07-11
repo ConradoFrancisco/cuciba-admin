@@ -2,8 +2,9 @@ import axiosInstance from "MyApp/utils/axiosConfig";
 import { toast } from "react-toastify";
 
 class AreaService {
-  async getAll({ limit = 0, offset = 0, input = "",estado="",orden="",orderBy="",orderDirection="" }) {
+  async getAll({ limit = 0, offset = 0, input = "",estado=undefined,orden=undefined,orderBy="",orderDirection="" }) {
     try {
+      console.log("service:",estado)
       const response = await axiosInstance.get("http://localhost:8080/api/v1/areas", {
         params: {
           limit, offset, input ,estado,orden,orderBy,orderDirection
@@ -74,7 +75,7 @@ class AreaService {
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(`http://localhost:8080/areas/${id}`)
+      const response = await axiosInstance.patch(`http://localhost:8080/api/v1/areas/delete/${id}`)
       toast.success('Área eliminada correctamente', {
         position: "bottom-right",
         autoClose: 3000,

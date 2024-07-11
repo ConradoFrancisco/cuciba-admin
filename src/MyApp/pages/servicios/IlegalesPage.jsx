@@ -12,7 +12,7 @@ import InmobiliariasIlegalesForm from "./Forms/FilterForms/InmobiliariasIlegales
 
 export default function IlegalesPage(){
     const { filterObject } = useService({
-        service: InmobiliariasIlegalesServices.getAllNoCausa,
+        service: InmobiliariasIlegalesServices.getAll,
       });
     
       const { data, limit, offset, setLimit, setoffset, total, setInput, setEstado, setOrden, setPuesto,setcategoria } = filterObject;

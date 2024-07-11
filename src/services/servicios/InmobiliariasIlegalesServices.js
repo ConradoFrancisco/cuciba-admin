@@ -2,52 +2,23 @@ import axiosInstance from "MyApp/utils/axiosConfig";
 import { toast } from "react-toastify";
 
 class inmobiliariasIlegalesService {
+  
   async getAll({
     limit = 0,
     offset = 0,
     input = undefined,
     estado = undefined,
+    penal = false,
     fecha = undefined,
     orderBy = "",
     orderDirection = "",
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/servicios/inmobiliarias-penal",
+        "http://localhost:8080/api/v1/servicios/inmobiliarias-ilegales",
         {
           params: {
-            fecha,
-            input,
-            estado,
-            limit,
-            offset,
-            orderDirection,
-            orderBy,
-          },
-        }
-      );
-      console.log(response);
-      return response;
-    } catch (e) {
-      throw new Error(
-        "error al obtener las inmobiliarias ilegales, intente nuevamente mas tarde"
-      );
-    }
-  }
-  async getAllNoCausa({
-    limit = 0,
-    offset = 0,
-    input = undefined,
-    estado = undefined,
-    fecha = undefined,
-    orderBy = "",
-    orderDirection = "",
-  }) {
-    try {
-      const response = await axiosInstance.get(
-        "http://localhost:8080/servicios/inmobiliarias-penal/no-causa",
-        {
-          params: {
+            penal,
             fecha,
             input,
             estado,
