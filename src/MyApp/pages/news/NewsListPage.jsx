@@ -1,5 +1,5 @@
 import PageHeader from "components/common/PageHeader";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Card, Col, Modal, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { useUser } from "MyApp/context/AuthProvider";
@@ -11,11 +11,11 @@ import Paginator from "MyApp/my-components/Paginator";
 import NewsFilterForm from "./components/NewsFilterForm";
 
 export default function NewsListPage() {
-
+  const [open,setOpen] = useState(false)
+  const tituloRef = useRef();
   const { filterObject } = useService({ service: NewsInstance.getAll })
 
   const { data,setFlag,flag,total,offset,setoffset,setLimit,limit,setEstado,setOrden,setInput } = filterObject
-  console.log(data)
   const formFilterObject = {
     setoffset,
     setInput,
@@ -23,13 +23,27 @@ export default function NewsListPage() {
     setOrden,
   };
 
+  const handleCreateNoticia = async () =>{
+    const titulo = tituloRef.current.value
+    try{
+      const result = await NewsInstance.create({titulo})
+      console.log(result)
+      const newflag = flag + 1;
+      setFlag(newflag)
+    }catch(e){
+      console.error(e)
+    }finally{
+      setOpen(false)
+    }
+  }
+
   return (
     <>
       <PageHeader
         title="Listado de noticias"
         className="mb-3"
       >
-       <Link className="btn btn-primary" to={'/noticias/añadir'} variant="primary"><FiPlus></FiPlus> Agregar noticia</Link> 
+       <Button onClick={()=>setOpen(true)} variant="primary"><FiPlus></FiPlus> Agregar noticia</Button> 
       </PageHeader>
       <Row>
         <Col xl={2}>
@@ -47,6 +61,22 @@ export default function NewsListPage() {
         <Paginator limit={limit} offset={offset} setLimit={setLimit} setOffset={setoffset} total={total} />
         </Col>
       </Row>
+      <Modal show={open}>
+          <Modal.Header>
+            Agregar titulo de noticia
+          </Modal.Header>
+          <Modal.Body>
+            <div className="form-group">
+              <div className="form-label">
+                Titulo
+              </div>
+                <input ref={tituloRef} type="text" className="form-control" />
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => handleCreateNoticia()} >Enviar</Button>
+          </Modal.Footer>
+      </Modal>
     </>
   );
 }

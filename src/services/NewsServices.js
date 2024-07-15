@@ -9,7 +9,7 @@ class NewsService {
     estado = undefined, }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/noticias", { params: {limit,input,offset,estado} }
+        "http://localhost:8080/api/v1/noticia", { params: {limit,input,offset,estado} }
       );
       return response;
     } catch (e) {
@@ -18,20 +18,23 @@ class NewsService {
       });
     }
   }
-  async getByid({ id }) {
-    try {
-      const response = await axiosInstance.get(`http://localhost:8080/noticias/${id}`)
-      return response.data
 
-    } catch (e) {
-      throw new Error("error al conseguir la noticia");
+  async getByid(id){
+    try{
+      console.log(id)
+      const response = await axiosInstance.get(`http://localhost:8080/api/v1/noticia/${id.id}`)
+      console.log(response)
+      return(response)
+    }catch(e){
+      console.error(e)
     }
   }
-  async create({ date, title, description, body, orden }) {
-    const cuerpo = { date, title, description, body, orden };
+
+  async create({ titulo }) {
+    const cuerpo = { titulo };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/noticias",
+        "http://localhost:8080/api/v1/noticia",
         cuerpo,
         { headers: { "Content-Type": "application/json" } }
       );

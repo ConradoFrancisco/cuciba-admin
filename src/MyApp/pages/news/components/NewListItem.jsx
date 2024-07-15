@@ -10,7 +10,6 @@ export default function NewListItem({ item,flag,setFlag }) {
   const [openModal, setOpenModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalAction, setModalAction] = useState(null);
-  console.log(item)
   const handleSetActive = async ( id, estado ) => {
     try {
       const response = await NewsInstance.setActive({ id, estado });
@@ -41,7 +40,6 @@ export default function NewListItem({ item,flag,setFlag }) {
     setSelectedItem(item);
     setModalAction(action);
     setOpenModal(true);
-    console.log(action);
   };
   const EstadoCirculo = ({ estado }) => {
     const circleClass = estado ? "green" : "red";
@@ -71,13 +69,13 @@ export default function NewListItem({ item,flag,setFlag }) {
           className="d-flex gap-2 justify-content-between"
           style={{ borderBottom: "1px solid #f0f0f0" }}
         >
-          <h5>{item.title}</h5> <EstadoCirculo estado={item.estado} />{" "}
+          <h5>{item.titulo}</h5> <EstadoCirculo estado={item.estado} />{" "}
         </Card.Header>
         <Card.Body className="d-flex gap-3">
-          <img
+          {/* <img
             style={{ maxWidth: "100px" }}
             src={`http://localhost:8080/${item.Imagens[0].imageUrl}`}
-          />
+          /> */}
           <p>{item.description}</p>
         </Card.Body>
         <Card.Footer
@@ -85,18 +83,18 @@ export default function NewListItem({ item,flag,setFlag }) {
           style={{ borderTop: "1px solid #f0f0f0" }}
         >
           <div>
-            <span>Fecha: {item.date}</span>
+            <span>Fecha: {item.fecha}</span>
           </div>
           <div className="d-flex gap-2">
             <Button
-              variant={item.estado === 0 ? "success" : "secondary"}
+              variant={item.estado === false ? "success" : "secondary"}
               onClick={
-                item.estado === 0
+                item.estado === false
                   ? () => handleOpenModal("publicar", item)
                   : () => handleOpenModal("Pausar", item)
               }
             >
-              {item.estado === 0 ? "Publicar" : "Pausar"}
+              {item.estado === false ? "Publicar" : "Pausar"}
             </Button>
             <Link className="btn btn-primary" to={`/noticias/editar/${item.id}`}>Editar</Link>
             <Button
@@ -124,7 +122,7 @@ export default function NewListItem({ item,flag,setFlag }) {
                 <div className="d-flex justify-content-center gap-3 pt-3">
                   <Button
                     variant="success"
-                    onClick={() => handleSetActive(item.id,1)}
+                    onClick={() => handleSetActive(item.id,true)}
                   >
                     Continuar
                   </Button>
@@ -150,7 +148,7 @@ export default function NewListItem({ item,flag,setFlag }) {
                 <div className="d-flex justify-content-center gap-3 pt-3">
                   <Button
                     variant="success"
-                    onClick={() => handleSetActive(item.id,0)}
+                    onClick={() => handleSetActive(item.id,false)}
                   >
                     Continuar
                   </Button>
