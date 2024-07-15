@@ -35,13 +35,13 @@ export default function InmobiliariasIlegalesPenalForm({
                 nombre: item.nombre,
                 direccion: item.direccion,
                 fecha: item.fecha_edit,
-                causa: 1
+                penal: true
             }
             : {
                 nombre: "",
                 direccion: "",
                 fecha: "",
-                causa: 1
+                penal: true
             };
 
     const formik = useFormik({
@@ -51,10 +51,10 @@ export default function InmobiliariasIlegalesPenalForm({
         onSubmit: async (values) => {
             
             setLoading(true);
-            const { nombre,direccion,fecha,id,causa} = values;
+            const { nombre,direccion,fecha,id,penal} = values;
             try {
                 const result = await metodo({
-                    nombre,direccion,fecha,id,causa
+                    nombre,direccion,fecha,id,penal
                 });
                 console.log(result);
                 toast.success(result.data, {

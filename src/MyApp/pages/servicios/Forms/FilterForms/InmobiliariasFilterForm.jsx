@@ -3,8 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import PreguntasFrecuentesService from "services/servicios/PreguntasFrecuentesService";
 
-export default function PreguntasFrecuentesFilterForm({ formFilterObject }) {
-  const [categorias, setCategorias] = useState([]);
+export default function InmobiliariasFilterForm({ formFilterObject }) {
   const formRef = useRef(null);
 
   const clearFilters = (e) => {
@@ -23,6 +22,7 @@ export default function PreguntasFrecuentesFilterForm({ formFilterObject }) {
     const form = formRef.current;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+    console.log(data)
     data.estado = data.estado === "Todas" ? null : data.estado;
     data.categoria = data.categoria === "Todas" ? null : data.categoria;
     formFilterObject.setoffset(0);
@@ -32,18 +32,6 @@ export default function PreguntasFrecuentesFilterForm({ formFilterObject }) {
     /* formFilterObject.setPuesto(data.categoria); */
     formFilterObject.setcategoria(data.categoria)
   };
-  useEffect(() => {
-    const fetchCategorias = async () => {
-      try {
-        const response = await PreguntasFrecuentesService.getCategorys();
-        console.log(response.data);
-        setCategorias(response.data);
-      } catch (e) {
-        console.error("hubo un problema con la obtencion de datos");
-      }
-    };
-    fetchCategorias();
-  }, []);
 
   return (
     <>
@@ -51,11 +39,11 @@ export default function PreguntasFrecuentesFilterForm({ formFilterObject }) {
         <Row>
           <Col xl={4}>
             <Form.Group>
-              <Form.Label>Pregunta</Form.Label>
+              <Form.Label>Nombre</Form.Label>
               <Form.Control name="input" />
             </Form.Group>
           </Col>
-          <Col xl={2}>
+          <Col xl={4}>
             <Form.Group>
               <Form.Label>Estado</Form.Label>
               <Form.Select name="estado">
@@ -65,17 +53,7 @@ export default function PreguntasFrecuentesFilterForm({ formFilterObject }) {
               </Form.Select>
             </Form.Group>
           </Col>
-          <Col xl={2}>
-            <Form.Group>
-              <Form.Label>Categoría</Form.Label>
-              <Form.Select name="categoria">
-                <option value={undefined}>Todas</option>
-                {categorias?.map((categoria)=>(
-                    <option value={categoria.id}>{categoria.nombre}</option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
+          
           <Col xl={2} className="mt-4">
             <Button variant="primary" className="w-100" type="submit">
               Enviar

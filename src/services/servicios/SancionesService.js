@@ -15,7 +15,7 @@ class PersonalService {
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/servicios/sanciones",
+        "http://localhost:8080/api/v1/servicios/sanciones",
         {
           params: {
             categoria,

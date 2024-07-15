@@ -1,18 +1,18 @@
 import axiosInstance from "MyApp/utils/axiosConfig";
 import { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import PreguntasFrecuentesService from "services/servicios/PreguntasFrecuentesService";
-import SancionesService from "services/servicios/SancionesService";
 
 export default function BibliotecaFilterForm({ formFilterObject }) {
   const [puestos, setPuestos] = useState([]);
 
   const clearFilters = (e) => {
+    const form = formRef.current;
+    form.reset();
     e.preventDefault();
     formFilterObject.setoffset(0);
     formFilterObject.setInput(undefined);
     formFilterObject.setEstado(undefined);
-    formFilterObject.setOrden(undefined);
+    formFilterObject.setcategoria(undefined);
   };
 
   const formRef = useRef(null);
@@ -21,17 +21,18 @@ export default function BibliotecaFilterForm({ formFilterObject }) {
     const form = formRef.current;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+    data.estado = data.estado === "Todas" ? null : data.estado;
+    data.categoria = data.categoria === "Todas" ? null : data.categoria;
     formFilterObject.setoffset(0);
     formFilterObject.setEstado(data.estado);
     formFilterObject.setInput(data.input);
-    formFilterObject.setOrden(data.orden);
     formFilterObject.setcategoria(data.categoria);
     /* formFilterObject.setcategoria(data.categoria) */
   };
   useEffect(() => {
     const fetchCategorias = async () => {
       try {
-        const response = await axiosInstance.get('http://localhost:8080/servicios/biblioteca-digital/categorias');
+        const response = await axiosInstance.get('http://localhost:8080/api/v1/servicios/biblioteca-digital/categorias');
         console.log(response.data);
         setPuestos(response.data);
       } catch (e) {
@@ -55,9 +56,9 @@ export default function BibliotecaFilterForm({ formFilterObject }) {
             <Form.Group>
               <Form.Label>Estado</Form.Label>
               <Form.Select name="estado">
-                <option value="">Todas</option>
-                <option value={1}>Activas</option>
-                <option value={0}>Inactivas</option>
+                <option value={null}>Todas</option>
+                <option value={true}>Activas</option>
+                <option value={false}>Inactivas</option>
               </Form.Select>
             </Form.Group>
           </Col>

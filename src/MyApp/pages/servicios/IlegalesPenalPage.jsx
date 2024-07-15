@@ -8,10 +8,11 @@ import PreguntaFrecuenteForm from "./Forms/PreguntaFrecuenteForm";
 import PreguntasFrecuentesFilterForm from "./Forms/FilterForms/PreguntasFrecuentesFilterForm";
 import InmobiliariasIlegalesServices from "services/servicios/InmobiliariasIlegalesServices";
 import InmobiliariasIlegalesPenalForm from "./Forms/InmobiliariasIlegalesPenalForm";
+import InmobiliariasFilterForm from "./Forms/FilterForms/InmobiliariasFilterForm";
 
 export default function IlegalesPenalPage(){
     const { filterObject } = useService({
-        service: InmobiliariasIlegalesServices.getAll,
+        service: InmobiliariasIlegalesServices.getAllCausa,
       });
     
       const { data, limit, offset, setLimit, setoffset, total, setInput, setEstado, setOrden, setPuesto,setcategoria } = filterObject;
@@ -35,7 +36,7 @@ export default function IlegalesPenalPage(){
                 <Accordion className="rounded">
                   <Accordion.Header className="rounded">Filtros</Accordion.Header>
                   <AccordionBody>
-                    <PreguntasFrecuentesFilterForm formFilterObject={formFilterObject}/>
+                    <InmobiliariasFilterForm formFilterObject={formFilterObject}/>
                   </AccordionBody>
                 </Accordion>
               </Card>

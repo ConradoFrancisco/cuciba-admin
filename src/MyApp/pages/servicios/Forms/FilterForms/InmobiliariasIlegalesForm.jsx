@@ -21,7 +21,7 @@ export default function InmobiliariasIlegalesForm({
   const [loading, setLoading] = useState(false);
   const metodo =
     tipo === "editar"
-      ? InmobiliariasIlegalesServices.updateNoCausa
+      ? InmobiliariasIlegalesServices.update
       : InmobiliariasIlegalesServices.create;
 
   const initialValues =
@@ -30,14 +30,14 @@ export default function InmobiliariasIlegalesForm({
           id: item.id,
           nombre: item.nombre,
           direccion: item.direccion,
-          fecha: item.fecha_edit,
-          causa: 0,
+          fecha: item.fecha,
+          penal: false,
         }
       : {
           nombre: "",
           direccion: "",
           fecha: "",
-          causa: 0,
+          penal: false,
         };
 
   const formik = useFormik({
@@ -47,14 +47,14 @@ export default function InmobiliariasIlegalesForm({
     onSubmit: async (values) => {
       console.log(values)
       setLoading(true);
-      const { nombre, direccion, fecha, id, causa } = values;
+      const { nombre, direccion, fecha, id, penal } = values;
       try {
         const result = await metodo({
           nombre,
           direccion,
           fecha,
           id,
-          causa,
+          penal,
         });
         console.log(result);
         toast.success(result.data, {
@@ -123,6 +123,11 @@ export default function InmobiliariasIlegalesForm({
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               isInvalid={!!formik.errors.fecha && formik.touched.fecha}
+            ></Form.Control>
+            <Form.Control
+              type="date"
+              className="d-none"
+              value={formik.values.penal}
             ></Form.Control>
             <Form.Control.Feedback type="invalid">
               {formik.errors.fecha}

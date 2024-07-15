@@ -76,12 +76,12 @@ export default function RevistaForm({ tipo, item, flag, setFlag, setOpenModal })
   const initialValues = tipo === "editar" ? {
     tipo,
     id: item.id,
-    portada: item.portada,
+    portada: item.imagen,
     archivo: item.archivo,
     fecha: item.fecha,
     descripcion: item.descripcion,
   } : {
-    portada: "",
+    imagen: "",
     archivo: "",
     fecha: "",
     descripcion: "",
@@ -99,7 +99,7 @@ export default function RevistaForm({ tipo, item, flag, setFlag, setOpenModal })
         if (typeof values.portada !== "string") {
           const formData = new FormData();
           formData.append("file", values.portada);
-          const response = await axios.post("http://localhost:8080/upload", formData, {
+          const response = await axios.post("http://localhost:8080/api/v1/files", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -112,7 +112,7 @@ export default function RevistaForm({ tipo, item, flag, setFlag, setOpenModal })
         if (typeof values.archivo !== "string") {
           const formData = new FormData();
           formData.append("file", values.archivo);
-          const response = await axios.post("http://localhost:8080/files", formData, {
+          const response = await axios.post("http://localhost:8080/api/v1/files", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -124,7 +124,7 @@ export default function RevistaForm({ tipo, item, flag, setFlag, setOpenModal })
 
         const payload = {
           
-          portada: portadaPath,
+          imagen: portadaPath,
           archivo: archivoPath,
           fecha: values.fecha,
           descripcion: values.descripcion,

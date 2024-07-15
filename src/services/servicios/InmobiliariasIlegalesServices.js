@@ -37,11 +37,45 @@ class inmobiliariasIlegalesService {
       );
     }
   }
-  async create({ nombre, direccion,fecha,causa }) {
-    const body = { nombre, direccion,fecha,causa };
+  async getAllCausa({
+    limit = 0,
+    offset = 0,
+    input = undefined,
+    estado = undefined,
+    penal = true,
+    fecha = undefined,
+    orderBy = "",
+    orderDirection = "",
+  }) {
+    try {
+      const response = await axiosInstance.get(
+        "http://localhost:8080/api/v1/servicios/inmobiliarias-ilegales",
+        {
+          params: {
+            penal:true,
+            fecha,
+            input,
+            estado,
+            limit,
+            offset,
+            orderDirection,
+            orderBy,
+          },
+        }
+      );
+      console.log(response);
+      return response;
+    } catch (e) {
+      throw new Error(
+        "error al obtener las inmobiliarias ilegales, intente nuevamente mas tarde"
+      );
+    }
+  }
+  async create({ nombre, direccion,fecha,penal }) {
+    const body = { nombre, direccion,fecha,penal };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/servicios/inmobiliarias-penal",
+        "http://localhost:8080/api/v1/servicios/inmobiliarias-ilegales",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -57,7 +91,7 @@ class inmobiliariasIlegalesService {
       estado === 1 ? "Inmobiliaria ilegal Publicada!" : "Inmobiliaria ilegal dada de baja";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/inmobiliarias-penal/${id}`,
+        `http://localhost:8080/api/v1/servicios/inmobiliarias-ilegales/active/${id}`,
         body
       );
       toast.success(area, {
@@ -78,8 +112,8 @@ class inmobiliariasIlegalesService {
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(
-        `http://localhost:8080/servicios/inmobiliarias-penal/${id}`
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/api/v1/servicios/inmobiliarias-ilegales/delete/${id}`
       );
       toast.success("Inmobiliaria ilegal eliminada correctamente", {
         position: "bottom-right",
@@ -102,7 +136,7 @@ class inmobiliariasIlegalesService {
     console.log(body)
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/inmobiliarias-penal/modificar/${id}`,
+        `http://localhost:8080/api/v1/servicios/inmobiliarias-ilegales/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );

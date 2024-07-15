@@ -9,14 +9,16 @@ class BibliotecaService {
     input = undefined,
     estado = undefined,
     fecha = undefined,
+    categoria = undefined,
     orderBy = "",
     orderDirection = "",
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/servicios/biblioteca-digital",
+        "http://localhost:8080/api/v1/servicios/biblioteca-digital",
         {
           params: {
+            categoria,
             fecha,
             input,
             estado,
@@ -40,7 +42,7 @@ class BibliotecaService {
     const body = {fecha,descripcion,pdf,categoria  };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/servicios/biblioteca-digital",
+        "http://localhost:8080/api/v1/servicios/biblioteca-digital",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -53,10 +55,10 @@ class BibliotecaService {
   async setActive({ id, estado }) {
     const body = { estado };
     const area =
-      estado === 1 ? "Post Publicado!" : "Post dado de baja";
+      estado === true ? "Post Publicado!" : "Post dado de baja";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/biblioteca-digital/${id}`,
+        `http://localhost:8080/api/v1/servicios/biblioteca-digital/active/${id}`,
         body
       );
       toast.success(area, {
@@ -78,7 +80,7 @@ class BibliotecaService {
   async delete({ id }) {
     try {
       const response = await axiosInstance.delete(
-        `http://localhost:8080/servicios/biblioteca-digital/${id}`
+        `http://localhost:8080/api/v1/servicios/biblioteca-digital/${id}`
       );
       toast.success("Post eliminado correctamente", {
         position: "bottom-right",
@@ -96,12 +98,11 @@ class BibliotecaService {
       throw new Error("error al eliminar el infractor");
     }
   }
-  async update({ id, nombre,direccion,fecha }) {
-    const body = {nombre,direccion,fecha };
-    console.log(body)
+  async update({ id, descripcion,categoria,pdf,fecha }) {
+    const body = {descripcion,categoria,pdf,fecha };
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/biblioteca-digital/modificar/${id}`,
+        `http://localhost:8080/api/v1/servicios/biblioteca-digital/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );

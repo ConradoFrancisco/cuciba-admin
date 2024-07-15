@@ -33,7 +33,7 @@ export default function PostBibliotecaForm({
       ? {
           id: item.id,
           descripcion: item.descripcion,
-          categoria: item.categoria_id,
+          categoria: item.categoria.id,
           pdf: item.pdf,
           fecha: item.fecha,
         }
@@ -58,7 +58,7 @@ export default function PostBibliotecaForm({
           formData.append("file", values.pdf);
           console.log(formData.get("file"));
           const response = await axios.post(
-            "http://localhost:8080/files",
+            "http://localhost:8080/api/v1/files",
             formData,
             {
               headers: {
@@ -76,7 +76,7 @@ export default function PostBibliotecaForm({
         const pdf = pdfPath;
         const result = await metodo({
           id,
-          categoria,
+          categoria : {id:categoria} ,
           descripcion,
           pdf,
           fecha,
@@ -102,7 +102,7 @@ export default function PostBibliotecaForm({
     const fetchPuestos = async () => {
       try {
         const response = await axiosInstance.get(
-          "http://localhost:8080/servicios/biblioteca-digital/categorias"
+          "http://localhost:8080/api/v1/servicios/biblioteca-digital/categorias"
         );
         console.log(response.data);
         setCategorias(response.data);

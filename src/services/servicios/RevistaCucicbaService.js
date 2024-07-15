@@ -13,7 +13,7 @@ class RevistaCucicbaService {
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/servicios/revista-cucicba",
+        "http://localhost:8080/api/v1/servicios/revista",
         {
           params: {
             input,
@@ -34,11 +34,11 @@ class RevistaCucicbaService {
     }
   }
 
-  async create({ fecha,descripcion,archivo,portada}) {
-    const body = {fecha,descripcion,archivo,portada };
+  async create({ fecha,descripcion,archivo,imagen}) {
+    const body = {fecha,descripcion,archivo,imagen };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/servicios/revista-cucicba",
+        "http://localhost:8080/api/v1/servicios/revista",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -61,10 +61,10 @@ class RevistaCucicbaService {
   async setActive({ id, estado }) {
     const body = { estado };
     const area =
-      estado === 1 ? "Revista Publicada!" : "Revista dada de baja";
+      estado === true ? "Revista Publicada!" : "Revista dada de baja";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/servicios/revista-cucicba/${id}`,
+        `http://localhost:8080/api/v1/servicios/revista/active/${id}`,
         body
       );
       toast.success(area, {
@@ -85,8 +85,8 @@ class RevistaCucicbaService {
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(
-        `http://localhost:8080/servicios/revista-cucicba/${id}`
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/api/v1/servicios/revista/delete/${id}`
       );
       toast.success("Revista eliminada correctamente", {
         position: "bottom-right",
