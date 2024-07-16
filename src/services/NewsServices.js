@@ -53,13 +53,13 @@ class NewsService {
       throw new Error("error al intentar publicar la noticia");
     }
   }
-  async update({id, date, title, description, body, orden }) {
+  async update({id, fecha, titulo, descripcion, cuerpo, orden }) {
     console.log('me ejecuto')
-    const cuerpo = { date, title, description, body, orden };
+    const body = { fecha, titulo, descripcion, cuerpo, orden };
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/noticias/modificar/${id}`,
-        cuerpo,
+        `http://localhost:8080/api/v1/noticia/${id}`,
+        body,
         { headers: { "Content-Type": "application/json" } }
       );
       toast.success("Noticia modificada correctamente", {

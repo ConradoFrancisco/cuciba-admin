@@ -36,11 +36,11 @@ class PersonalService {
       );
     }
   }
-  async create({ descripcion,fecha,pdf,categoria }) {
-    const body = { descripcion,fecha,pdf,categoria };
+  async create({ descripcion,created_at,archivo,categoria }) {
+    const body = { descripcion,created_at,archivo,categoria };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/servicios/sanciones",
+        "http://localhost:8080/api/v1/servicios/sanciones",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -96,8 +96,8 @@ class PersonalService {
       throw new Error("error al eliminar el área");
     }
   }
-  async update({ id, descripcion,fecha,pdf,categoria }) {
-    const body = { descripcion,fecha,pdf,categoria };
+  async update({ id, descripcion,created_at,archivo,categoria }) {
+    const body = { descripcion,created_at,archivo,categoria };
     console.log(body)
     try {
       const response = await axiosInstance.patch(

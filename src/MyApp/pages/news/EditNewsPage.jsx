@@ -26,11 +26,11 @@ export default function EditNewsPage() {
   });
 
   const initialValues = {
-    titulo: noticia?.title,
-    date: "s",
-    orden: "d",
-    descripcion: "e",
-    content: "f",
+    titulo: noticia?.titulo,
+    date: "",
+    orden: "",
+    descripcion: "",
+    content: "",
   };
 
   const formik = useFormik({
@@ -44,7 +44,7 @@ export default function EditNewsPage() {
       console.log(values);
       // Realizar la petición POST al endpoint de subida múltiple
       const response = await axios.post(
-        "http://localhost:8080/upload-multiple",
+        "http://localhost:8080/api/v1/files/multiple",
         formData,
         {
           headers: {
@@ -52,21 +52,22 @@ export default function EditNewsPage() {
           },
         }
       );
+      console.log(response)
       if (response.status === 200) {
         const files = response.data.filePaths;
         try {
           const result = await NewsInstance.update({
             id:id,
-            body: values.content,
-            date: values.date,
-            description: values.descripcion,
-            orden: values.orden,
-            title: values.titulo,
+            cuerpo:values.content,
+            descripcion:values.descripcion,
+            titulo:values.titulo,
+            fecha:values.date,
+            orden:values.orden
           });
           
-          const response = await NewsInstance.uploadImagesUrl({ id:id, files });
+          /* const response = await NewsInstance.uploadImagesUrl({ id:id, files });
           console.log(response);
-          navigate("/noticias/listar");
+          navigate("/noticias/listar"); */
         } catch (e) {
           console.error(e)
           throw new Error("error al insertar la noticia o sus imagenes");
@@ -78,16 +79,11 @@ export default function EditNewsPage() {
     const fetchNew = async () => {
       try {
         const response = await NewsInstance.getByid({ id });
-        console.log(response);
-        setNoticia(response.noticia);
+        console.log(response.data.titulo);
+        setNoticia(response.data);
         formik.setValues({
-          titulo: response.noticia.title,
-          date: response.noticia.date,
-          orden: response.noticia.orden,
-          descripcion: response.noticia.description,
-          content: response.noticia.body,
+          titulo: response.data.titulo,
         });
-
          /* setImages(response.data[0].imagenes.split(';')); */
         
       } catch (e) {

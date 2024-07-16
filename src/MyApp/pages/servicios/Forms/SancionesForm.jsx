@@ -57,7 +57,7 @@ export default function SancionesForm({
           formData.append("file", values.pdf);
           console.log(formData.get("file"));
           const response = await axios.post(
-            "http://localhost:8080/files",
+            "http://localhost:8080/api/v1/files",
             formData,
             {
               headers: {
@@ -72,12 +72,13 @@ export default function SancionesForm({
 
         const { id, categoria, descripcion, fecha } = values;
         const pdf = pdfPath;
+        const fech = new Date();
         const result = await metodo({
           id,
-          categoria,
+          categoria : {id:categoria},
           descripcion,
-          pdf,
-          fecha,
+          archivo: pdf,
+          created_at: fech
         });
         const newflag = flag + 1;
         setFlag(newflag);
@@ -100,7 +101,7 @@ export default function SancionesForm({
     const fetchPuestos = async () => {
       try {
         const response = await axiosInstance.get(
-          "http://localhost:8080/servicios/sanciones/categorias"
+          "http://localhost:8080/api/v1/servicios/sanciones/categorias"
         );
         console.log(response.data);
         setCategorias(response.data);
