@@ -3,15 +3,15 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
+import AreasInstance from "services/institucional/AreaService";
 import PersonalInstance from "services/institucional/PersonalService";
 import * as yup from "yup";
 const personalSchema = yup.object().shape({
   nombre: yup.string().required("el nombre es requerido"),
   apellido: yup.string().required("el apellido es requerido"),
-  telefono: yup.string(),
+  /* telefono: yup.string(),
   email: yup.string().email(),
-  cargo: yup.string().required("el cargo es requerido"),
-  area: yup.number().required("el area es requerida"),
+  area: yup.number().required("el area es requerida"), */
 });
 export default function PersonalForm({
   tipo,
@@ -32,15 +32,15 @@ export default function PersonalForm({
           apellido: item.apellido,
           telefono: item.telefono,
           email: item.email,
-          cargo: item.cargo,
-          area: item.area_id,
+          posicion: item.posicion,
+          area: item.areaId,
         }
       : {
           nombre: "",
           apellido: "",
           telefono: "",
           email: "",
-          cargo: "",
+          posicion: "",
           area: "-",
         };
 
@@ -49,6 +49,7 @@ export default function PersonalForm({
     initialValues,
     validationSchema: personalSchema,
     onSubmit: async (values) => {
+      console.log(values)
       try {
         setLoading(true);
         const response = await metodo(values);
@@ -78,10 +79,9 @@ export default function PersonalForm({
   useEffect(() => {
     const fetchAreas = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:8080/areas/select"
-        );
-        setAreas(response.data);
+        const response = await axiosInstance.get("http://localhost:8080/api/v1/areas");
+        setAreas(response.data.data)
+        console.log(response)
       } catch (e) {
         console.error("hubo un problema con la obtencion de datos");
       }
@@ -158,21 +158,21 @@ export default function PersonalForm({
         </Col>
         <Col xl={6} className="mb-2">
           <Form.Group>
-            <Form.Label>Cargo:</Form.Label>
+            <Form.Label>Posición:</Form.Label>
             <Form.Control
               type="text"
-              name="cargo"
-              value={formik.values.cargo}
+              name="posicion"
+              value={formik.values.posicion}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              isInvalid={!!formik.errors.cargo && formik.touched.cargo}
+              isInvalid={!!formik.errors.posicion && formik.touched.posicion}
             />
             <Form.Control.Feedback type="invalid">
-              {formik.errors.cargo}
+              {formik.errors.posicion}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
-        <Col xl={6} className="mb-2">
+        {<Col xl={6} className="mb-2">
           <Form.Group>
             <Form.Label>Área:</Form.Label>
             <Form.Select
@@ -190,12 +190,12 @@ export default function PersonalForm({
                   value={area.id}
                   selected={formik.values.area === area.id}
                 >
-                  {area.title}
+                  {area.nombre}
                 </option>
               ))}
             </Form.Select>
           </Form.Group>
-        </Col>
+        </Col>}
         <Col xl={4} className="mt-4">
           <button type="submit" className="btn btn-success">
             {tipo === "añadir" ? "Crear" : "Guardar Cambios"}

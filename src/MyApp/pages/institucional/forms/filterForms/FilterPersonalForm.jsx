@@ -27,10 +27,9 @@ export default function FilterPersonalform({ formFilterObject }) {
   useEffect(() => {
     const fetchAreas = async () => {
       try {
-        const response = await axiosInstance.get(
-          "http://localhost:8080/areas/select"
-        );
-        setAreas(response.data);
+        const response = await axiosInstance.get("http://localhost:8080/api/v1/areas");
+        setAreas(response.data.data)
+        console.log(response)
       } catch (e) {
         console.error("hubo un problema con la obtencion de datos");
       }
@@ -53,9 +52,9 @@ export default function FilterPersonalform({ formFilterObject }) {
               <Form.Select
                 name="area"
               >
-              <option value={'-'}>-</option>
+              <option value={undefined}>-</option>
                 {areas?.map((area)=>(
-                    <option key={area.id} value={area.id}>{area.title}</option>
+                    <option key={area.id} value={area}>{area.nombre}</option>
                 ))}
               </Form.Select>
             </Form.Group>
@@ -64,7 +63,7 @@ export default function FilterPersonalform({ formFilterObject }) {
             <Form.Group>
               <Form.Label>Estado</Form.Label>
               <Form.Select name="estado">
-                <option value="">Todas</option>
+                <option defaultValue={undefined}>Todas</option>
                 <option value={1}>Activas</option>
                 <option value={0}>Inactivas</option>
               </Form.Select>

@@ -5,7 +5,14 @@ import MyTableFooter from "MyApp/my-components/MyTableFooter";
 import PageHeader from "components/common/PageHeader";
 import useService from "hooks/useService";
 import { useEffect, useState } from "react";
-import { Accordion, AccordionBody, Card, Col, Row, Table } from "react-bootstrap";
+import {
+  Accordion,
+  AccordionBody,
+  Card,
+  Col,
+  Row,
+  Table,
+} from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { Outlet, useLocation } from "react-router-dom";
@@ -15,19 +22,32 @@ import PersonalForm from "./forms/PersonalForm";
 import FilterPersonalform from "./forms/filterForms/FilterPersonalForm";
 
 export default function PersonalPage() {
-  const columns = ["nombre","area","cargo","email","telefono", "estado"];
+  const columns = ["nombre", "area", "posicion", "email", "telefono", "estado"];
   const location = useLocation();
 
   const { filterObject } = useService({ service: PersonalInstance.getAll });
 
-  const { data, limit, offset, setLimit, setoffset, total,setInput,input,setEstado,setOrden,orderDirection,orderBy } = filterObject;
+  const {
+    data,
+    limit,
+    offset,
+    setLimit,
+    setoffset,
+    total,
+    setInput,
+    input,
+    setEstado,
+    setOrden,
+    orderDirection,
+    orderBy,
+  } = filterObject;
   const isEditRoute = location.pathname.includes("/editar/");
   const formFilterObject = {
     setoffset,
     setInput,
     setEstado,
     setOrden,
-    input
+    input,
   };
   return (
     <>
@@ -45,14 +65,16 @@ export default function PersonalPage() {
           </PageHeader>
           <Row className="mt-4">
             <Col>
-            <Card>
-            <Accordion className="rounded">
-              <Accordion.Header className="rounded">Filtros</Accordion.Header>
-              <AccordionBody>
-                <FilterPersonalform formFilterObject={formFilterObject} />
-              </AccordionBody>
-            </Accordion>
-          </Card>
+              <Card>
+                <Accordion className="rounded">
+                  <Accordion.Header className="rounded">
+                    Filtros
+                  </Accordion.Header>
+                  <AccordionBody>
+                    <FilterPersonalform formFilterObject={formFilterObject} />
+                  </AccordionBody>
+                </Accordion>
+              </Card>
               <Card className="p-4 mt-4">
                 {data.length > 0 ? (
                   <MyTableComponent

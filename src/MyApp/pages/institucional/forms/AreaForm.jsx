@@ -6,19 +6,19 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 
 const areaSchema = yup.object().shape({
-  title: yup.string().required("el titulo es requerido"),
+  nombre: yup.string().required("el nombre es requerido"),
   orden: yup.number().required("el orden es requerido"),
 });
 
-export default function Areaform({ props:setOpenModal, setFlag, flag,tipo,item }) {
+export default function Areaform({ setOpenModal, setFlag, flag,tipo,item }) {
   const [loading, setLoading] = useState(false);
   
   const initialValues = tipo === 'editar' ? {
     id: item.id,
-    title: item.title,
+    nombre: item.nombre,
     orden: item.orden,
   } : {
-    title: "",
+    nombre: "",
     orden: "",
   };
 
@@ -64,14 +64,14 @@ export default function Areaform({ props:setOpenModal, setFlag, flag,tipo,item }
               <Form.Label>Nombre del área:</Form.Label>
               <Form.Control
                 type="text"
-                name="title"
-                value={formik.values.title}
+                name="nombre"
+                value={formik.values.nombre}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                isInvalid={!!formik.errors.title && formik.touched.title}
+                isInvalid={!!formik.errors.nombre && formik.touched.nombre}
               />
               <Form.Control.Feedback type="invalid">
-                {formik.errors.title}
+                {formik.errors.nombre}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>

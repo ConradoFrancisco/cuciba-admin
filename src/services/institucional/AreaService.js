@@ -17,12 +17,12 @@ class AreaService {
     }
   }
 
-  async create({ title, orden }) {
-    const body = { title, orden };
+  async create({ nombre, orden }) {
+    const body = { nombre, orden };
     console.log(body)
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/areas",
+        "http://localhost:8080/api/v1/areas",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -34,12 +34,12 @@ class AreaService {
     }
   }
 
-  async update({ id, title, orden }) {
-    const body = { title, orden };
+  async update({ id, nombre, orden }) {
+    const body = { nombre, orden };
     console.log(body)
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/areas/modificar/${id}`,
+        `http://localhost:8080/api/v1/areas/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );

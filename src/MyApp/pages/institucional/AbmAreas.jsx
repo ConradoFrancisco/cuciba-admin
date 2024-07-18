@@ -10,7 +10,7 @@ import useService from "hooks/useService";
 import Areaform from "./forms/AreaForm";
 import FilterAreaform from "./forms/filterForms/FilterAreaForm";
 import { useEffect } from "react";
-const columns = ["orden", "nombre","descripcion", "estado"];
+const columns = ["orden", "nombre", "estado"];
 export default function AbmAreas() {
   const { filterObject } = useService({ service: AreasInstance.getAll });
   const {
@@ -52,7 +52,7 @@ useEffect(()=>{
           <Card className="p-4 mt-4">
             {data.length > 0 ? (
               <MyTableComponent
-                AddFormComponent={<Areaform area={null} flag={null} setFlag={null} tipo={null} />}
+                AddFormComponent={<Areaform />}
                 setActiveFunction={AreasInstance.setActive}
                 deleteFunction={AreasInstance.delete}
                 data={data}
