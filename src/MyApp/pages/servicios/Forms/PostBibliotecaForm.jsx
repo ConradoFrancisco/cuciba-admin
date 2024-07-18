@@ -34,7 +34,7 @@ export default function PostBibliotecaForm({
           id: item.id,
           descripcion: item.descripcion,
           categoria: item.categoria.id,
-          pdf: item.pdf,
+          pdf: item.archivo,
           fecha: item.fecha,
         }
       : {
@@ -78,7 +78,7 @@ export default function PostBibliotecaForm({
           id,
           categoria : {id:categoria} ,
           descripcion,
-          pdf,
+          archivo:pdf,
           fecha,
         });
         const newflag = flag + 1;

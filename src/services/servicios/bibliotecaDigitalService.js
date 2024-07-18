@@ -38,8 +38,8 @@ class BibliotecaService {
     }
   }
 
-  async create({ fecha,descripcion,pdf,categoria}) {
-    const body = {fecha,descripcion,pdf,categoria  };
+  async create({ fecha,descripcion,archivo,categoria}) {
+    const body = {fecha,descripcion,archivo,categoria  };
     try {
       const response = await axiosInstance.post(
         "http://localhost:8080/api/v1/servicios/biblioteca-digital",

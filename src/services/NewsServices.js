@@ -53,9 +53,9 @@ class NewsService {
       throw new Error("error al intentar publicar la noticia");
     }
   }
-  async update({id, fecha, titulo, descripcion, cuerpo, orden }) {
+  async update({id, fecha, titulo, descripcion, cuerpo, orden,imagenes }) {
     console.log('me ejecuto')
-    const body = { fecha, titulo, descripcion, cuerpo, orden };
+    const body = { fecha, titulo, descripcion, cuerpo, orden,imagenes };
     try {
       const response = await axiosInstance.patch(
         `http://localhost:8080/api/v1/noticia/${id}`,
@@ -117,7 +117,7 @@ class NewsService {
   }
   async delete(id) {
     try {
-      const response = await axiosInstance.delete(`http://localhost:8080/noticias/${id}`)
+      const response = await axiosInstance.patch(`http://localhost:8080/api/v1/noticia/delete/${id}`)
       toast.success("Noticia eliminada satisfactoriamente", {
         position: "bottom-right",
         autoClose: 3000,
@@ -136,9 +136,9 @@ class NewsService {
   }
   async setActive({ id, estado }) {
     const body = { estado };
-    const area = estado === 1 ? 'Noticia Publicada satisfatoriamente' : 'Noticia pausada satisfactoriamente'
+    const area = estado === true ? 'Noticia Publicada satisfatoriamente' : 'Noticia pausada satisfactoriamente'
     try {
-      const response = await axiosInstance.patch(`http://localhost:8080/noticias/${id}`, body)
+      const response = await axiosInstance.patch(`http://localhost:8080/api/v1/noticia/active/${id}`, body)
       toast.success(area, {
         position: "bottom-right",
         autoClose: 3000,

@@ -62,12 +62,11 @@ export default function EditNewsPage() {
             descripcion:values.descripcion,
             titulo:values.titulo,
             fecha:values.date,
-            orden:values.orden
+            orden:values.orden,
+            imagenes : files
           });
           
-          /* const response = await NewsInstance.uploadImagesUrl({ id:id, files });
-          console.log(response);
-          navigate("/noticias/listar"); */
+          navigate("/noticias/listar");
         } catch (e) {
           console.error(e)
           throw new Error("error al insertar la noticia o sus imagenes");
