@@ -9,7 +9,7 @@ const comisionSchema = yup.object().shape({
   nombre: yup.string().required("el nombre es requerido"),
   apellido: yup.string().required("el apellido es requerido"),
   orden: yup.number().required("el orden es requerido"),
-  posicion: yup.string().required("la posición es requerida"),
+  cargo: yup.string().required("la posición es requerida"),
 });
 
 export default function Comisionform({ setOpenModal, setFlag, flag,tipo,item }) {
@@ -20,12 +20,12 @@ export default function Comisionform({ setOpenModal, setFlag, flag,tipo,item }) 
     nombre: item.nombre,
     apellido: item.apellido,
     orden: item.orden,
-    posicion: item.posicion,
+    cargo: item.titular,
   } : {
     nombre: "",
     apellido:"" ,
     orden: "",
-    posicion: "",
+    cargo: "",
   };
 
   const metodo = tipo === 'editar' ?  ComisionRevisadoraService.update : ComisionRevisadoraService.create
@@ -116,18 +116,18 @@ export default function Comisionform({ setOpenModal, setFlag, flag,tipo,item }) 
             <Form.Group>
               <Form.Label>Posición:</Form.Label>
               <Form.Select
-                name="posicion"
-                value={formik.values.posicion}
+                name="cargo"
+                value={formik.values.cargo}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                isInvalid={!!formik.errors.posicion && formik.touched.posicion}
+                isInvalid={!!formik.errors.cargo && formik.touched.cargo}
               >
                 <option value={undefined}>-</option>
-                <option value="Titular">Titular</option>
-                <option value="Suplente">Suplente</option>
+                <option value={true}>Titular</option>
+                <option value={false}>Suplente</option>
               </Form.Select>
               <Form.Control.Feedback type="invalid">
-                {formik.errors.posicion}
+                {formik.errors.cargo}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>

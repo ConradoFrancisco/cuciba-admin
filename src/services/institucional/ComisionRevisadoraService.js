@@ -14,7 +14,7 @@ class ComisionRevisadoraService {
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/comision",
+        "http://localhost:8080/api/v1/institucional/revisora",
         {
           params: {
             puesto,
@@ -28,7 +28,6 @@ class ComisionRevisadoraService {
           },
         }
       );
-      console.log(response);
       return response;
     } catch (e) {
       throw new Error(
@@ -36,18 +35,20 @@ class ComisionRevisadoraService {
       );
     }
   }
-  async create({ nombre, apellido,orden,posicion }) {
-    const body = { nombre, apellido,orden,posicion };
+  async create({ nombre, apellido, titular,orden }) {
+    const body = { nombre, apellido, titular,orden };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/comision",
+        "http://localhost:8080/api/v1/institucional/revisora",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
       return response;
     } catch (e) {
       console.log(e);
-      throw new Error("error al insertar los datos en comision de ética y disciplica");
+      throw new Error(
+        "error al insertar los datos en Tribunal de ética y disciplica"
+      );
     }
   }
   async setActive({ id, estado }) {
@@ -56,7 +57,7 @@ class ComisionRevisadoraService {
       estado === 1 ? "Autoridad dada de alta!" : "Autoridad ahora inactiva";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/comision/${id}`,
+        `http://localhost:8080/api/v1/institucional/revisora/active/${id}`,
         body
       );
       toast.success(area, {
@@ -77,8 +78,8 @@ class ComisionRevisadoraService {
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(
-        `http://localhost:8080/comision/${id}`
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/api/v1/institucional/revisora/delete/${id}`
       );
       toast.success("Autoridad eliminada correctamente", {
         position: "bottom-right",
@@ -96,18 +97,17 @@ class ComisionRevisadoraService {
       throw new Error("error al eliminar el área");
     }
   }
-  async update({ id, nombre, apellido,orden,posicion }) {
-    const body = { nombre, apellido,orden,posicion };
+  async update({ id, nombre, apellido, titular,orden }) {
+    const body = { nombre, apellido, titular,orden };
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/comision/modificar/${id}`,
+        `http://localhost:8080/api/v1/institucional/revisora/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );
-      console.log(response)
       return response;
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw new Error("error al insertar los datos en areas");
     }
   }

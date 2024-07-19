@@ -10,7 +10,7 @@ import FilterTribunalForm from "../forms/filterForms/FilterTribunalForm";
 
 export default function AutoridadesTribunalPage() {
   const { filterObject } = useService({ service: TribunalEticaService.getAll });
-  const columns = ["nombre", "apellido", "orden", "posicion", "estado"];
+  const columns = ["nombre", "apellido","orden", "cargo","estado"];
   const {
     data,
     offset,

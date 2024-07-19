@@ -12,7 +12,7 @@ import Comisionform from "../forms/ComisionForm";
 
 export default function ComisionRevisadoraPage() {
   const { filterObject } = useService({ service: ComisionRevisadoraService.getAll });
-  const columns = ["nombre", "apellido", "orden", "posicion", "estado"];
+  const columns = ["nombre", "apellido", "cargo","orden", "estado"];
   const {
     data,
     offset,

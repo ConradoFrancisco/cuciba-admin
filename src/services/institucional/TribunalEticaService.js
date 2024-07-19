@@ -14,7 +14,7 @@ class TribunalEticaService {
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/tribunal",
+        "http://localhost:8080/api/v1/institucional/etica",
         {
           params: {
             puesto,
@@ -36,18 +36,20 @@ class TribunalEticaService {
       );
     }
   }
-  async create({ nombre, apellido,orden,posicion }) {
-    const body = { nombre, apellido,orden,posicion };
+  async create({ nombre, apellido, titular }) {
+    const body = { nombre, apellido, titular };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/tribunal",
+        "http://localhost:8080/api/v1/institucional/etica",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
       return response;
     } catch (e) {
       console.log(e);
-      throw new Error("error al insertar los datos en Tribunal de ética y disciplica");
+      throw new Error(
+        "error al insertar los datos en Tribunal de ética y disciplica"
+      );
     }
   }
   async setActive({ id, estado }) {
@@ -56,7 +58,7 @@ class TribunalEticaService {
       estado === 1 ? "Autoridad dada de alta!" : "Autoridad ahora inactiva";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/tribunal/${id}`,
+        `http://localhost:8080/api/v1/institucional/etica/active/${id}`,
         body
       );
       toast.success(area, {
@@ -77,8 +79,8 @@ class TribunalEticaService {
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(
-        `http://localhost:8080/tribunal/${id}`
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/api/v1/institucional/etica/delete/${id}`
       );
       toast.success("Autoridad eliminada correctamente", {
         position: "bottom-right",
@@ -88,7 +90,7 @@ class TribunalEticaService {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        style: { color: "#fff", fontWeight: "500" }, // Añade un borde al texto}
+        style: { color: "#fff", fontWeight: "500" },
       });
       return response;
     } catch (e) {
@@ -96,18 +98,18 @@ class TribunalEticaService {
       throw new Error("error al eliminar el área");
     }
   }
-  async update({ id, nombre, apellido,orden,posicion }) {
-    const body = { nombre, apellido,orden,posicion };
+  async update({ id, nombre, apellido, titular }) {
+    const body = { nombre, apellido, titular };
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/tribunal/modificar/${id}`,
+        `http://localhost:8080/api/v1/institucional/etica/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );
-      console.log(response)
+      console.log(response);
       return response;
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw new Error("error al insertar los datos en areas");
     }
   }
