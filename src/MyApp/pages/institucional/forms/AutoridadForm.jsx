@@ -17,9 +17,9 @@ export default function PersonalForm({
   const autoridadSchema = yup.object().shape({
     nombre: yup.string().required("El nombre es requerido"),
     apellido: yup.string().required("El apellido es requerido"),
-    puesto: yup.number().required("El puesto es requerido"),
+    cargoid: yup.number().required("El puesto es requerido"),
     orden: yup.number().required("El orden es requerido"),
-    avatar: yup
+    foto: yup
     .mixed()
     .test("avatarRequired", "El avatar es requerido", function (value) {
       // Verificar si el tipo es "editar" y si el campo "avatar" está vacío o es nulo
@@ -55,7 +55,7 @@ export default function PersonalForm({
       const reader = new FileReader();
       reader.onload = (e) => {
         setThumbnail(e.target.result);
-        setFieldValue("avatar", file);
+        setFieldValue("foto", file);
       };
       reader.readAsDataURL(file);
     }
@@ -75,15 +75,15 @@ console.log(item)
           id: item.id,
           nombre: item.nombre,
           apellido: item.apellido,
-          puesto: item.puesto_id,
-          avatar: item.avatar,
+          cargoid: item.cargo.id,
+          foto: item.foto,
           orden: item.orden,
         }
       : {
           nombre: "",
           apellido: "",
-          puesto: "",
-          avatar: "",
+          cargoid: "",
+          foto: null,
           orden: "",
         };
 
@@ -95,13 +95,13 @@ console.log(item)
       console.log(values);
       try {
         setLoading(true);
-        let avatarPath = values.avatar;
+        let avatarPath = values.foto;
 
-        if (typeof values.avatar !== "string") {
+        if (typeof values.foto !== "string") {
           const formData = new FormData();
-          formData.append("file", values.avatar);
+          formData.append("file", values.foto);
           const response = await axios.post(
-            "http://localhost:8080/upload",
+            "http://localhost:8080/api/v1/files",
             formData,
             {
               headers: {
@@ -109,20 +109,23 @@ console.log(item)
               },
             }
           );
-          if (response.status === 200) {
+          if (response.data.status === 200) {
+            console.log("entre");
             avatarPath = response.data.filePath;
+            formik.setFieldValue("foto",avatarPath)
           }
         }
 
-        const { nombre, apellido, puesto, orden, id } = values;
+        const { nombre, apellido, cargoid, orden, id } = values;
+        console.log(values)
         try {
           const result = await metodo({
             id,
             orden,
             nombre,
             apellido,
-            puesto,
-            avatar: avatarPath,
+            cargoid,
+            foto: avatarPath,
           });
           console.log(result);
           toast.success(result.data, {
@@ -154,9 +157,9 @@ console.log(item)
     const fetchPuestos = async () => {
       try {
         const response = await axiosInstance.get(
-          "http://localhost:8080/autoridades/cargos"
+          "http://localhost:8080/api/v1/institucional/autoridad/cargos"
         );
-        console.log(response.data);
+        console.log(response);
         setPuestos(response.data);
       } catch (e) {
         console.error("hubo un problema con la obtencion de datos");
@@ -205,22 +208,22 @@ console.log(item)
           <Form.Group>
             <Form.Label>Puesto:</Form.Label>
             <Form.Select
-              defaultValue={formik.values.puesto}
-              name="puesto"
-              value={formik.values.puesto}
+              defaultValue={formik.values.cargoid}
+              name="cargoid"
+              value={formik.values.cargoid}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              isInvalid={!!formik.errors.puesto && formik.touched.puesto}
+              isInvalid={!!formik.errors.cargoid && formik.touched.cargoid}
             >
               <option value="-">-</option>
-              {puestos.map((puesto) => (
-                <option key={puesto.id} value={puesto.id}>
-                  {puesto.nombre}
+              {puestos.map((cargo) => (
+                <option key={cargo.id} value={cargo.id}>
+                  {cargo.nombre}
                 </option>
               ))}
             </Form.Select>
             <Form.Control.Feedback type="invalid">
-              {formik.errors.puesto}
+              {formik.errors.cargoid}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>
@@ -243,13 +246,13 @@ console.log(item)
         </Col>
         <Col xs={12}>
           <Form.Group>
-            <Form.Label>Avatar:</Form.Label>
+            <Form.Label>Foto:</Form.Label>
             {(thumbnail || item !== null) && (
               <div style={{ maxWidth: "200px" }}>
                 <img
                   src={
                     !thumbnail && tipo === "editar"
-                      ? "http://localhost:8080/" + item.avatar
+                      ? "http://localhost:8080/" + item.foto
                       : thumbnail
                   }
                   alt="Thumbnail"
@@ -260,16 +263,16 @@ console.log(item)
             <Form.Control
               className="mt-4"
               type="file"
-              name="avatar"
+              name="foto"
               onChange={(event) =>
                 handleImageChange(event, formik.setFieldValue)
               }
               accept="image/*"
               onBlur={formik.handleBlur}
-              isInvalid={!!formik.errors.avatar && formik.touched.avatar}
+              isInvalid={!!formik.errors.foto && formik.touched.foto}
             />
             <Form.Control.Feedback type="invalid">
-              {formik.errors.avatar}
+              {formik.errors.foto}
             </Form.Control.Feedback>
           </Form.Group>
         </Col>

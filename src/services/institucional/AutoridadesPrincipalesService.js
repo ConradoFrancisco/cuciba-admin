@@ -8,16 +8,16 @@ class PersonalService {
     input = undefined,
     estado = undefined,
     orden = undefined,
-    puesto = undefined,
+    cargoId = undefined,
     orderBy = "",
     orderDirection = "",
   }) {
     try {
       const response = await axiosInstance.get(
-        "http://localhost:8080/autoridades",
+        "http://localhost:8080/api/v1/institucional/autoridad",
         {
           params: {
-            puesto,
+            cargoId,
             input,
             estado,
             orden,
@@ -36,11 +36,11 @@ class PersonalService {
       );
     }
   }
-  async create({ nombre, apellido, avatar, puesto, orden }) {
-    const body = { nombre, apellido, avatar, puesto, orden };
+  async create({ nombre, apellido, foto, cargoid, orden }) {
+    const body = { nombre, apellido, foto, cargoid, orden };
     try {
       const response = await axiosInstance.post(
-        "http://localhost:8080/autoridades",
+        "http://localhost:8080/api/v1/institucional/autoridad",
         body,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -56,7 +56,7 @@ class PersonalService {
       estado === 1 ? "Autoridad dada de alta!" : "Autoridad ahora inactiva";
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/autoridades/${id}`,
+        `http://localhost:8080/api/v1/institucional/autoridad/active/${id}`,
         body
       );
       toast.success(area, {
@@ -77,8 +77,8 @@ class PersonalService {
   }
   async delete({ id }) {
     try {
-      const response = await axiosInstance.delete(
-        `http://localhost:8080/autoridades/${id}`
+      const response = await axiosInstance.patch(
+        `http://localhost:8080/api/v1/institucional/autoridad/delete/${id}`
       );
       toast.success("Autoridad eliminada correctamente", {
         position: "bottom-right",
@@ -96,12 +96,12 @@ class PersonalService {
       throw new Error("error al eliminar el área");
     }
   }
-  async update({ id, nombre, apellido, avatar, puesto, orden }) {
-    const body = { nombre, apellido, avatar, puesto, orden };
+  async update( { id,nombre, apellido, foto, cargoid, orden }) {
+    const body = { id,nombre, apellido, foto, cargoid, orden };
     console.log(body)
     try {
       const response = await axiosInstance.patch(
-        `http://localhost:8080/autoridades/modificar/${id}`,
+        `http://localhost:8080/api/v1/institucional/autoridad/${id}`,
         body,
         { headers: { "Content-Type": "application/json" } }
       );

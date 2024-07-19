@@ -23,7 +23,7 @@ export default function AutoridadesPage() {
     setOrden,
     setPuesto
   };
-  console.log(total)
+  console.log(data)
   return (
     <>
       <PageHeader title="Autoridades">
