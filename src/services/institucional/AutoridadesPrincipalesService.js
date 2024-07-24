@@ -8,23 +8,27 @@ class PersonalService {
     input = undefined,
     estado = undefined,
     orden = undefined,
-    cargoId = undefined,
+    puesto = undefined,
+    periodo = undefined,
     orderBy = "",
     orderDirection = "",
   }) {
     try {
+      
+      const control_estado = estado >= 0 ? estado : null;
       const response = await axiosInstance.get(
         "http://localhost:8080/api/v1/institucional/autoridad",
         {
           params: {
-            cargoId,
+            puesto,
             input,
-            estado,
+            estado : control_estado,
             orden,
             limit,
             offset,
             orderDirection,
             orderBy,
+            periodo
           },
         }
       );
@@ -36,8 +40,8 @@ class PersonalService {
       );
     }
   }
-  async create({ nombre, apellido, foto, cargoid, orden }) {
-    const body = { nombre, apellido, foto, cargoid, orden };
+  async create({ nombre, apellido, foto, cargoid, orden,periodo }) {
+    const body = { nombre, apellido, foto, cargoid, orden,periodo };
     try {
       const response = await axiosInstance.post(
         "http://localhost:8080/api/v1/institucional/autoridad",
@@ -96,8 +100,8 @@ class PersonalService {
       throw new Error("error al eliminar el área");
     }
   }
-  async update( { id,nombre, apellido, foto, cargoid, orden }) {
-    const body = { id,nombre, apellido, foto, cargoid, orden };
+  async update( { id,nombre, apellido, foto, cargoid, orden, periodo}) {
+    const body = { id,nombre, apellido, foto, cargoid, orden, periodo };
     console.log(body)
     try {
       const response = await axiosInstance.patch(

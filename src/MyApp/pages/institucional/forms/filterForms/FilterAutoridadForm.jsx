@@ -6,11 +6,15 @@ export default function FilterAutoridadForm({ formFilterObject }) {
   const [puestos, setPuestos] = useState([]);
 
   const clearFilters = (e) => {
+    const form = formRef.current;
+    form.reset();
     e.preventDefault();
+    
     formFilterObject.setoffset(0);
-    formFilterObject.setInput(undefined);
     formFilterObject.setEstado(undefined);
+    formFilterObject.setInput(undefined);
     formFilterObject.setOrden(undefined);
+    formFilterObject.setPuesto(undefined);
   };
 
   const formRef = useRef(null);
@@ -19,6 +23,7 @@ export default function FilterAutoridadForm({ formFilterObject }) {
     const form = formRef.current;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
+    console.log(data)
     formFilterObject.setoffset(0);
     formFilterObject.setEstado(data.estado);
     formFilterObject.setInput(data.input);
@@ -29,7 +34,7 @@ export default function FilterAutoridadForm({ formFilterObject }) {
     const fetchPuestos = async () => {
       try {
         const response = await axiosInstance.get(
-          "http://localhost:8080/autoridades/cargos"
+          "http://localhost:8080/api/v1/institucional/autoridad/cargos"
         );
         console.log(response.data);
         setPuestos(response.data);
@@ -60,7 +65,7 @@ export default function FilterAutoridadForm({ formFilterObject }) {
             <Form.Group>
               <Form.Label>Estado</Form.Label>
               <Form.Select name="estado">
-                <option value="">Todas</option>
+                <option value={-1}>Todas</option>
                 <option value={1}>Activas</option>
                 <option value={0}>Inactivas</option>
               </Form.Select>
@@ -70,7 +75,7 @@ export default function FilterAutoridadForm({ formFilterObject }) {
             <Form.Group>
               <Form.Label>Puesto</Form.Label>
               <Form.Select name="puesto">
-                <option value={undefined}>Todas</option>
+                <option >Todas</option>
                 {puestos?.map((puesto)=>(
                     <option value={puesto.id}>{puesto.nombre}</option>
                 ))}

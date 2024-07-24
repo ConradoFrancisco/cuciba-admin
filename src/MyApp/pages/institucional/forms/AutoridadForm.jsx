@@ -2,7 +2,7 @@ import axiosInstance from "MyApp/utils/axiosConfig";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
 import AutoridadesPrincipalesService from "services/institucional/AutoridadesPrincipalesService";
 import * as yup from "yup";
@@ -14,39 +14,84 @@ export default function PersonalForm({
   setFlag,
   setOpenModal,
 }) {
+  const handleDeleteImage = async (filePath) => {
+    if (filePath.startsWith('data:image')) {
+      // Si el archivo es una imagen en formato Base64
+      formik.setFieldValue("foto", ""); // Limpiar el campo 'foto' en formik
+      setThumbnail(null); // Limpiar la vista previa de la imagen
+    } else {
+      // Si el archivo está cargado en el servidor
+      try {
+        const response = await axiosInstance.delete(
+          "http://localhost:8080/api/v1/files",
+          {
+            data: { filePath: filePath },
+            headers: { "Content-Type": "application/json" }
+          }
+        );
+        if (response.status === 200) {
+          formik.setFieldValue("foto", ""); // Limpiar el campo 'foto' en formik
+          setThumbnail(null); // Limpiar la vista previa de la imagen
+          toast.success("Imagen eliminada con éxito", {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            style: { color: "#fff", fontWeight: "500" },
+          });
+        }
+      } catch (e) {
+        console.error(e);
+        toast.error("Error al eliminar la imagen", {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: { color: "#fff", fontWeight: "500" },
+        });
+      }
+    }
+  };
+
   const autoridadSchema = yup.object().shape({
     nombre: yup.string().required("El nombre es requerido"),
     apellido: yup.string().required("El apellido es requerido"),
     cargoid: yup.number().required("El puesto es requerido"),
     orden: yup.number().required("El orden es requerido"),
     foto: yup
-    .mixed()
-    .test("avatarRequired", "El avatar es requerido", function (value) {
-      // Verificar si el tipo es "editar" y si el campo "avatar" está vacío o es nulo
-      if (this.options.context.tipo === "editar") {
-        return true; // La validación pasa sin más comprobaciones
-      }
-      // Si no es "editar", continuar con la validación del avatar
-      return !!value; // Si value es nulo o vacío, la validación falla
-    })
-    .test(
-      "fileType",
-      "Solo se permiten archivos de imagen",
-      function (value) {
-        // Validar el tipo de archivo si se proporciona un avatar
+      .mixed()
+      .test("avatarRequired", "El avatar es requerido", function (value) {
+        // Verificar si el tipo es "editar" y si el campo "avatar" está vacío o es nulo
         if (this.options.context.tipo === "editar") {
           return true; // La validación pasa sin más comprobaciones
         }
-        if (value) {
-          return ["image/jpeg", "image/png", "image/gif"].includes(
-            value.type
-          );
+        // Si no es "editar", continuar con la validación del avatar
+        return !!value; // Si value es nulo o vacío, la validación falla
+      })
+      .test(
+        "fileType",
+        "Solo se permiten archivos de imagen",
+        function (value) {
+          // Validar el tipo de archivo si se proporciona un avatar
+          if (this.options.context.tipo === "editar") {
+            return true; // La validación pasa sin más comprobaciones
+          }
+          if (value) {
+            return ["image/jpeg", "image/png", "image/gif"].includes(
+              value.type
+            );
+          }
+          // Si no se proporciona un archivo, la validación pasa automáticamente
+          return true;
         }
-        // Si no se proporciona un archivo, la validación pasa automáticamente
-        return true;
-      }
-    ),
-});
+      ),
+  });
   const [thumbnail, setThumbnail] = useState(null);
 
   const handleImageChange = (event, setFieldValue) => {
@@ -60,8 +105,8 @@ export default function PersonalForm({
       reader.readAsDataURL(file);
     }
   };
-console.log(item)
   const [puestos, setPuestos] = useState([]);
+  const [periodos, setPeriodos] = useState([]);
   const [loading, setLoading] = useState(false);
   const metodo =
     tipo === "editar"
@@ -78,9 +123,11 @@ console.log(item)
           cargoid: item.cargo.id,
           foto: item.foto,
           orden: item.orden,
+          periodo: item.periodo,
         }
       : {
           nombre: "",
+          periodo: "",
           apellido: "",
           cargoid: "",
           foto: null,
@@ -112,15 +159,16 @@ console.log(item)
           if (response.data.status === 200) {
             console.log("entre");
             avatarPath = response.data.filePath;
-            formik.setFieldValue("foto",avatarPath)
+            formik.setFieldValue("foto", avatarPath);
           }
         }
 
-        const { nombre, apellido, cargoid, orden, id } = values;
-        console.log(values)
+        const { nombre, apellido, cargoid, orden, id, periodo } = values;
+        console.log(values);
         try {
           const result = await metodo({
             id,
+            periodo,
             orden,
             nombre,
             apellido,
@@ -166,6 +214,21 @@ console.log(item)
       }
     };
     fetchPuestos();
+  }, []);
+
+  useEffect(() => {
+    const fetchPeriodos = async () => {
+      try {
+        const response = await axiosInstance.get(
+          "http://localhost:8080/api/v1/institucional/autoridad/periodo"
+        );
+        console.log(response);
+        setPeriodos(response.data);
+      } catch (e) {
+        console.error("hubo un problema con la obtencion de datos");
+      }
+    };
+    fetchPeriodos();
   }, []);
 
   return (
@@ -229,6 +292,29 @@ console.log(item)
         </Col>
         <Col xs={12} md={6} className="mb-2">
           <Form.Group>
+            <Form.Label>Período:</Form.Label>
+            <Form.Select
+              defaultValue={formik.values.periodo}
+              name="periodo"
+              value={formik.values.periodo}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              isInvalid={!!formik.errors.periodo && formik.touched.periodo}
+            >
+              <option value="-">-</option>
+              {periodos.map((periodo) => (
+                <option key={periodo.id} value={periodo.id}>
+                  {periodo.nombre}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.periodo}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Col xs={12} md={6} className="mb-2">
+          <Form.Group>
             <Form.Label>Orden:</Form.Label>
             <Form.Control
               type="number"
@@ -247,19 +333,28 @@ console.log(item)
         <Col xs={12}>
           <Form.Group>
             <Form.Label>Foto:</Form.Label>
-            {(thumbnail || item !== null) && (
-              <div style={{ maxWidth: "200px" }}>
-                <img
-                  src={
-                    !thumbnail && tipo === "editar"
-                      ? "http://localhost:8080/" + item.foto
-                      : thumbnail
-                  }
-                  alt="Thumbnail"
-                  style={{ width: "100%", height: "auto" }}
-                />
-              </div>
-            )}
+            {thumbnail || formik.values.foto ? (
+      <div style={{ maxWidth: "200px" }}>
+        <img
+          src={
+            !thumbnail && tipo === "editar"
+              ? "http://localhost:8080/" + item.foto
+              : thumbnail
+          }
+          alt="Thumbnail"
+          style={{ width: "100%", height: "auto" }}
+        />
+        <Button
+          onClick={() => handleDeleteImage(thumbnail ? thumbnail : formik.values.foto)}
+          className="w-100 mt-2"
+          variant="danger"
+        >
+          Eliminar Imagen
+        </Button>
+      </div>
+    ) : (
+      <p>No hay imagen disponible</p>
+    )}
             <Form.Control
               className="mt-4"
               type="file"

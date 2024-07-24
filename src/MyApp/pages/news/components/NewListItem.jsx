@@ -62,6 +62,7 @@ export default function NewListItem({ item,flag,setFlag }) {
       </div>
     );
   };
+  console.log("aca",item)
   return (
     <>
       <Card key={item.id} className="mb-4">
@@ -72,11 +73,11 @@ export default function NewListItem({ item,flag,setFlag }) {
           <h5>{item.titulo}</h5> <EstadoCirculo estado={item.estado} />{" "}
         </Card.Header>
         <Card.Body className="d-flex gap-3">
-          {/* <img
+          <img
             style={{ maxWidth: "100px" }}
-            src={`http://localhost:8080/${item.Imagens[0].imageUrl}`}
-          /> */}
-          <p>{item.description}</p>
+            src={item.imagenes.length > 0 ? `http://localhost:8080/${item.imagenes[0].url}` : ''}
+          />
+          <p>{item.descripcion}</p>
         </Card.Body>
         <Card.Footer
           className="d-flex justify-content-between gap-2"
